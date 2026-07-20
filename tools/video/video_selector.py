@@ -24,7 +24,11 @@ class VideoSelector(BaseTool):
 
     # Operations that REQUIRE motion: an image-only tool (image_selector) is not
     # an acceptable last-resort fallback for these, so fallback_tools_for() drops it.
-    MOTION_REQUIRED_OPERATIONS = frozenset({"image_to_video", "reference_to_video"})
+    MOTION_REQUIRED_OPERATIONS = frozenset({
+        "image_to_video",
+        "reference_to_video",
+        "first_last_frame_to_video",
+    })
     # Default score gap for the preferred_provider override (see input_schema).
     PREFERRED_PROVIDER_GAP = 0.15
 
@@ -70,12 +74,23 @@ class VideoSelector(BaseTool):
             "allowed_providers": {"type": "array", "items": {"type": "string"}},
             "operation": {
                 "type": "string",
-                "enum": ["text_to_video", "image_to_video", "reference_to_video", "rank"],
+                "enum": [
+                    "text_to_video",
+                    "image_to_video",
+                    "reference_to_video",
+                    "first_last_frame_to_video",
+                    "rank",
+                ],
                 "default": "text_to_video",
             },
             "target_operation": {
                 "type": "string",
-                "enum": ["text_to_video", "image_to_video", "reference_to_video"],
+                "enum": [
+                    "text_to_video",
+                    "image_to_video",
+                    "reference_to_video",
+                    "first_last_frame_to_video",
+                ],
                 "description": "Operation to score when operation='rank'.",
                 "default": "text_to_video",
             },
@@ -139,6 +154,10 @@ class VideoSelector(BaseTool):
                 "type": "array",
                 "description": "Structured multi-shot prompts; not inferred from prose.",
             },
+            "first_frame_url": {"type": "string"},
+            "first_frame_path": {"type": "string"},
+            "last_frame_url": {"type": "string"},
+            "last_frame_path": {"type": "string"},
             "image_url": {
                 "type": "string",
                 "description": "Alias for reference_image_url (used by some providers like Kling via fal.ai).",

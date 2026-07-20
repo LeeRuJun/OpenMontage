@@ -38,6 +38,7 @@ class _StubTool:
         provider: str,
         *,
         supports_image_to_video: bool = True,
+        supports_first_last_frame: bool = False,
         status: ToolStatus = ToolStatus.AVAILABLE,
         cost: float = 0.10,
         runtime: float = 60.0,
@@ -49,6 +50,7 @@ class _StubTool:
         self.supports = {
             "text_to_video": True,
             "image_to_video": supports_image_to_video,
+            "first_last_frame_to_video": supports_first_last_frame,
         }
         self.input_schema = {"properties": {"prompt": {}}}
         self._status = status
@@ -246,9 +248,31 @@ def test_fallback_keeps_image_selector_for_text_to_video():
     assert "image_selector" in fallback
 
 
+def test_first_last_frame_requires_real_provider_capability():
+    selector = VideoSelector()
+    supported = _StubTool("veo_video", "veo", supports_first_last_frame=True)
+    unsupported = _StubTool("sora_video", "openai")
+    candidates = selector._filter_candidates(
+        {"operation": "first_last_frame_to_video"}, [supported, unsupported]
+    )
+    assert [tool.name for tool in candidates] == ["veo_video"]
+
+
+def test_first_last_frame_has_no_image_fallback():
+    fallback = VideoSelector().fallback_tools_for({"operation": "first_last_frame_to_video"})
+    assert "image_selector" not in fallback
+
+
 def test_static_fallback_tools_property_still_lists_image_selector():
     """The input-agnostic property preserves the old shape for external consumers."""
     assert "image_selector" in VideoSelector().fallback_tools
+
+
+def test_first_last_frame_operation_is_motion_required():
+    assert "first_last_frame_to_video" in VideoSelector.MOTION_REQUIRED_OPERATIONS
+    assert "first_last_frame_to_video" in VideoSelector.input_schema["properties"]["operation"]["enum"]
+    assert "first_frame_url" in VideoSelector.input_schema["properties"]
+    assert "last_frame_url" in VideoSelector.input_schema["properties"]
 
 
 # ---------------------------------------------------------------------------

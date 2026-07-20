@@ -127,6 +127,16 @@ class ImageSelector(BaseTool):
                 "type": "string",
                 "description": "Provider-specific idempotency/provenance task id.",
             },
+            "mask_path": {"type": "string", "description": "Optional edit mask path."},
+            "mask_url": {"type": "string", "description": "Optional edit mask URL."},
+            "model": {"type": "string", "description": "Provider model identifier."},
+            "size": {"type": "string", "description": "Provider size or WIDTHxHEIGHT."},
+            "quality": {"type": "string"},
+            "output_format": {"type": "string"},
+            "output_compression": {"type": "integer"},
+            "background": {"type": "string"},
+            "moderation": {"type": "string"},
+            "input_fidelity": {"type": "string"},
             "preferred_provider": {
                 "type": "string",
                 "description": "Provider name or 'auto'. Valid values are discovered at runtime from the registry.",
@@ -276,6 +286,16 @@ class ImageSelector(BaseTool):
                 "watermark",
                 "callback_url",
                 "external_task_id",
+                "mask_path",
+                "mask_url",
+                "model",
+                "size",
+                "quality",
+                "output_format",
+                "output_compression",
+                "background",
+                "moderation",
+                "input_fidelity"
                 "workflow_json",
                 "workflow_path",
                 "output_node",
@@ -387,6 +407,8 @@ class ImageSelector(BaseTool):
             or inputs.get("image_path")
             or inputs.get("image_urls")
             or inputs.get("image_paths")
+            or inputs.get("mask_path")
+            or inputs.get("mask_url")
         )
         if not wants_edit:
             return candidates

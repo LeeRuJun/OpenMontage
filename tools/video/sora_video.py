@@ -24,11 +24,9 @@ from tools.base_tool import (
 
 
 _DEFAULT_MODEL = "sora-2"
+_ALLOWED_MODELS = ["sora-2", "sora-2-pro"]
 _DEFAULT_SIZE = "720x1280"
 _DEFAULT_SECONDS = "4"
-_ALLOWED_MODELS = ["sora-2", "sora-2-pro"]
-_ALLOWED_SIZES = ["1280x720", "720x1280", "1024x1792", "1792x1024"]
-_ALLOWED_SECONDS = ["4", "8", "12"]
 _MIN_OPENAI_VERSION = (2, 44, 0)
 
 
@@ -55,6 +53,7 @@ class SoraVideo(BaseTool):
         "text_to_video": True,
         "image_to_video": True,
         "native_audio": True,
+        "opening_frame_reference": True,
         "camera_direction": True,
         "social_ads": True,
         "short_clips": True,
@@ -79,13 +78,13 @@ class SoraVideo(BaseTool):
             },
             "model": {
                 "type": "string",
-                "enum": _ALLOWED_MODELS,
                 "default": _DEFAULT_MODEL,
+                "description": "Sora model identifier; unknown future API values are passed through.",
             },
             "size": {
                 "type": "string",
-                "enum": _ALLOWED_SIZES,
                 "default": _DEFAULT_SIZE,
+                "description": "Provider-supported output size, passed through to the Videos API.",
             },
             "aspect_ratio": {
                 "type": "string",
@@ -95,7 +94,6 @@ class SoraVideo(BaseTool):
             },
             "seconds": {
                 "type": "string",
-                "enum": _ALLOWED_SECONDS,
                 "default": _DEFAULT_SECONDS,
             },
             "duration": {
@@ -110,6 +108,18 @@ class SoraVideo(BaseTool):
                 "type": "string",
                 "description": "Alias for input_reference_path.",
             },
+            "input_reference_url": {
+                "type": "string",
+                "description": "Optional opening/reference image URL or data URL.",
+            },
+            "reference_image_url": {
+                "type": "string",
+                "description": "Alias for input_reference_url.",
+            },
+            "first_frame_path": {"type": "string"},
+            "first_frame_url": {"type": "string"},
+            "last_frame_path": {"type": "string"},
+            "last_frame_url": {"type": "string"},
             "output_path": {"type": "string"},
         },
     }
@@ -153,9 +163,25 @@ class SoraVideo(BaseTool):
         from openai import OpenAI
 
         start = time.time()
-        model = self._normalize_model(inputs)
-        size = self._normalize_size(inputs, model)
-        seconds = self._normalize_seconds(inputs)
+        try:
+            model = self._normalize_model(inputs)
+            size = self._normalize_size(inputs, model)
+            seconds = self._normalize_seconds(inputs)
+        except (TypeError, ValueError) as exc:
+            return ToolResult(success=False, error=f"Invalid Sora video input: {exc}")
+
+        if any(inputs.get(key) for key in (
+            "first_frame_path", "first_frame_url", "last_frame_path", "last_frame_url"
+        )):
+            return ToolResult(
+                success=False,
+                error=(
+                    "Sora currently supports only input_reference as an opening/reference image; "
+                    "first_frame and last_frame controls are unsupported. "
+                    "Use a provider with first_last_frame_to_video capability."
+                ),
+            )
+
         prompt = str(inputs["prompt"]).strip()
         output_path = Path(inputs.get("output_path", "sora_output.mp4"))
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -168,13 +194,18 @@ class SoraVideo(BaseTool):
         }
 
         reference_path = inputs.get("input_reference_path") or inputs.get("reference_image_path")
-        if inputs.get("operation") == "image_to_video" or reference_path:
-            if not reference_path:
-                return ToolResult(success=False, error="image_to_video requires input_reference_path")
-            reference = Path(str(reference_path))
-            if not reference.exists():
-                return ToolResult(success=False, error=f"Input reference not found: {reference}")
-            payload["input_reference"] = {"image_url": self._file_to_data_uri(reference)}
+        reference_url = inputs.get("input_reference_url") or inputs.get("reference_image_url")
+        if inputs.get("operation") == "image_to_video" or reference_path or reference_url:
+            if not reference_path and not reference_url:
+                return ToolResult(success=False, error="image_to_video requires an input reference image")
+            if reference_url:
+                payload["input_reference"] = {"image_url": str(reference_url)}
+            else:
+                reference = Path(str(reference_path))
+                try:
+                    payload["input_reference"] = {"image_url": self._file_to_data_uri(reference)}
+                except (FileNotFoundError, ValueError) as exc:
+                    return ToolResult(success=False, error=f"Invalid Sora input reference: {exc}")
 
         client = OpenAI()
         try:
@@ -235,26 +266,41 @@ class SoraVideo(BaseTool):
     @staticmethod
     def _normalize_model(inputs: dict[str, Any]) -> str:
         model = str(inputs.get("model", _DEFAULT_MODEL)).strip().lower()
-        if model not in _ALLOWED_MODELS:
-            raise ValueError("model must be one of: sora-2, sora-2-pro")
+        if not model:
+            raise ValueError("model must not be empty")
         return model
 
     @staticmethod
     def _normalize_size(inputs: dict[str, Any], model: str) -> str:
         default_size = "1280x720" if inputs.get("aspect_ratio") == "16:9" else _DEFAULT_SIZE
-        size = str(inputs.get("size", default_size)).strip().lower()
-        allowed = {"1280x720", "720x1280"} if model == "sora-2" else set(_ALLOWED_SIZES)
-        if size not in allowed:
-            raise ValueError(f"size must be one of: {', '.join(sorted(allowed))} for model {model}")
+        size = str(inputs.get("size") or default_size).strip().lower()
+        if not size:
+            raise ValueError("size must not be empty")
         return size
 
     @staticmethod
     def _normalize_seconds(inputs: dict[str, Any]) -> str:
         seconds = str(inputs.get("seconds") or inputs.get("duration") or _DEFAULT_SECONDS).strip().lower()
         seconds = seconds[:-1] if seconds.endswith("s") else seconds
-        if seconds not in _ALLOWED_SECONDS:
-            raise ValueError("seconds must be one of: 4, 8, 12")
+        if not seconds or not seconds.isdigit() or int(seconds) <= 0:
+            raise ValueError("seconds must be a positive integer or duration such as '8s'")
         return seconds
+
+    @staticmethod
+    def _has_unsupported_frame_inputs(inputs: dict[str, Any]) -> bool:
+        return any(inputs.get(key) for key in (
+            "first_frame_path", "first_frame_url", "last_frame_path", "last_frame_url"
+        ))
+
+    @staticmethod
+    def _file_to_data_uri(path: Path) -> str:
+        if not path.exists():
+            raise FileNotFoundError(f"Input reference not found: {path}")
+        mime_type, _ = mimetypes.guess_type(path.name)
+        if mime_type not in {"image/jpeg", "image/png", "image/webp"}:
+            raise ValueError("Sora input reference must be JPEG, PNG, or WebP")
+        encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+        return f"data:{mime_type};base64,{encoded}"
 
     @staticmethod
     def _get_status_value(video: Any) -> str:
@@ -269,14 +315,6 @@ class SoraVideo(BaseTool):
             return value if isinstance(value, str) else None
         value = getattr(video, "id", None)
         return value if isinstance(value, str) else None
-
-    @staticmethod
-    def _file_to_data_uri(path: Path) -> str:
-        mime_type, _ = mimetypes.guess_type(path.name)
-        if not mime_type:
-            mime_type = "application/octet-stream"
-        encoded = base64.b64encode(path.read_bytes()).decode("ascii")
-        return f"data:{mime_type};base64,{encoded}"
 
     @staticmethod
     def _write_download(content: Any, output_path: Path) -> None:
