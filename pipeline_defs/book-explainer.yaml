@@ -1,0 +1,143 @@
+name: book-explainer
+version: "1.0"
+description: >
+  Title-only, research-first YouTube book explanation pipeline. Produces an
+  18-25 minute Chinese video from a book title, using narration, generated
+  still images, motion graphics, and optional A-roll; AI video is not required.
+category: custom
+stability: beta
+default_checkpoint_policy: guided
+extensions:
+  custom_scripts: true
+  custom_playbooks: true
+  custom_skills: true
+  custom_tools: false
+orchestration:
+  mode: executive-producer
+  skill: pipelines/book-explainer/executive-producer
+  budget_default_usd: 3.00
+  max_revisions_per_stage: 3
+  max_send_backs: 3
+  max_wall_time_minutes: 45
+compatible_playbooks:
+  recommended: [clean-professional, premium-minimalist]
+  also_works: [minimalist-diagram, flat-motion-graphics]
+  custom_allowed: true
+required_skills:
+  - pipelines/book-explainer/executive-producer
+  - pipelines/book-explainer/intake-director
+  - pipelines/book-explainer/research-director
+  - pipelines/book-explainer/audience-director
+  - pipelines/book-explainer/proposal-director
+  - pipelines/book-explainer/script-director
+  - pipelines/book-explainer/script-validation-director
+  - pipelines/book-explainer/scene-director
+  - pipelines/book-explainer/voice-sample-director
+  - pipelines/book-explainer/asset-director
+  - pipelines/book-explainer/edit-director
+  - pipelines/book-explainer/compose-director
+  - pipelines/book-explainer/thumbnail-director
+  - pipelines/book-explainer/publish-director
+  - meta/reviewer
+  - meta/checkpoint-protocol
+  - meta/voice-performance-director
+stages:
+  - name: intake
+    skill: pipelines/book-explainer/intake-director
+    produces: [brief]
+    checkpoint_required: true
+    human_approval_default: false
+    success_criteria: [Book title is present, Target duration is between 18 and 25 minutes]
+  - name: research
+    skill: pipelines/book-explainer/research-director
+    required_artifacts_in: [brief]
+    produces: [research_brief]
+    checkpoint_required: true
+    human_approval_default: false
+    success_criteria: [At least five sources, At least three narrative angles, Claims and quotations have provenance]
+  - name: audience
+    skill: pipelines/book-explainer/audience-director
+    required_artifacts_in: [brief, research_brief]
+    produces: [audience_profile]
+    checkpoint_required: true
+    human_approval_default: false
+    success_criteria: [At least two audience profiles, Real listener questions and tensions recorded, Each profile maps to a distinct narrative angle]
+  - name: proposal
+    skill: pipelines/book-explainer/proposal-director
+    required_artifacts_in: [brief, research_brief, audience_profile]
+    produces: [proposal_packet]
+    checkpoint_required: true
+    human_approval_default: true
+    success_criteria: [Narrative mode selected, Duration estimate is 18-25 minutes, Narration is primary, Images are supportive and budgeted at 20-35]
+  - name: script
+    skill: pipelines/book-explainer/script-director
+    required_artifacts_in: [proposal_packet, research_brief, audience_profile]
+    produces: [script]
+    checkpoint_required: true
+    human_approval_default: true
+    success_criteria: [Original deep explanation rather than summary, Hook and payoff present, Each section answers a viewer question, Duration estimate is within 10 percent]
+  - name: scene_plan
+    skill: pipelines/book-explainer/scene-director
+    required_artifacts_in: [script, proposal_packet]
+    produces: [scene_plan]
+    checkpoint_required: true
+    human_approval_default: true
+    success_criteria: [Every beat has a narrative purpose, Voice leads timing, Images and B-roll support rather than replace narration]
+  - name: script_validation
+    skill: pipelines/book-explainer/script-validation-director
+    required_artifacts_in: [script, proposal_packet]
+    produces: []
+    checkpoint_required: true
+    human_approval_default: false
+    success_criteria: [Measured narration estimate is between 18 and 25 minutes, Script is not sent to TTS when outside range]
+  - name: voice_sample
+    skill: pipelines/book-explainer/voice-sample-director
+    required_artifacts_in: [script]
+    produces: []
+    required_tools: [tts_selector]
+    tools_available: [tts_selector]
+    checkpoint_required: true
+    human_approval_default: true
+    success_criteria: [30-60 second Chinese sample exists, Voice pronunciation pace and tone approved before full narration]
+  - name: assets
+    skill: pipelines/book-explainer/asset-director
+    required_artifacts_in: [scene_plan, script, voice_sample]
+    produces: [asset_manifest]
+    required_tools: [tts_selector, image_selector]
+    optional_tools: [video_selector, music_gen]
+    tools_available: [tts_selector, image_selector, video_selector, music_gen]
+    checkpoint_required: true
+    human_approval_default: true
+    success_criteria: [Narration exists and is primary, Image count follows approved support budget, Music is subtle or explicitly absent, Provenance is recorded]
+  - name: edit
+    skill: pipelines/book-explainer/edit-director
+    required_artifacts_in: [scene_plan, asset_manifest]
+    produces: [edit_decisions]
+    checkpoint_required: true
+    human_approval_default: false
+    success_criteria: [Timeline is driven by full narration, Captions enabled, Chapters are derivable, Music remains below narration]
+  - name: compose
+    skill: pipelines/book-explainer/compose-director
+    required_artifacts_in: [edit_decisions, asset_manifest]
+    produces: [render_report, final_review]
+    required_tools: [video_compose, audio_mixer]
+    tools_available: [video_compose, audio_mixer]
+    checkpoint_required: true
+    human_approval_default: false
+    success_criteria: [Playable 1080p YouTube MP4, Duration 18-25 minutes, Audio and caption checks pass]
+  - name: thumbnail
+    skill: pipelines/book-explainer/thumbnail-director
+    required_artifacts_in: [script, render_report]
+    produces: []
+    optional_tools: [image_selector]
+    tools_available: [image_selector]
+    checkpoint_required: true
+    human_approval_default: true
+    success_criteria: [Two or three concepts reviewed, One thumbnail approved, Mobile readability checked]
+  - name: publish
+    skill: pipelines/book-explainer/publish-director
+    required_artifacts_in: [render_report, final_review]
+    produces: [publish_log]
+    checkpoint_required: true
+    human_approval_default: true
+    success_criteria: [YouTube metadata and chapters complete, Export bundle contains video subtitles metadata and thumbnail]
