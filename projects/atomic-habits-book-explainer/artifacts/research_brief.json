@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "topic": "《原子习惯》与持续行为改变",
+  "research_date": "2026-08-30",
+  "landscape": {
+    "existing_content": [
+      {"title": "Atomic Habits official overview", "url": "https://jamesclear.com/atomic-habits", "source": "author_site", "angle": "system and 1% improvement", "what_it_covers": "book premise and practical framing", "what_it_misses": "Chinese audience context and critical limits"},
+      {"title": "Identity-Based Habits", "url": "https://jamesclear.com/identity-based-habits", "source": "author_blog", "angle": "identity first", "what_it_covers": "three layers of behavior change", "what_it_misses": "full long-form narrative"},
+      {"title": "Life-Changing Tips from Atomic Habits", "url": "https://www.penguinrandomhouse.com/articles/atomic-habits-excerpt/", "source": "publisher", "angle": "practical tips", "what_it_covers": "habit tracking and repeatable behaviors", "what_it_misses": "viewer-specific application plan"}
+    ],
+    "saturated_angles": ["只复述四个法则", "把1%进步讲成保证成功", "纯金句合集"],
+    "underserved_gaps": ["解释为什么方法会失效", "把身份、环境和行动串成一条现实决策链", "给中文观众低摩擦的第一步"]
+  },
+  "data_points": [
+    {"claim": "作者将行为改变拆成结果、过程和身份三个层次。", "source_url": "https://jamesclear.com/identity-based-habits", "source_name": "James Clear", "credibility": "primary_source", "surprise_factor": "notable", "usable_as": "script_anchor"},
+    {"claim": "四法则是让行为显而易见、有吸引力、简单、令人满足。", "source_url": "https://jamesclear.com/three-steps-habit-change", "source_name": "James Clear", "credibility": "primary_source", "surprise_factor": "expected", "usable_as": "chapter_framework"},
+    {"claim": "习惯追踪同时提供提醒、进度反馈和完成后的满足感。", "source_url": "https://www.penguinrandomhouse.com/articles/atomic-habits-excerpt/", "source_name": "Penguin Random House", "credibility": "secondary_source", "surprise_factor": "notable", "usable_as": "case_visual"}
+  ],
+  "audience_insights": {"common_questions": ["为什么我总是坚持不了？", "目标和系统哪个更重要？", "怎样让好习惯自动发生？"], "misconceptions": [{"myth": "只要足够自律就能改变", "reality": "环境和行为摩擦会显著影响重复概率", "source": "James Clear official framework"}], "knowledge_level": "知道习惯重要，但缺少可执行系统", "pain_points": ["计划很多却无法持续", "坏习惯触发太容易", "失败后容易自责"]},
+  "angles_discovered": [
+    {"name": "为什么坚持不了", "hook": "问题可能不在你的意志力，而在你的系统。", "type": "narrative", "why_now": "把常见失败经验转成可解释的行为机制", "grounded_in": ["data_points[0]", "audience_insights.common_questions"]},
+    {"name": "先成为那种人", "hook": "每一次重复，都是给某种身份投票。", "type": "evergreen", "why_now": "身份层能把抽象目标变成日常选择", "grounded_in": ["data_points[0]"]},
+    {"name": "四步重建习惯", "hook": "改变习惯不是靠硬撑，而是重新设计四个环节。", "type": "evergreen", "why_now": "四法则提供清晰的实践结构", "grounded_in": ["data_points[1]", "data_points[2]"]}
+  ],
+  "sources": [
+    {"url": "https://jamesclear.com/atomic-habits", "title": "Atomic Habits", "used_for": "book premise and author framing", "reliability": "primary"},
+    {"url": "https://jamesclear.com/identity-based-habits", "title": "Identity-Based Habits", "used_for": "identity framework", "reliability": "primary"},
+    {"url": "https://jamesclear.com/three-steps-habit-change", "title": "How To Start New Habits That Actually Stick", "used_for": "four laws", "reliability": "primary"},
+    {"url": "https://www.penguinrandomhouse.com/articles/atomic-habits-excerpt/", "title": "Life-Changing Tips from Atomic Habits", "used_for": "habit tracking example", "reliability": "secondary"},
+    {"url": "https://www.penguinrandomhouseretail.com/book/?isbn=9780735211292", "title": "Atomic Habits publisher page", "used_for": "book metadata and positioning", "reliability": "secondary"}
+  ],
+  "research_summary": "《原子习惯》最适合被讲成一个关于系统设计的问题型故事：观众不是缺少愿望，而是环境、身份和反馈回路让某些行为更容易重复。视频应解释方法、展示限制，并给出低摩擦行动，而不是逐章复述。"
+}

@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "title": "《原子习惯》：为什么知道该做，却总是坚持不了？",
+  "hook": "你不是缺少自律，而是每天都在用一套让坏习惯更容易发生的系统。",
+  "key_points": ["身份先于目标", "让好习惯显而易见且有吸引力", "让好习惯简单且令人满足", "用系统而非意志力持续改变"],
+  "core_message": "真正持久的改变来自环境、身份和重复系统，而不是一次性的热情。",
+  "cta": "你最想改变的一个习惯是什么？",
+  "tone": "温暖、具体、反鸡汤",
+  "style": "clean-professional",
+  "target_audience": "想改善习惯、效率和自我管理的中文 YouTube 观众",
+  "target_platform": "youtube",
+  "target_duration_seconds": 1200,
+  "reference_material": ["https://jamesclear.com/atomic-habits"],
+  "angle_options": [
+    {"name": "问题型：为什么坚持不了", "description": "从失败的日常习惯切入，拆解环境与系统。"},
+    {"name": "观点型：先成为那种人", "description": "围绕身份认同解释行为改变。"},
+    {"name": "实践型：四步重建习惯", "description": "用四法则组织可立即执行的方案。"}
+  ],
+  "selected_angle": "问题型：为什么坚持不了",
+  "metadata": {"duration_range_seconds": [1080, 1500], "image_budget": {"min": 20, "target": 28, "max": 35}, "ai_video_default": false, "narration_primary": true, "music_role": "support_only", "language": "zh-CN", "narrative_mode": "problem_then_practice"}
+}

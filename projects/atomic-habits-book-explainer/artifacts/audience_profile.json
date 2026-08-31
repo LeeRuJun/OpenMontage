@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "profiles": [
+    {"id":"p1","label":"知道该做却总是拖延的成年人","lived_problem":"计划很多，真正执行几天就中断","listener_language":["我不是不知道方法，就是坚持不了","为什么别人能做到我做不到"],"desired_change":"把改变从意志力问题变成环境和启动设计问题","objections":["两分钟规则听起来太简单","我试过打卡但没用"],"best_angle":"问题型：为什么坚持不了？","hook":"你不是缺少自律，而是系统让坏习惯更容易发生。"},
+    {"id":"p2","label":"刚开始自我管理的年轻观众","lived_problem":"想学习、运动、早起，但目标太多无法持续","listener_language":["我想成为更好的人但总是反复","怎样从今天开始而不是等下周"],"desired_change":"用身份和一个最小动作建立可持续起点","objections":["身份认同会不会只是自我暗示","生活环境没法轻易改变"],"best_angle":"实践型：七天重建一个习惯","hook":"先别把目标写大，先让自己成为一个会开始的人。"},
+    {"id":"p3","label":"对成功学和鸡汤保持怀疑的人","lived_problem":"看过很多方法，却发现现实压力让方法失效","listener_language":["这些方法是不是只适合生活顺利的人","为什么我知道道理还是做不到"],"desired_change":"理解方法有效的边界，同时保留可操作的小杠杆","objections":["个人习惯不能解决结构性问题","四个法则过度简化了行为科学"],"best_angle":"观点型：原子习惯只解释了一半","hook":"如果习惯方法让你更自责，可能是你漏看了它的边界。"}
+  ],
+  "recommendation": {"profile_id":"p1","reason":"问题最普遍，能把观众熟悉的失败经验转成连续故事，并自然引出书中的方法与限制。","audience_angle_pair":"知道该做却坚持不了 × 问题型+实践型","sources":["https://www.reddit.com/r/atomichabit/comments/1rrokpk/i_read_atomic_habits_and_then_actually_nothing/","https://www.goodreads.com/book/40121378/questions","https://jamesclear.com/identity-based-habits"]}
+}
