@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "openmontage/artifacts/visual_asset_plan",
+  "title": "Visual Asset Plan",
+  "description": "Reusable visual assets planned before storyboard assembly.",
+  "type": "object",
+  "required": ["version", "visual_grammar", "canvas", "assets"],
+  "properties": {
+    "version": {"type": "string", "const": "1.0"},
+    "visual_grammar": {"type": "string", "minLength": 1},
+    "canvas": {
+      "type": "object",
+      "required": ["width", "height", "aspect_ratio"],
+      "properties": {
+        "width": {"type": "integer", "const": 1920},
+        "height": {"type": "integer", "const": 1080},
+        "aspect_ratio": {"type": "string", "const": "16:9"}
+      },
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "role", "used_by", "generation_mode", "status", "reusable"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "type": {"type": "string", "enum": ["style_kit", "illustration", "map", "diagram", "timeline", "object_visual", "data_card", "quote_card", "portrait", "background", "talking_head"]},
+          "role": {"type": "string", "minLength": 1},
+          "used_by": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "generation_mode": {"type": "string", "enum": ["image", "svg", "code", "stock", "user_asset"]},
+          "status": {"type": "string", "enum": ["planned", "generated", "approved", "rejected", "needs_refinement"]},
+          "reusable": {"type": "boolean"},
+          "path": {"type": "string"},
+          "source_tool": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

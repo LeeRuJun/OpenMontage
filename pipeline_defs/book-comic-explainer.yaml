@@ -1,0 +1,271 @@
+name: book-comic-explainer
+version: "2.0"
+description: >
+  Generic 16:9 knowledge-book explainer pipeline. Classifies the book, chooses how
+  to explain it, records narration first, generates reusable visual assets, then
+  assembles an editorial diagram storyboard and deterministic Remotion render.
+category: generated
+stability: beta
+
+default_checkpoint_policy: guided
+
+extensions:
+  custom_scripts: true
+  custom_playbooks: true
+  custom_skills: true
+  custom_tools: false
+
+required_skills:
+  - pipelines/book-comic-explainer/book-profile-director
+  - pipelines/book-comic-explainer/research-director
+  - pipelines/book-comic-explainer/proposal-director
+  - pipelines/book-comic-explainer/script-director
+  - pipelines/book-comic-explainer/narration-director
+  - pipelines/book-comic-explainer/visual-asset-plan-director
+  - pipelines/book-comic-explainer/storyboard-director
+  - pipelines/book-comic-explainer/character-director
+  - pipelines/book-comic-explainer/scene-director
+  - pipelines/book-comic-explainer/asset-director
+  - pipelines/book-comic-explainer/edit-director
+  - pipelines/book-comic-explainer/compose-director
+  - creative/book-explainer-self-media
+  - creative/narrative-storytelling
+  - meta/reviewer
+  - meta/checkpoint-protocol
+  - meta/voice-performance-director
+
+orchestration:
+  mode: sequential
+  budget_default_usd: 3.00
+  max_revisions_per_stage: 3
+  max_send_backs: 2
+  max_wall_time_minutes: 45
+
+channel_asset_path: shared_assets/channel_seinen_manga
+
+reference_input:
+  supported: true
+  analysis_depth: standard
+  analysis_tools: [video_analyzer, transcript_fetcher]
+
+stages:
+  - name: book_profile
+    skill: pipelines/book-comic-explainer/book-profile-director
+    produces: [book_profile]
+    tools_available: []
+    checkpoint_required: false
+    human_approval_default: false
+    review_focus:
+      - Primary and secondary book types are evidence-grounded
+      - Visual grammar matches the book and audience
+      - Low-confidence cases fall back to editorial_explainer
+    success_criteria:
+      - Schema-valid book_profile
+      - Primary type, narrative mode, and visual grammar are present
+
+  - name: research
+    skill: pipelines/book-comic-explainer/research-director
+    required_artifacts_in: [book_profile]
+    produces: [research_brief]
+    tools_available: []
+    checkpoint_required: false
+    human_approval_default: false
+    review_focus:
+      - Book content accurately captured
+      - Research follows the selected book profile
+      - At least 3 genuinely different angles discovered
+    success_criteria:
+      - Schema-valid research_brief
+      - At least 3 angles, each grounded in research
+
+  - name: proposal
+    skill: pipelines/book-comic-explainer/proposal-director
+    required_artifacts_in: [book_profile, research_brief]
+    produces: [proposal_packet, delivery_strategy, decision_log]
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - At least 3 angles with hooks and visual approaches
+      - Delivery strategy explains why this book is told this way
+      - Production plan reflects tool availability
+    success_criteria:
+      - Schema-valid proposal_packet and delivery_strategy
+      - User explicitly chose the angle and delivery strategy
+      - Angle and strategy decisions recorded
+
+  - name: script
+    skill: pipelines/book-comic-explainer/script-director
+    required_artifacts_in: [proposal_packet, delivery_strategy, research_brief]
+    produces: [script]
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Script serves the approved angle and delivery strategy
+      - Every section has dramatic function and leaves a question
+      - Narration text is written for speaking, not reading on paper
+      - "Delivery cues are specific: pace, pauses, emphasis"
+    success_criteria:
+      - Schema-valid script
+      - Hook grabs in first 30 seconds
+      - Every section has question_left_with_viewer
+      - Delivery cues present for every section
+
+  - name: narration
+    skill: pipelines/book-comic-explainer/narration-director
+    required_artifacts_in: [script]
+    produces: [narration_audio]
+    required_tools: [tts_selector]
+    tools_available: [tts_selector]
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Voice matches channel profile
+      - Sample approved before batch
+      - Delivery cues from script are followed
+      - Every section has audio with exact duration
+    success_criteria:
+      - Narration audio for all script sections
+      - Voice sample approved by user
+      - Exact durations recorded — these become the timeline
+
+  - name: visual_asset_plan
+    skill: pipelines/book-comic-explainer/visual-asset-plan-director
+    required_artifacts_in: [book_profile, delivery_strategy, script, narration_audio]
+    produces: [visual_asset_plan]
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Asset types follow book profile and delivery strategy
+      - Reusable assets are identified before generation
+      - Canvas and safe composition are 1920x1080 16:9
+    success_criteria:
+      - Schema-valid visual_asset_plan
+      - Every script section has planned visual support
+      - Assets have generation modes and reuse metadata
+
+  - name: core_assets
+    skill: pipelines/book-comic-explainer/asset-director
+    required_artifacts_in: [visual_asset_plan]
+    produces: [asset_manifest]
+    required_tools: [image_selector]
+    optional_tools: [music_gen]
+    tools_available: [image_selector, music_gen]
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Core assets match the selected visual grammar
+      - Assets are reusable and provenance is recorded
+      - One representative asset sample is approved before batch generation
+    success_criteria:
+      - Approved asset_manifest exists
+      - Core reusable assets are generated or supplied
+      - All approved files exist on disk
+
+  - name: storyboard
+    skill: pipelines/book-comic-explainer/storyboard-director
+    required_artifacts_in: [script, narration_audio, asset_manifest, visual_asset_plan]
+    produces: [storyboard_spec]
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Every narration segment references approved assets
+      - Frame count matches narration duration
+      - Missing visuals are recorded as gap requests, not silently invented
+      - Shot types and editorial rhythm vary
+    success_criteria:
+      - Key frame plan covers all narration segments
+      - Approved asset IDs are used instead of ad hoc paths
+      - Missing-asset requests are explicit
+
+  - name: character_design
+    condition: requires_character_design
+    skill: pipelines/book-comic-explainer/character-director
+    required_artifacts_in: [script, storyboard_spec]
+    produces: [character_design]
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Every character in storyboard has an appearance block
+      - Appearance is copy-paste ready
+      - Distinct silhouettes — no two characters look alike
+    success_criteria:
+      - Schema-valid character_design
+      - Appearance blocks are verbatim-copyable into image prompts
+
+  - name: scene_design
+    condition: requires_scene_design
+    skill: pipelines/book-comic-explainer/scene-director
+    required_artifacts_in: [script, storyboard_spec]
+    optional_artifacts_in: [character_design]
+    produces: [scene_list, art_style]
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - "Art style locked: era, mood, palette, lighting"
+      - Scenes reused from shared_assets where possible
+      - Every storyboard location has a scene assigned
+    success_criteria:
+      - Art style prompt_prefix ready for downstream
+      - Scene list covers all locations
+      - New scene prompts include style + era + mood
+
+  - name: gap_assets
+    skill: pipelines/book-comic-explainer/asset-director
+    required_artifacts_in: [storyboard_spec, asset_manifest, visual_asset_plan]
+    optional_artifacts_in: [character_design, scene_list, art_style]
+    produces: [asset_manifest]
+    required_tools: [image_selector]
+    tools_available: [image_selector]
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Only missing or rejected assets are regenerated
+      - Existing approved assets are not silently replaced
+      - Revised provenance and status are recorded
+    success_criteria:
+      - All storyboard gap requests are resolved or explicitly waived
+      - Schema-valid revised asset_manifest
+      - All approved files exist on disk
+
+  - name: edit
+    skill: pipelines/book-comic-explainer/edit-director
+    required_artifacts_in: [storyboard_spec, asset_manifest, narration_audio, script]
+    produces: [edit_decisions]
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: false
+    review_focus:
+      - Narration is the timeline
+      - Key visuals appear before or with spoken concepts
+      - Camera motion follows asset type and editorial rhythm
+      - Silence is used intentionally
+    success_criteria:
+      - Schema-valid edit_decisions
+      - Full duration covered with no gaps
+      - Narration drives timing
+
+  - name: compose
+    skill: pipelines/book-comic-explainer/compose-director
+    required_artifacts_in: [edit_decisions, asset_manifest, narration_audio]
+    optional_artifacts_in: [script, book_profile, delivery_strategy, character_design]
+    produces: [render_report, cover_images]
+    required_tools: [video_compose]
+    tools_available: [video_compose]
+    checkpoint_required: true
+    human_approval_default: false
+    review_focus:
+      - Audio synced precisely
+      - Editorial canvas and scene primitives render deterministically
+      - Music ducked below narration
+      - Optional talking-head overlay stays in its designated corner
+    success_criteria:
+      - Schema-valid render_report
+      - Final MP4 passes ffprobe validation
+      - Resolution is 1920x1080
+      - Duration within ±5% of narration total

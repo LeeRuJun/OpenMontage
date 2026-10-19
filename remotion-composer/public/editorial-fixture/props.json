@@ -1,0 +1,77 @@
+{
+  "cuts": [
+    {
+      "id": "image-card",
+      "source": "editorial-fixture/card.svg",
+      "in_seconds": 0,
+      "out_seconds": 4,
+      "type": "image_card",
+      "editorialTitle": "可复用的视觉资产",
+      "editorialSubtitle": "图片可以服务多个章节"
+    },
+    {
+      "id": "map",
+      "source": "",
+      "in_seconds": 4,
+      "out_seconds": 8,
+      "type": "map_scene",
+      "editorialTitle": "地图与路线",
+      "editorialNodes": [
+        {"id": "a", "label": "长安", "x": 720, "y": 520},
+        {"id": "b", "label": "洛阳", "x": 1180, "y": 560}
+      ],
+      "editorialPaths": [{"id": "route", "d": "M720 520 C880 390 1020 440 1180 560"}]
+    },
+    {
+      "id": "diagram",
+      "source": "",
+      "in_seconds": 8,
+      "out_seconds": 12,
+      "type": "diagram_scene",
+      "editorialTitle": "因果关系",
+      "editorialNodes": [
+        {"id": "input", "label": "压力", "x": 620, "y": 540},
+        {"id": "mechanism", "label": "机制", "x": 960, "y": 540},
+        {"id": "result", "label": "结果", "x": 1300, "y": 540}
+      ],
+      "editorialEdges": [{"from": "input", "to": "mechanism"}, {"from": "mechanism", "to": "result"}]
+    },
+    {
+      "id": "timeline",
+      "source": "",
+      "in_seconds": 12,
+      "out_seconds": 16,
+      "type": "timeline_scene",
+      "editorialTitle": "事件时间线",
+      "editorialEvents": [
+        {"year": "A", "label": "起点"},
+        {"year": "B", "label": "转折"},
+        {"year": "C", "label": "结果"}
+      ],
+      "editorialActiveIndex": 1
+    },
+    {
+      "id": "data",
+      "source": "",
+      "in_seconds": 16,
+      "out_seconds": 20,
+      "type": "data_reveal",
+      "editorialTitle": "关键数字",
+      "editorialLabel": "核心指标",
+      "editorialValue": 70000,
+      "editorialUnit": "人"
+    },
+    {
+      "id": "quote",
+      "source": "",
+      "in_seconds": 20,
+      "out_seconds": 24,
+      "type": "quote_card",
+      "editorialQuote": "先让观众看到机制，再让观众记住结论。",
+      "editorialAttribution": "Editorial explainer"
+    }
+  ],
+  "overlays": [],
+  "captions": [],
+  "audio": {}
+}

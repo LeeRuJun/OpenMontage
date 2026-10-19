@@ -16,7 +16,7 @@
           "id": { "type": "string" },
           "type": {
             "type": "string",
-            "enum": ["image", "video", "audio", "narration", "music", "sfx", "diagram", "animation", "code_snippet", "subtitle", "font", "lut"]
+            "enum": ["image", "video", "audio", "narration", "music", "sfx", "diagram", "animation", "3d_asset", "3d_world", "code_snippet", "subtitle", "font", "lut"]
           },
           "path": { "type": "string", "description": "Relative path within the pipeline project directory" },
           "source_tool": { "type": "string" },
@@ -34,6 +34,11 @@
           "provider": { "type": "string", "description": "Provider name (e.g. pixabay, google_imagen)" },
           "license": { "type": "string", "description": "License type (e.g. Pixabay License, CC0)" },
           "original_url": { "type": "string", "description": "Source URL if downloaded from a stock service" },
+          "visual_role": { "type": "string" },
+          "book_sections": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "generation_mode": { "type": "string", "enum": ["image", "svg", "code", "stock", "user_asset"] },
+          "reusable": { "type": "boolean" },
+          "status": { "type": "string", "enum": ["planned", "generated", "approved", "rejected", "needs_refinement"] },
           "voice_performance": {
             "type": "object",
             "description": "Applied voice-performance contract for narration assets.",

@@ -197,13 +197,16 @@ stages:
     human_approval_default: false
     review_focus:
       - Source and support layers remain balanced
+      - User-selected reference conversion/hook atoms, if provided, remain real video assets in the final tail section and are not replaced by generated UI
       - Aspect-ratio variants preserve readability
       - Audio stays coherent across footage and generated elements
+      - "If fixed-region ad packaging is used: middle/source region stays pixel-locked; top/bottom are the creative zones; fixed logo remains exact transparent PNG top-layer; CTA is user-selected/custom; final conversion uses selected real reference atoms, never Remotion-drawn fake app/list UI"
       - "render_runtime in edit_decisions matches proposal_packet — silent swap is a CRITICAL governance violation"
       - "Hybrid typically uses render_runtime='remotion' so source footage and React support overlays compose in one pass; pick 'hyperframes' only when support layers are HTML/GSAP-native"
     success_criteria:
       - Schema-valid render_report artifact
       - Output file exists and passes ffprobe validation
+      - For fixed-region ads, rendered final MP4 tail segment is visually sampled and matches selected reference conversion atoms
 
   - name: publish
     skill: pipelines/hybrid/publish-director

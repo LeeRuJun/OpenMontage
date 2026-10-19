@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "openmontage/artifacts/book_profile",
+  "title": "Book Profile",
+  "description": "Classifies a book before research and visual planning.",
+  "type": "object",
+  "required": ["version", "primary_type", "secondary_types", "narrative_mode", "visual_grammar", "confidence", "evidence"],
+  "properties": {
+    "version": {"type": "string", "const": "1.0"},
+    "primary_type": {
+      "type": "string",
+      "enum": ["history", "politics", "business_economics", "psychology_self_help", "science_technology", "biography", "literature", "philosophy_social", "mixed", "unknown"]
+    },
+    "secondary_types": {"type": "array", "items": {"type": "string"}},
+    "narrative_mode": {
+      "type": "string",
+      "enum": ["explanatory", "story_driven", "practical", "debate", "case_study"]
+    },
+    "visual_grammar": {
+      "type": "string",
+      "enum": ["historical_diagram", "business_system", "behavior_diagram", "technical_explainer", "biographical_timeline", "narrative_illustration", "concept_map", "editorial_explainer"]
+    },
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "evidence": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  },
+  "additionalProperties": false
+}

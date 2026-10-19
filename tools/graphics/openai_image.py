@@ -10,6 +10,8 @@ from contextlib import ExitStack
 from pathlib import Path
 from typing import Any
 
+from tools.provider_pricing import PriceQuoteRequired
+
 from tools.base_tool import (
     BaseTool,
     Determinism,
@@ -83,6 +85,11 @@ class OpenAIImage(BaseTool):
             "prompt": {"type": "string"},
             "model": {
                 "type": "string",
+                "enum": [
+                    "gpt-image-2",
+                    "gpt-image-2.5-flare",
+                    "gpt-image-2.5-sunburst",
+                ],
                 "default": "gpt-image-2",
                 "description": "OpenAI image model. Defaults to gpt-image-2.",
             },
@@ -168,8 +175,12 @@ class OpenAIImage(BaseTool):
         return ToolStatus.UNAVAILABLE
 
     def estimate_cost(self, inputs: dict[str, Any]) -> float:
-        # Provider pricing changes; keep this as a conservative estimate until
-        # the cost registry has dimension-aware GPT Image 2 pricing.
+        # gpt-image-2 per-image pricing at 1024x1024 (non-square sizes run
+        # slightly cheaper): https://developers.openai.com/api/docs/guides/image-generation
+        if inputs.get("model", "gpt-image-2") != "gpt-image-2":
+            raise PriceQuoteRequired(
+                "GPT Image 2.5 uses token pricing; obtain a quote for the chosen size and quality"
+            )
         quality = inputs.get("quality", "high")
         n = int(inputs.get("n", 1) or 1)
         cost_map = {"low": 0.006, "medium": 0.053, "high": 0.211, "auto": 0.053}
@@ -183,11 +194,12 @@ class OpenAIImage(BaseTool):
             )
 
         start = time.time()
+        model = inputs.get("model", "gpt-image-2")
         try:
             normalized = self._normalize_inputs(inputs)
             from openai import OpenAI
 
-            client = OpenAI()
+            client = OpenAI(max_retries=0)
             payload = self._build_payload(normalized)
             with ExitStack() as stack:
                 image_inputs = self._open_image_inputs(normalized, stack)
@@ -234,9 +246,15 @@ class OpenAIImage(BaseTool):
                 "output": outputs[0],
                 "outputs": outputs,
                 "images_generated": len(outputs),
+                "usage": (
+                    response.usage.model_dump()
+                    if getattr(response, "usage", None) and hasattr(response.usage, "model_dump")
+                    else None
+                ),
+                "cost_status": "estimated" if model == "gpt-image-2" else "usage_reported_unpriced",
             },
             artifacts=outputs,
-            cost_usd=self.estimate_cost(normalized),
+            cost_usd=self.estimate_cost(normalized) if model == "gpt-image-2" else None,
             duration_seconds=round(time.time() - start, 2),
             model=normalized["model"],
         )
@@ -246,6 +264,8 @@ class OpenAIImage(BaseTool):
         normalized = dict(inputs)
         normalized["prompt"] = str(inputs["prompt"])
         normalized["model"] = str(inputs.get("model", "gpt-image-2"))
+        if normalized["model"] == "gpt-image-2" and inputs.get("quality") in {"xhigh", "max"}:
+            raise ValueError("xhigh/max quality requires GPT Image 2.5")
         normalized["generation_mode"] = inputs.get("generation_mode")
         if normalized["generation_mode"] not in {None, "generate", "edit"}:
             raise ValueError("generation_mode must be 'generate' or 'edit'")

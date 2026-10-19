@@ -36,6 +36,58 @@ When listing multiple subjects or events:
 
 > Write the prompt so that someone who has never seen the intended video could picture the subjects, scene, motion, and camera work from your text alone. If a reader could not picture it, a generation model will not render it.
 
+## Time-Range Prompt Contract — video is NOT an image
+
+**Every text-to-video prompt must be written as time ranges.** If you submit a
+single paragraph that only describes the appearance of a scene, most models will
+interpret it like an image prompt and return a nearly-static shot. Time ranges
+force the prompt to describe what happens over time.
+
+Use this structure for any clip longer than ~3 seconds:
+
+```text
+0-2s:
+[Establish the shot: subject, location, state, 3-5 concrete visual elements,
+lighting, and whether the camera is locked / moving.]
+
+2-4s:
+[Advance the action: one visible event, subject reaction, environmental motion,
+and camera movement.]
+
+4-6s:
+[Escalate or reveal: the next beat, transformation, punchline setup, or visual
+change.]
+
+6-8s:
+[Payoff / transition / reaction.]
+```
+
+Rules:
+
+- Each time range must contain **at least one visible action verb**: swells,
+  spills, wakes, turns, reaches, falls, drifts, opens, covers, pops up.
+- Each time range must mention **subject + action + visual change**. If a range
+  only says what something looks like, rewrite it.
+- A clip can have many ranges: `0-2s`, `2-4s`, `4-6s`, `6-8s`, `8-10s`, etc.
+- For comedy, ads, character shorts, and poetry, write beats like a storyboard:
+  setup → escalation → reaction → payoff.
+- Do not submit a single flowing paragraph to a video model unless the desired
+  result is intentionally a static tableau.
+
+Example:
+
+```text
+6-8s:
+The foam swells more than expected and flops over the rim like a soft creamy
+wave. Yinbao reacts with shocked round eyes.
+
+8-10s:
+The foam gently covers Yinbao from head to toe. He pops back up with a foam
+mustache and a blank, embarrassed expression. Freeze on the punchline.
+```
+
+---
+
 ## Universal Prompt Formula
 
 Prior work (CMU/Harvard, "Building a Precise Video Language with Human-AI Oversight") shows VLMs reliably describe subject + scene but fail on motion, spatial, and camera. **Forcing prompts to fill all five slots is the highest-leverage change.**

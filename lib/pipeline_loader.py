@@ -26,7 +26,7 @@ from functools import lru_cache
 
 @lru_cache(maxsize=1)
 def _load_manifest_schema() -> dict:
-    with open(SCHEMA_PATH) as f:
+    with open(SCHEMA_PATH, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -61,7 +61,7 @@ def load_pipeline(name: str, defs_dir: Optional[Path] = None) -> dict[str, Any]:
     if not path.exists():
         raise FileNotFoundError(f"Pipeline manifest not found: {path}")
 
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         manifest = yaml.safe_load(f)
 
     schema = _load_manifest_schema()
@@ -136,6 +136,8 @@ def get_stage_order(
     """
     order: list[str] = []
     for stage in manifest["stages"]:
+        if context is not None and not _condition_is_active(stage.get("condition"), context):
+            continue
         order.append(stage["name"])
         if not include_sub_stages:
             continue

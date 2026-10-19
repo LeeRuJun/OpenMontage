@@ -16,6 +16,9 @@ import { ProductReveal, ProductRevealProps } from "./components/ProductReveal";
 import { CaptionOverlay, WordCaption } from "./components/CaptionOverlay";
 import { CollageBurst, CollageBurstProps } from "./CollageBurst";
 import { LyricOverlay, LyricOverlayProps } from "./LyricOverlay";
+import { PipelineStory } from "./PipelineStory";
+import { ReferenceReplica } from "./ReferenceReplica";
+import { LayeredReferenceReplica } from "./LayeredReferenceReplica";
 
 // ---------------------------------------------------------------------------
 // Theme System — prevents every video from looking like dark fintech
@@ -149,6 +152,24 @@ export const Root: React.FC = () => {
           audio: {},
         }}
         calculateMetadata={calculateMetadata}
+      />
+      <Composition
+        id="ReferenceReplica"
+        component={ReferenceReplica}
+        durationInFrames={30 * 10}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+      <Composition
+        id="LayeredReferenceReplica"
+        component={LayeredReferenceReplica}
+        durationInFrames={30 * 10}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
       />
       <Composition
         id="CinematicRenderer"
@@ -295,6 +316,14 @@ export const Root: React.FC = () => {
           lyrics: [],
           bottomY: 0.88,
         } as LyricOverlayProps}
+      />
+      <Composition
+        id="PipelineStory"
+        component={PipelineStory}
+        durationInFrames={300}
+        fps={30}
+        width={1920}
+        height={1080}
       />
       <Composition
         id="EndTag"

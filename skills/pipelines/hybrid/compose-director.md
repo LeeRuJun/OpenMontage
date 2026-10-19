@@ -38,7 +38,7 @@ For each output variant, verify:
 - crop safety,
 - text safety,
 - subtitle legibility,
-- audio consistency.
+- audio consistency,
 
 ### 3. Keep Audio Coherent
 

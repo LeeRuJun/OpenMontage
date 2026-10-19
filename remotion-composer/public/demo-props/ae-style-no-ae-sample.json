@@ -1,0 +1,169 @@
+{
+  "render_runtime": "remotion",
+  "renderer_family": "animation-first",
+  "composition_mode": "templated",
+  "themeConfig": {
+    "backgroundColor": "#101828",
+    "surfaceColor": "#172033",
+    "primaryColor": "#F6B44B",
+    "accentColor": "#3DD6D0",
+    "textColor": "#F8FAFC",
+    "captionHighlightColor": "#FFE082",
+    "captionBackgroundColor": "rgba(0,0,0,0.72)",
+    "chartColors": [
+      "#F6B44B",
+      "#3DD6D0",
+      "#8EA7FF",
+      "#FF7A90"
+    ]
+  },
+  "cuts": [
+    {
+      "id": "sc01_library_intro",
+      "source": "ae-style-no-ae-sample/library_1.png",
+      "in_seconds": 0,
+      "out_seconds": 2.4,
+      "type": "anime_scene",
+      "images": [
+        "ae-style-no-ae-sample/library_1.png",
+        "ae-style-no-ae-sample/library_2.png"
+      ],
+      "animation": "zoom-in",
+      "particles": "light-rays",
+      "particleColor": "#FFE082",
+      "particleCount": 12,
+      "particleIntensity": 0.28,
+      "lightingFrom": "rgba(255,190,80,0.15)",
+      "lightingTo": "rgba(255,220,140,0.05)",
+      "vignette": true,
+      "backgroundColor": "#4A2C1A"
+    },
+    {
+      "id": "sc02_library_to_office",
+      "source": "ae-style-no-ae-sample/transition_1.png",
+      "in_seconds": 2.4,
+      "out_seconds": 4.6,
+      "type": "anime_scene",
+      "images": [
+        "ae-style-no-ae-sample/transition_1.png",
+        "ae-style-no-ae-sample/transition_2.png"
+      ],
+      "animation": "pan-right",
+      "particles": "mist",
+      "particleColor": "#FFFFFF",
+      "particleCount": 8,
+      "particleIntensity": 0.22,
+      "lightingFrom": "rgba(255,210,120,0.06)",
+      "lightingTo": "rgba(80,120,160,0.08)",
+      "vignette": true,
+      "backgroundColor": "#D8E0E6"
+    },
+    {
+      "id": "sc03_overtime_pressure",
+      "source": "ae-style-no-ae-sample/office_night_1.png",
+      "in_seconds": 4.6,
+      "out_seconds": 7.1,
+      "type": "anime_scene",
+      "images": [
+        "ae-style-no-ae-sample/office_night_1.png",
+        "ae-style-no-ae-sample/office_night_2.png"
+      ],
+      "animation": "ken-burns",
+      "particles": "mist",
+      "particleColor": "#8EC5FF",
+      "particleCount": 18,
+      "particleIntensity": 0.35,
+      "lightingFrom": "rgba(30,80,160,0.10)",
+      "lightingTo": "rgba(0,0,0,0.25)",
+      "vignette": true,
+      "backgroundColor": "#0E172A"
+    },
+    {
+      "id": "sc04_bedroom_bill",
+      "source": "ae-style-no-ae-sample/bedroom_1.png",
+      "in_seconds": 7.1,
+      "out_seconds": 10.0,
+      "type": "anime_scene",
+      "images": [
+        "ae-style-no-ae-sample/bedroom_1.png",
+        "ae-style-no-ae-sample/bedroom_2.png"
+      ],
+      "animation": "zoom-in",
+      "particles": "sparkles",
+      "particleColor": "#BBD7FF",
+      "particleCount": 10,
+      "particleIntensity": 0.25,
+      "lightingFrom": "rgba(80,150,255,0.10)",
+      "lightingTo": "rgba(255,255,255,0.05)",
+      "vignette": true,
+      "backgroundColor": "#081020"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "badge",
+      "type": "section_title",
+      "text": "OpenMontage / Remotion",
+      "subtitle": "无 AE 复刻动态图层风格",
+      "in_seconds": 0.2,
+      "out_seconds": 2.2,
+      "position": "top-left",
+      "accentColor": "#FFE082"
+    }
+  ],
+  "captions": [
+    {
+      "word": "大家好",
+      "startMs": 0,
+      "endMs": 760
+    },
+    {
+      "word": "今天想跟你聊一本书",
+      "startMs": 760,
+      "endMs": 2200
+    },
+    {
+      "word": "《管道的故事》",
+      "startMs": 2400,
+      "endMs": 3600
+    },
+    {
+      "word": "你有没有过这种感觉",
+      "startMs": 3600,
+      "endMs": 5000
+    },
+    {
+      "word": "每天拼命工作",
+      "startMs": 5000,
+      "endMs": 6300
+    },
+    {
+      "word": "加班加点",
+      "startMs": 6300,
+      "endMs": 7300
+    },
+    {
+      "word": "不敢请假",
+      "startMs": 7300,
+      "endMs": 8300
+    },
+    {
+      "word": "不敢生病",
+      "startMs": 8300,
+      "endMs": 10000
+    }
+  ],
+  "audio": {
+    "narration": {
+      "src": "ae-style-no-ae-sample/narration_10s.mp3",
+      "volume": 0.95
+    },
+    "music": {
+      "src": "ae-style-no-ae-sample/music_bed.mp3",
+      "volume": 0.1,
+      "fadeInSeconds": 0.5,
+      "fadeOutSeconds": 1,
+      "loop": true
+    }
+  }
+}

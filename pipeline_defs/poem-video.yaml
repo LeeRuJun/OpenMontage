@@ -1,0 +1,174 @@
+name: poem-video
+version: "2.0"
+description: >
+  AI poetry video pipeline. Takes a Chinese poem, generates visual scenes via
+  text-to-video, records narration via TTS, and composes a short vertical video
+  (1080×1920, 15–60 seconds) with music, subtitles, and transitions. Designed for
+  the 国风/古诗词 AI短视频 genre popular on Douyin and Xiaohongshu.
+category: generated
+stability: beta
+default_checkpoint_policy: guided
+
+orchestration:
+  mode: sequential
+  budget_default_usd: 1.50
+  max_revisions_per_stage: 3
+  max_send_backs: 2
+  max_wall_time_minutes: 12
+
+extensions:
+  custom_scripts: true
+  custom_playbooks: true
+  custom_skills: true
+  custom_tools: false
+
+required_skills:
+  - pipelines/poem-video/idea-director
+  - pipelines/poem-video/script-director
+  - pipelines/poem-video/asset-director
+  - pipelines/poem-video/edit-director
+  - pipelines/poem-video/compose-director
+  - creative/poem-video
+  - creative/narrative-storytelling
+  - meta/reviewer
+  - meta/checkpoint-protocol
+  - meta/video-reference-analyst
+  - meta/video-gen-prompting
+
+compatible_playbooks:
+  recommended:
+    - ink-sketch
+  also_works:
+    - premium-minimalist
+    - flat-motion-graphics
+  custom_allowed: true
+
+stages:
+  # ── 1. Idea — Understand poem, propose visual direction ──────
+  - name: idea
+    skill: pipelines/poem-video/idea-director
+    produces:
+      - brief
+      - decision_log
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Poem correctly interpreted (author, dynasty, imagery, emotion)
+      - Visual art style locked (水墨, 工笔, 青绿山水, 素描, etc.)
+      - If a reference video exists, its 美术风格 extracted and locked (reference_style in decision_log)
+      - Voice and music direction chosen
+      - Target duration is realistic for the poem length
+    success_criteria:
+      - Schema-valid brief artifact
+      - Art style, voice, and music direction recorded in decision_log
+      - If a reference exists, reference_style recorded in decision_log (style, palette, structure, motion)
+      - At least 2 visual directions presented
+
+  # ── 2. Script — Break poem into visual scenes ────────────────
+  - name: script
+    skill: pipelines/poem-video/script-director
+    required_artifacts_in:
+      - brief
+    produces:
+      - script
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Each line/couplet has a text-to-video scene description
+      - Scene descriptions are vivid, visual, and generation-ready
+      - Visual flow follows the poem's emotional arc
+      - Narration text matches the poem (original + optional modern translation)
+    success_criteria:
+      - Schema-valid script artifact
+      - One scene per poetic line or couplet
+      - Every scene has a concrete visual prompt
+
+  # ── 3. Assets — Generate clips + narration + music ───────────
+  - name: assets
+    skill: pipelines/poem-video/asset-director
+    required_artifacts_in:
+      - script
+    produces:
+      - asset_manifest
+    required_tools:
+      - video_selector
+      - tts_selector
+    optional_tools:
+      - music_gen
+    tools_available:
+      - video_selector
+      - tts_selector
+      - music_gen
+    checkpoint_required: true
+    human_approval_default: true
+    review_focus:
+      - Every scene has a generated video clip that matches the visual prompt
+      - Clips were generated via text-to-video, not image-to-video / stills
+      - Every clip passes qa_lib.gate_slideshow_motion (real motion, not a slideshow)
+      - Every clip passes qa_lib.gate_tone_contrast (visible subject, not a murky black blob)
+      - Video clips are visually coherent (same art style across scenes)
+      - Narration audio is clear, well-paced, and matches the poem's rhythm
+      - Music complements the poem's mood without overpowering narration
+      - All files exist on disk and pass ffprobe validation
+    success_criteria:
+      - Schema-valid asset_manifest artifact
+      - One video clip per scene, all same resolution and aspect ratio, ALL scenes present on disk
+      - Every clip passes qa_lib.gate_slideshow_motion and qa_lib.gate_tone_contrast
+      - Narration audio covers full poem
+      - Background music file present
+
+  # ── 4. Edit — Arrange clips to narration timeline ────────────
+  - name: edit
+    skill: pipelines/poem-video/edit-director
+    required_artifacts_in:
+      - script
+      - asset_manifest
+    produces:
+      - edit_decisions
+    tools_available: []
+    checkpoint_required: true
+    human_approval_default: false
+    review_focus:
+      - Clips aligned to narration segments — narration IS the timeline
+      - Transitions between scenes are appropriate (dissolve, fade, cut)
+      - Subtitle timing matches narration
+      - No gaps or black frames between scenes
+    success_criteria:
+      - Schema-valid edit_decisions artifact
+      - Full duration covered with no gaps
+      - Narration drives timing — clip durations follow audio
+
+  # ── 5. Compose — Stitch + audio + subtitles + render ─────────
+  - name: compose
+    skill: pipelines/poem-video/compose-director
+    required_artifacts_in:
+      - edit_decisions
+      - asset_manifest
+    produces:
+      - render_report
+    required_tools:
+      - video_compose
+      - audio_mixer
+    optional_tools:
+      - subtitle_gen
+    tools_available:
+      - video_compose
+      - audio_mixer
+      - subtitle_gen
+    checkpoint_required: true
+    human_approval_default: false
+    review_focus:
+      - qa_lib.run_all() passes on final video (scene_count, black_frame_ratio<5%, audio_present, subtitles_present, duration ±10%, tone_contrast, slideshow_motion)
+      - Final video is 1080×1920 (vertical) unless user chose horizontal
+      - Narration synced precisely with visuals
+      - Music ducked below narration
+      - Subtitles readable and styled appropriately
+      - Poem title and author displayed at start
+      - Output passes ffprobe validation
+    success_criteria:
+      - Schema-valid render_report artifact
+      - qa_lib.run_all() returns passed=True — any failing gate means do-not-ship and send back to assets
+      - Output MP4 exists and plays correctly
+      - Duration within ±10% of target

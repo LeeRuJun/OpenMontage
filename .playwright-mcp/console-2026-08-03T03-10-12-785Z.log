@@ -1,0 +1,27 @@
+[    2371ms] [ERROR] Not signed in with the identity provider. @ https://x.com/Hamburgerai/status/2083469532581245176:0
+[    2890ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/2/guide.json?display_location=web_sidebar&count=5:0
+[    4799ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[    4969ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/graphql/viewer_context.json:0
+[    6428ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token. @ https://abs.twimg.com/x-web/x-web/assets/sentry-filter-BmD5JtWs.js:2
+[    8024ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   13715ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/2/guide.json?display_location=web_sidebar&count=5:0
+[   14921ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   21124ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   25578ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   33354ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   38774ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   42131ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   44242ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/2/guide.json?display_location=web_sidebar&count=5:0
+[   49034ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   58383ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   66486ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   69958ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   74641ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   80197ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   90436ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[   98985ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[  107136ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[  111381ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[  114630ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/2/guide.json?display_location=web_sidebar&count=5:0
+[  115221ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0
+[  121616ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://api.x.com/1.1/flow/viewer.json:0

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#d9c7a3"/>
+  <circle cx="960" cy="520" r="240" fill="#b6503c" opacity=".18"/>
+  <path d="M560 690 C760 430 1120 430 1360 690" fill="none" stroke="#b6503c" stroke-width="18"/>
+  <text x="960" y="520" text-anchor="middle" font-family="sans-serif" font-size="84" font-weight="700" fill="#332c25">EDITORIAL ASSET</text>
+</svg>

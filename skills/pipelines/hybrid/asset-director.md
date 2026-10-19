@@ -45,7 +45,8 @@ Keep the metadata clear about which assets are:
 - source-derived,
 - provided,
 - recorded,
-- generated.
+- generated,
+- direct reference conversion/hook atoms selected by the user.
 
 ### 4. Use Metadata For The Support Map
 
@@ -61,6 +62,7 @@ Recommended metadata keys:
 - support assets map to real narrative needs,
 - reusable kits are present,
 - source and generated assets are clearly separated,
+- user-selected reference conversion/hook atoms are marked as provided/direct-reference assets, not generated assets,
 - every referenced file exists.
 
 ### Mid-Production Fact Verification

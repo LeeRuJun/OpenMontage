@@ -324,10 +324,18 @@ curl -X POST "https://api.heygen.com/v1/workflows/executions" \
 
 ## Best Practices
 
-1. **Be descriptive in prompts** — include camera movement, lighting, style, and mood details
-2. **Default to Seedance 2.0 (via `seedance_video`) for cinematic and motion-led work** when `FAL_KEY` is set — single-pass synced audio, multi-shot, lip-sync, director-level camera. Use VEO 3.1 / Sora V2 Pro when the user specifically wants Google or OpenAI motion character; use `ltx_distilled` or `veo3_fast` only when speed is the hard constraint
-3. **Use reference images** for image-to-video generation — great for animating product photos or still images
-4. **Video generation is the slowest workflow** — allow up to 5 minutes, poll every 10 seconds
-5. **Aspect ratio matters** — use `9:16` for social media stories/reels, `16:9` for landscape, `1:1` for square
-6. **Output includes `asset_id`** — use this to reference the generated video in other HeyGen workflows
-7. **Output URLs are temporary** — download or save generated videos promptly
+1. **Write prompts as time ranges, not image descriptions** — use `0-2s: ...`, `2-4s: ...`, `4-6s: ...`. Each range needs a visible action verb and a visual change. A single paragraph that only describes the scene behaves like an image prompt and produces near-static video. Example:
+   ```text
+   6-8s:
+   The foam swells more than expected and flops over the rim like a soft creamy wave. Yinbao reacts with shocked round eyes.
+
+   8-10s:
+   The foam gently covers Yinbao from head to toe. He pops back up with a foam mustache and a blank, embarrassed expression. Freeze on the punchline.
+   ```
+2. **Be descriptive in prompts** — include camera movement, lighting, style, and mood details inside each time range
+3. **Default to Seedance 2.0 (via `seedance_video` / configured Doubao Seedance gateway) for cinematic and motion-led work** when available — single-pass synced audio, multi-shot, lip-sync, director-level camera. Use VEO 3.1 / Sora V2 Pro when the user specifically wants Google or OpenAI motion character; use `ltx_distilled` or `veo3_fast` only when speed is the hard constraint
+4. **Use reference images** for image-to-video generation — great for animating product photos or still images, but text is still required and should still be time-ranged
+5. **Video generation is the slowest workflow** — allow up to 5 minutes, poll every 10 seconds
+6. **Aspect ratio matters** — use `9:16` for social media stories/reels, `16:9` for landscape, `1:1` for square
+7. **Output includes `asset_id` or task id** — use this to reference the generated video in other workflows
+8. **Output URLs are temporary** — download or save generated videos promptly

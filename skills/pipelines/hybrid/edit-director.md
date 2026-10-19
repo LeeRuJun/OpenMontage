@@ -26,7 +26,8 @@ Typical order:
 2. speaker or context labels,
 3. diagrams or stat cards,
 4. optional inserts,
-5. CTA elements.
+5. CTA elements,
+6. user-selected real reference conversion/hook atoms at the tail when the ad structure calls for conversion material.
 
 ### 3. Protect Readability
 

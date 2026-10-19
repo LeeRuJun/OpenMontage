@@ -31,6 +31,9 @@ ARTIFACT_NAMES = [
     "final_review",
     "character_qa_report",
     "video_analysis_brief",
+    "book_profile",
+    "delivery_strategy",
+    "visual_asset_plan",
 ]
 
 
@@ -39,7 +42,7 @@ def load_schema(name: str) -> dict:
     path = SCHEMA_DIR / f"{name}.schema.json"
     if not path.exists():
         raise FileNotFoundError(f"Schema not found: {path}")
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -47,6 +50,17 @@ def validate_artifact(name: str, data: dict[str, Any]) -> None:
     """Validate artifact data against its schema. Raises on failure."""
     schema = load_schema(name)
     jsonschema.validate(instance=data, schema=schema)
+    if name == "delivery_strategy":
+        ratios = data["explanation_style"]
+        total = sum(
+            ratios[key]
+            for key in ("summary_ratio", "interpretation_ratio", "example_ratio")
+        )
+        if abs(total - 1.0) > 1e-6:
+            raise ValueError(
+                "delivery_strategy explanation ratios must sum to 1.0; "
+                f"got {total:.6f}"
+            )
 
 
 def list_schemas() -> list[str]:

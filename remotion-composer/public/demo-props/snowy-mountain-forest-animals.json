@@ -1,0 +1,128 @@
+{
+  "render_runtime": "remotion",
+  "renderer_family": "animation-first",
+  "composition_mode": "templated",
+  "cuts": [
+    {
+      "id": "sc01_snow_mountain_wakes",
+      "source": "snowy-mountain-forest-animals/01_sc01_snow_mountain_wakes.png",
+      "in_seconds": 0,
+      "out_seconds": 5,
+      "type": "anime_scene",
+      "images": [
+        "snowy-mountain-forest-animals/01_sc01_snow_mountain_wakes.png"
+      ],
+      "animation": "zoom-in",
+      "particles": "sparkles",
+      "particleColor": "#FFE8A3",
+      "particleCount": 16,
+      "particleIntensity": 0.45,
+      "lightingFrom": "rgba(255,210,120,0.05)",
+      "lightingTo": "rgba(255,210,120,0.18)",
+      "vignette": true,
+      "backgroundColor": "#DCEFFF"
+    },
+    {
+      "id": "sc02_enter_pine_forest",
+      "source": "snowy-mountain-forest-animals/02_sc02_enter_pine_forest.png",
+      "in_seconds": 5,
+      "out_seconds": 10,
+      "type": "anime_scene",
+      "images": [
+        "snowy-mountain-forest-animals/02_sc02_enter_pine_forest.png"
+      ],
+      "animation": "pan-right",
+      "particles": "mist",
+      "particleColor": "#EAF7FF",
+      "particleCount": 22,
+      "particleIntensity": 0.35,
+      "lightingFrom": "rgba(190,220,255,0.08)",
+      "lightingTo": "rgba(255,230,160,0.10)",
+      "vignette": true,
+      "backgroundColor": "#17342E"
+    },
+    {
+      "id": "sc03_fox_and_rabbit_play",
+      "source": "snowy-mountain-forest-animals/03_sc03_fox_and_rabbit_play.png",
+      "in_seconds": 10,
+      "out_seconds": 17,
+      "type": "anime_scene",
+      "images": [
+        "snowy-mountain-forest-animals/03_sc03_fox_and_rabbit_play.png"
+      ],
+      "animation": "ken-burns",
+      "particles": "sparkles",
+      "particleColor": "#FFFFFF",
+      "particleCount": 18,
+      "particleIntensity": 0.5,
+      "lightingFrom": "transparent",
+      "lightingTo": "rgba(255,225,170,0.12)",
+      "vignette": false,
+      "backgroundColor": "#F2F8FF"
+    },
+    {
+      "id": "sc04_deer_through_forest",
+      "source": "snowy-mountain-forest-animals/04_sc04_deer_through_forest.png",
+      "in_seconds": 17,
+      "out_seconds": 24,
+      "type": "anime_scene",
+      "images": [
+        "snowy-mountain-forest-animals/04_sc04_deer_through_forest.png"
+      ],
+      "animation": "zoom-out",
+      "particles": "mist",
+      "particleColor": "#DFF7FF",
+      "particleCount": 28,
+      "particleIntensity": 0.42,
+      "lightingFrom": "rgba(210,240,255,0.10)",
+      "lightingTo": "rgba(255,220,150,0.12)",
+      "vignette": true,
+      "backgroundColor": "#102B2C"
+    },
+    {
+      "id": "sc05_warm_wide_resolution",
+      "source": "snowy-mountain-forest-animals/05_sc05_warm_wide_resolution.png",
+      "in_seconds": 24,
+      "out_seconds": 30,
+      "type": "anime_scene",
+      "images": [
+        "snowy-mountain-forest-animals/05_sc05_warm_wide_resolution.png"
+      ],
+      "animation": "drift-up",
+      "particles": "sparkles",
+      "particleColor": "#FFE082",
+      "particleCount": 14,
+      "particleIntensity": 0.45,
+      "lightingFrom": "rgba(255,230,180,0.10)",
+      "lightingTo": "rgba(255,255,255,0.20)",
+      "vignette": true,
+      "backgroundColor": "#EAF6FF"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "title",
+      "type": "hero_title",
+      "text": "雪山醒来的早晨",
+      "start_seconds": 1,
+      "end_seconds": 4,
+      "position": "bottom-left"
+    },
+    {
+      "id": "final",
+      "type": "section_title",
+      "text": "冬天，也有快乐在发光",
+      "start_seconds": 28,
+      "end_seconds": 30,
+      "position": "bottom-right"
+    }
+  ],
+  "audio": {
+    "music": {
+      "src": "snowy-mountain-forest-animals/music_30s_fairy_morning.mp3",
+      "volume": 0.18,
+      "fadeInSeconds": 1,
+      "fadeOutSeconds": 2
+    }
+  }
+}

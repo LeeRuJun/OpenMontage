@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "openmontage/artifacts/delivery_strategy",
+  "title": "Delivery Strategy",
+  "description": "Defines how a book is explained before the final script is written.",
+  "type": "object",
+  "required": ["version", "core_promise", "audience_problem", "narrative_mode", "hook", "question_left_with_viewer", "progression", "explanation_style", "pacing", "ending"],
+  "properties": {
+    "version": {"type": "string", "const": "1.0"},
+    "core_promise": {"type": "string", "minLength": 1},
+    "audience_problem": {"type": "string", "minLength": 1},
+    "narrative_mode": {
+      "type": "string",
+      "enum": ["reframing_explainer", "one_big_idea", "problem_solution", "case_study", "concept_ladder", "character_arc", "debate_compare", "practical_playbook"]
+    },
+    "hook": {"type": "string", "minLength": 1},
+    "question_left_with_viewer": {"type": "string", "minLength": 1},
+    "progression": {"type": "array", "items": {"type": "string"}, "minItems": 2},
+    "explanation_style": {
+      "type": "object",
+      "required": ["abstraction_level", "summary_ratio", "interpretation_ratio", "example_ratio"],
+      "properties": {
+        "abstraction_level": {"type": "string", "enum": ["popular", "intermediate", "advanced"]},
+        "summary_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "interpretation_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "example_ratio": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "additionalProperties": false
+    },
+    "pacing": {
+      "type": "object",
+      "required": ["hook_seconds", "concept_change_every_seconds", "visual_change_every_seconds"],
+      "properties": {
+        "hook_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "concept_change_every_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "visual_change_every_seconds": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "ending": {
+      "type": "object",
+      "required": ["type", "takeaway"],
+      "properties": {
+        "type": {"type": "string", "enum": ["reframe", "principle", "question", "call_to_action"]},
+        "takeaway": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

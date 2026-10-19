@@ -52,6 +52,20 @@ service_account*.json
 # Stray media downloads (test/scratch clips left in repo root)
 pexels_video_*.mp4
 
+# Local reference footage and generated media — never commit
+/downloads/
+/exports/
+/reference_videos/
+/source/
+/reader/
+/.cache/
+/.remotion/
+Xiao Yang*.mp4
+default.profraw
+contact_sheet_view.png
+hamburgerai_video*.png
+jingyesi_*.png
+
 # Scratch/debug scripts
 scratch/
 
@@ -97,3 +111,28 @@ venv/
 
 # Backlot local cache (thumbnails)
 .backlot/
+
+# Local symlinked skill mirrors (untracked)
+.claude/skills/remotion-best-practices/
+.claude/skills/remotion-captions/
+.claude/skills/remotion-create/
+.claude/skills/remotion-docs/
+.claude/skills/remotion-interactivity/
+.claude/skills/remotion-maps/
+.claude/skills/remotion-markup/
+.claude/skills/remotion-multimedia/
+.claude/skills/remotion-render/
+.claude/skills/remotion-saas/
+.claude/skills/remotion-studio/
+.claude/skills/remotion-upgrade/
+.claude/skills/webapp-testing/
+
+# Workspace-local third-party runtimes (for example the portable Blender LTS
+# used by blender_world). These are checksum-verified but never committed.
+.runtime/
+
+# Local Wan / diffusers GPU environment
+.venv-wan/
+
+# Vendored AE plugin (local reference only, not source)
+vendor/duik/
