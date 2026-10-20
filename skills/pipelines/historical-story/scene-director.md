@@ -8,9 +8,20 @@ Translate locked narration into acts, sequence beats, and micro-shot requirement
 
 Do not require detailed character acting, choreography, dialogue blocking, gaze paths, or pose-by-pose animation. Characters are visual anchors inside contextual scenes; maps, timelines, diagrams, archival references, objects, and location plates carry most of the explanation.
 
-## Rhythm
+## Rhythm and visual-board math
 
-Pilot: 3–4 acts and 14–28 micro-shots. Full: 8–10 acts, 20–40 second sequence beats, 180–240 micro-shots. Normal shot duration is 4–8 seconds. An 8–12 second hold requires `hold_reason: emotional_hold` or `diagram_hold`.
+The storyboard has two nested levels:
+
+1. **Final visual board** — one unique final image/scene composition that may stay on screen while its internal layers move.
+2. **Microbeat** — a 4–8 second narration/animation beat inside that board. A microbeat changes the crop, camera move, route, evidence layer, caption, or emotional emphasis; it does **not** request another image.
+
+Pilot: 3–4 acts, 6–12 final visual boards, and 2–4 microbeats per board. A board usually holds 8–24 seconds.
+
+Full longform: 8–10 acts, **40–50 final visual boards** (recommended 48; normally 5–7 boards per act), and 3–5 microbeats per board. A board normally holds 20–30 seconds; 30–36 seconds is allowed only for a diagram, evidence board, or emotional landing with an explicit `hold_reason`.
+
+The 22–25 minute full contract therefore favors a rich board over a large image count. Each board must carry a clear location, subject, relationship, or evidence layout and must receive a unique final image. Core maps/diagrams may appear as deterministic overlays, but never substitute for the board's contextual image. Do not make one generated image per microbeat and do not stretch a static frame without internal motion or information change.
+
+The scene plan must identify `visual_board_id`, `microbeat_index`, and the board's internal beat purpose. The shot-asset plan has one final-image entry per `visual_board_id`; the edit stage turns its microbeats into camera, overlay, label, and audio timing.
 
 ## Asset requests
 

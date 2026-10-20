@@ -6,7 +6,7 @@ Acquire and generate reusable, source-aware visual assets for a narrated histori
 
 Create approved reusable groups: character references, location/scene plates, maps, diagrams, timelines, archival references, props, and music. Every group records provenance, historical treatment, rights, and continuity anchors.
 
-Character references are never automatically final shots. Scene plates define where and how a subject can appear.
+Character references are never automatically final shots. Scene plates define where and how a subject can appear. For full longform, the asset unit is the **final visual board**: one unique contextual image per board, not one image per internal microbeat. Core maps, diagrams, and evidence graphics can be reused as deterministic overlays, while the board's primary image must remain unique and narratively specific.
 
 ## shot_assets stage
 

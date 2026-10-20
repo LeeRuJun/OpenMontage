@@ -1,5 +1,5 @@
 name: historical-story
-version: "1.1"
+version: "1.2"
 description: >
   Fact-grounded historical storytelling pipeline. Designs how the story is told first,
   writes and locks narration, then derives storyboard requirements before designing
@@ -13,11 +13,23 @@ production_modes:
     required_tools: [tts_selector]
     optional_tools: [image_selector]
     scene_type: historical_story
+    visual_plan:
+      final_visual_boards: {min: 6, max: 12, recommended: 8}
+      boards_per_act: {min: 2, max: 4, recommended: 3}
+      board_duration_seconds: {min: 8, max: 24, preferred_max: 18}
+      microbeats_per_board: {min: 2, max: 4, recommended: 3}
+      microbeat_duration_seconds: {min: 3, max: 8}
   - name: full_longform
-    description: "22-25 minute historical story; target 5,500-7,200 Chinese characters at 4.0-4.8 chars/second, with 8-10 acts and 180-240 micro-shots."
+    description: "22-25 minute historical story; target 5,500-7,200 Chinese characters at 4.0-4.8 chars/second, 40-50 final visual boards across 8-10 acts, with 3-5 internal microbeats per board."
     required_tools: [tts_selector]
     optional_tools: [image_selector]
     scene_type: historical_story
+    visual_plan:
+      final_visual_boards: {min: 40, max: 50, recommended: 48}
+      boards_per_act: {min: 5, max: 7, recommended: 6}
+      board_duration_seconds: {min: 20, max: 36, preferred_max: 30}
+      microbeats_per_board: {min: 3, max: 5, recommended: 4}
+      microbeat_duration_seconds: {min: 4, max: 8}
 orchestration:
   mode: executive-producer
   skill: pipelines/historical-story/executive-producer

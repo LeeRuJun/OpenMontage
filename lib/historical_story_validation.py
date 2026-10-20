@@ -6,6 +6,24 @@ from typing import Any
 
 
 @dataclass(frozen=True)
+class VisualBoardContract:
+    min_boards: int
+    max_boards: int
+    recommended_boards: int
+    min_boards_per_act: int
+    max_boards_per_act: int
+    recommended_boards_per_act: int
+    min_duration_seconds: float
+    max_duration_seconds: float
+    preferred_max_duration_seconds: float
+    min_microbeats: int
+    max_microbeats: int
+    recommended_microbeats: int
+    min_microbeat_seconds: float
+    max_microbeat_seconds: float
+
+
+@dataclass(frozen=True)
 class StoryContract:
     mode: str
     min_duration: float
@@ -16,11 +34,18 @@ class StoryContract:
     max_acts: int
     min_shots: int
     max_shots: int
+    visual_boards: VisualBoardContract
 
 
 CONTRACTS = {
-    "pilot_2min": StoryContract("pilot_2min", 90, 150, 400, 720, 3, 4, 14, 28),
-    "full_longform": StoryContract("full_longform", 1320, 1500, 5500, 7200, 8, 10, 180, 240),
+    "pilot_2min": StoryContract(
+        "pilot_2min", 90, 150, 400, 720, 3, 4, 14, 28,
+        VisualBoardContract(6, 12, 8, 2, 4, 3, 8, 24, 18, 2, 4, 3, 3, 8),
+    ),
+    "full_longform": StoryContract(
+        "full_longform", 1320, 1500, 5500, 7200, 8, 10, 180, 240,
+        VisualBoardContract(40, 50, 48, 5, 7, 6, 20, 36, 30, 3, 5, 4, 4, 8),
+    ),
 }
 
 CHINESE_NARRATION_CPS = (4.0, 4.8)
@@ -74,6 +99,61 @@ def validate_scene_rhythm(mode: str, scenes: list[dict[str, Any]]) -> list[str]:
     return errors
 
 
+def validate_visual_boards(mode: str, scenes: list[dict[str, Any]]) -> list[str]:
+    """Validate final-image boards without forcing one image per microbeat."""
+    contract = contract_for(mode)
+    board_contract = contract.visual_boards
+    board_ids = {scene.get("visual_board_id") for scene in scenes}
+    if None in board_ids or len(board_ids) == 0:
+        return ["visual_board_id is required for the board/microbeat relationship"]
+
+    errors: list[str] = []
+    boards: dict[str, list[dict[str, Any]]] = {}
+    for scene in scenes:
+        board_id = scene.get("visual_board_id")
+        boards.setdefault(board_id, []).append(scene)
+
+    board_count = len(boards)
+    if not board_contract.min_boards <= board_count <= board_contract.max_boards:
+        errors.append(
+            f"visual_board_count {board_count} outside "
+            f"{board_contract.min_boards}-{board_contract.max_boards}"
+        )
+
+    boards_by_act: dict[str, set[str]] = {}
+    for board_id, beats in boards.items():
+        beats.sort(key=lambda item: float(item["start_seconds"]))
+        beat_count = len(beats)
+        if not board_contract.min_microbeats <= beat_count <= board_contract.max_microbeats:
+            errors.append(
+                f"visual board {board_id} has {beat_count} microbeats; "
+                f"expected {board_contract.min_microbeats}-{board_contract.max_microbeats}"
+            )
+        board_start = float(beats[0]["start_seconds"])
+        board_end = max(float(beat["end_seconds"]) for beat in beats)
+        board_duration = board_end - board_start
+        if not board_contract.min_duration_seconds <= board_duration <= board_contract.max_duration_seconds:
+            errors.append(
+                f"visual board {board_id} duration {board_duration:.2f}s violates "
+                f"{board_contract.min_duration_seconds}-{board_contract.max_duration_seconds}s"
+            )
+        if board_duration > board_contract.preferred_max_duration_seconds and not any(
+            beat.get("hold_reason") in {"emotional_hold", "diagram_hold"} for beat in beats
+        ):
+            errors.append(
+                f"visual board {board_id} duration {board_duration:.2f}s exceeds preferred "
+                f"{board_contract.preferred_max_duration_seconds}s without hold_reason"
+            )
+        act_id = beats[0].get("script_section_id", "unknown")
+        boards_by_act.setdefault(act_id, set()).add(board_id)
+
+    for act_id, act_boards in boards_by_act.items():
+        if not board_contract.min_boards_per_act <= len(act_boards) <= board_contract.max_boards_per_act:
+            errors.append(
+                f"act {act_id} has {len(act_boards)} visual boards; expected "
+                f"{board_contract.min_boards_per_act}-{board_contract.max_boards_per_act}"
+            )
+    return errors
 def validate_claim_coverage(script: dict[str, Any], ledger: dict[str, Any]) -> list[str]:
     claim_ids = {claim["id"] for claim in ledger.get("claims", [])}
     errors: list[str] = []
@@ -101,6 +181,8 @@ def validate_story(mode: str, *, timing: dict[str, Any], scenes: list[dict[str, 
     errors = []
     errors.extend(validate_timing(mode, duration_seconds=timing["measured_duration_seconds"], character_count=timing["character_count"], act_count=len(timing.get("acts", []))))
     errors.extend(validate_scene_rhythm(mode, scenes))
+    if any("visual_board_id" in scene for scene in scenes):
+        errors.extend(validate_visual_boards(mode, scenes))
     errors.extend(validate_claim_coverage(script, ledger))
     errors.extend(validate_asset_reuse(assets))
     if errors:
