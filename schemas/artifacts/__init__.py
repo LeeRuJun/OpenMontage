@@ -34,6 +34,8 @@ ARTIFACT_NAMES = [
     "historical_evidence_ledger",
     "historical_character_bible",
     "narration_timing",
+    "story_spine",
+    "historical_scene_bible",
 ]
 
 
