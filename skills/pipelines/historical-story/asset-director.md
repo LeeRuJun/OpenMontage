@@ -1,9 +1,25 @@
 # Historical Story Asset Director
 
-Acquire and generate reusable, source-aware visual groups.
+Acquire and generate reusable, source-aware visual assets for a narrated historical story. This pipeline does not depend on generated video clips; designed stills, diagrams, maps, archival references, and final shot images carry the visual storytelling.
 
-Use character, location, map, diagram, timeline, archival, event illustration, prop, and music groups. Prefer archival or provided material when it carries factual meaning; use generated reconstruction only with a visible treatment label.
+## core_assets stage
 
-Every character image uses the approved bible anchor verbatim. Every generated asset records provider/model/prompt and every historical asset records evidence or rights metadata. A generated asset normally serves at least two micro-shots; one-off hero assets require an explicit exception and approval.
+Create approved reusable groups: character references, location/scene plates, maps, diagrams, timelines, archival references, props, and music. Every group records provenance, historical treatment, rights, and continuity anchors.
 
-Output `asset_manifest` with `origin_type`, `historical_treatment`, `source_citation_id`, `asset_group_id`, `reused_by_scene_ids`, and `rights_note`.
+Character references are never automatically final shots. Scene plates define where and how a subject can appear.
+
+## shot_assets stage
+
+Read the approved `shot_asset_plan`. For each planned shot, combine the required character reference, scene reference, props/maps, narration beat, and composition into a final still image or editorial frame. The generated frame must fit the exact story context; do not place a generic portrait into a scene just because the person is mentioned.
+
+Use the approved provider/model path only. Generate one representative shot first, inspect it for scene fidelity, then batch the remaining shot groups. Reuse a final shot only when the crop, overlay, or narrative function changes meaningfully and the reuse is recorded.
+
+## Quality checklist
+
+- Every final shot matches its narration beat and scene location.
+- Characters are embedded in a relevant environment or evidence layout.
+- Maps/diagrams carry exact labels through deterministic overlays, not AI-generated text.
+- Generated reconstruction, archival, illustrative, and symbolic treatments are labeled.
+- All files have prompt/model/provenance and `reused_by_scene_ids` metadata.
+
+Output/update `asset_manifest`; stop for human review before edit.

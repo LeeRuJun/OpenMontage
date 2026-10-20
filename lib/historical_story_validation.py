@@ -19,9 +19,17 @@ class StoryContract:
 
 
 CONTRACTS = {
-    "pilot_2min": StoryContract("pilot_2min", 90, 150, 400, 650, 3, 4, 14, 28),
-    "full_longform": StoryContract("full_longform", 1320, 1500, 5000, 6500, 8, 10, 180, 240),
+    "pilot_2min": StoryContract("pilot_2min", 90, 150, 400, 720, 3, 4, 14, 28),
+    "full_longform": StoryContract("full_longform", 1320, 1500, 5500, 7200, 8, 10, 180, 240),
 }
+
+CHINESE_NARRATION_CPS = (4.0, 4.8)
+
+
+def recommended_character_range(duration_seconds: float) -> tuple[int, int]:
+    """Return the spoken-character range for a measured duration."""
+    low, high = CHINESE_NARRATION_CPS
+    return round(duration_seconds * low), round(duration_seconds * high)
 
 
 def contract_for(mode: str) -> StoryContract:
@@ -38,6 +46,15 @@ def validate_timing(mode: str, *, duration_seconds: float, character_count: int,
         errors.append(f"duration {duration_seconds} outside {contract.min_duration}-{contract.max_duration}s")
     if not contract.min_chars <= character_count <= contract.max_chars:
         errors.append(f"character_count {character_count} outside {contract.min_chars}-{contract.max_chars}")
+    if duration_seconds > 0:
+        cps = character_count / duration_seconds
+        min_cps, max_cps = CHINESE_NARRATION_CPS
+        if not min_cps <= cps <= max_cps:
+            recommended = recommended_character_range(duration_seconds)
+            errors.append(
+                f"character_density {cps:.2f} chars/s outside {min_cps}-{max_cps}; "
+                f"recommended range for {duration_seconds:.1f}s is {recommended[0]}-{recommended[1]} chars"
+            )
     if not contract.min_acts <= act_count <= contract.max_acts:
         errors.append(f"act_count {act_count} outside {contract.min_acts}-{contract.max_acts}")
     return errors

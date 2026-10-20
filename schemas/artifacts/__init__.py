@@ -37,6 +37,7 @@ ARTIFACT_NAMES = [
     "story_spine",
     "historical_scene_bible",
     "cover_plan",
+    "shot_asset_plan",
 ]
 
 

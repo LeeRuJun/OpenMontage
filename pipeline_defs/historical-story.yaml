@@ -9,14 +9,14 @@ stability: beta
 default_checkpoint_policy: guided
 production_modes:
   - name: pilot_2min
-    description: "90-150 second validation cut using the same story spine, character bible, and rhythm rules."
+    description: "90-150 second validation cut; target ~120 seconds and ~480-576 Chinese characters at 4.0-4.8 chars/second."
     required_tools: [tts_selector]
-    optional_tools: [image_selector, video_selector]
+    optional_tools: [image_selector]
     scene_type: historical_story
   - name: full_longform
-    description: "22-25 minute historical story with 8-10 acts and 180-240 micro-shots."
+    description: "22-25 minute historical story; target 5,500-7,200 Chinese characters at 4.0-4.8 chars/second, with 8-10 acts and 180-240 micro-shots."
     required_tools: [tts_selector]
-    optional_tools: [image_selector, video_selector]
+    optional_tools: [image_selector]
     scene_type: historical_story
 orchestration:
   mode: executive-producer
@@ -43,6 +43,7 @@ required_skills:
   - pipelines/historical-story/character-bible-director
   - pipelines/historical-story/scene-bible-director
   - pipelines/historical-story/asset-director
+  - pipelines/historical-story/shot-asset-plan-director
   - pipelines/historical-story/edit-director
   - pipelines/historical-story/compose-director
   - pipelines/historical-story/publish-director
@@ -116,13 +117,19 @@ stages:
     required_artifacts_in: [scene_plan, historical_character_bible, historical_scene_bible, historical_evidence_ledger]
     produces: [asset_manifest]
     required_tools: [image_selector]
-    optional_tools: [video_selector, music_gen]
-    tools_available: [image_selector, video_selector, music_gen]
+    optional_tools: [music_gen]
+    tools_available: [image_selector, music_gen]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: shot_asset_plan
+    skill: pipelines/historical-story/shot-asset-plan-director
+    required_artifacts_in: [scene_plan, historical_character_bible, historical_scene_bible, asset_manifest]
+    produces: [shot_asset_plan]
     checkpoint_required: true
     human_approval_default: true
   - name: shot_assets
     skill: pipelines/historical-story/asset-director
-    required_artifacts_in: [scene_plan, historical_character_bible, historical_scene_bible, asset_manifest]
+    required_artifacts_in: [scene_plan, shot_asset_plan, historical_character_bible, historical_scene_bible, asset_manifest]
     produces: [asset_manifest]
     required_tools: [image_selector]
     tools_available: [image_selector]
