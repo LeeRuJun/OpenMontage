@@ -36,6 +36,7 @@ ARTIFACT_NAMES = [
     "narration_timing",
     "story_spine",
     "historical_scene_bible",
+    "cover_plan",
 ]
 
 

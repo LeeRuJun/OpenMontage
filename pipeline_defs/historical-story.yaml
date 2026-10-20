@@ -35,6 +35,7 @@ required_skills:
   - pipelines/historical-story/intake-director
   - pipelines/historical-story/research-director
   - pipelines/historical-story/story-design-director
+  - pipelines/historical-story/cover-plan-director
   - pipelines/historical-story/proposal-director
   - pipelines/historical-story/script-director
   - pipelines/historical-story/narration-timing-director
@@ -66,9 +67,15 @@ stages:
     produces: [story_spine]
     checkpoint_required: true
     human_approval_default: true
+  - name: cover_plan
+    skill: pipelines/historical-story/cover-plan-director
+    required_artifacts_in: [brief, research_brief, historical_evidence_ledger, story_spine]
+    produces: [cover_plan]
+    checkpoint_required: true
+    human_approval_default: true
   - name: proposal
     skill: pipelines/historical-story/proposal-director
-    required_artifacts_in: [brief, research_brief, historical_evidence_ledger, story_spine]
+    required_artifacts_in: [brief, research_brief, historical_evidence_ledger, story_spine, cover_plan]
     produces: [proposal_packet, decision_log]
     checkpoint_required: true
     human_approval_default: true

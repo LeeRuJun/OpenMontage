@@ -1,0 +1,7 @@
+{
+  "series":"历史故事",
+  "parent_account":"叙事局",
+  "series_promise":"从一个历史选择，讲清一个时代如何改变。",
+  "visual_skin":{"palette":{"paper":"#F2EAD6","ink":"#222923","indigo":"#314553","vermilion":"#A74436"},"motifs":["地图路线","史纸","朱砂标记","断裂印章","时间轴"],"imagery":"人物只作为历史主体锚点；最终画面必须嵌入地点、道具、地图或关系语境。","motion":["route_draw","paper_reveal","stamp_drop","ink_fracture"],"avoid":["卡通吉祥物","战争爆炸模板","悬浮人物头像","AI生成中文文字","现代品牌元素"]},
+  "cover_lockup":{"account_mark":"assets/brand/narrative-mark.svg","series_label":"历史故事","title_safe_zone":"左上或左侧，保持移动端缩略图可读"}
+}
