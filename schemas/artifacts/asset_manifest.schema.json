@@ -34,6 +34,12 @@
           "provider": { "type": "string", "description": "Provider name (e.g. pixabay, google_imagen)" },
           "license": { "type": "string", "description": "License type (e.g. Pixabay License, CC0)" },
           "original_url": { "type": "string", "description": "Source URL if downloaded from a stock service" },
+          "origin_type": { "type": "string", "enum": ["archival", "generated", "provided", "stock", "derivative"] },
+          "source_citation_id": { "type": "string" },
+          "historical_treatment": { "type": "string", "enum": ["documentary", "illustrative", "dramatic_reconstruction", "symbolic"] },
+          "asset_group_id": { "type": "string" },
+          "reused_by_scene_ids": { "type": "array", "items": { "type": "string" } },
+          "rights_note": { "type": "string" },
           "voice_performance": {
             "type": "object",
             "description": "Applied voice-performance contract for narration assets.",

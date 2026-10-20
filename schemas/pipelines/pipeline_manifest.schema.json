@@ -34,6 +34,23 @@
         }
       ]
     },
+    "production_modes": {
+      "type": "array",
+      "description": "Mutually exclusive production modes selected at intake.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "required_tools": { "type": "array", "items": { "type": "string" } },
+          "optional_tools": { "type": "array", "items": { "type": "string" } },
+          "scene_type": { "type": "string" },
+          "best_for": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
     "required_skills": {
       "type": "array",
       "items": { "type": "string" }

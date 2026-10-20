@@ -1,0 +1,120 @@
+name: historical-story
+version: "1.0"
+description: >
+  Fact-grounded historical storytelling pipeline with a 2-minute pilot and a 22-25 minute long-form mode.
+category: custom
+stability: beta
+default_checkpoint_policy: guided
+production_modes:
+  - name: pilot_2min
+    description: "90-150 second validation cut using the same story spine, character bible, and rhythm rules."
+    required_tools: [tts_selector]
+    optional_tools: [image_selector, video_selector]
+    scene_type: historical_story
+  - name: full_longform
+    description: "22-25 minute historical story with 8-10 acts and 180-240 micro-shots."
+    required_tools: [tts_selector]
+    optional_tools: [image_selector, video_selector]
+    scene_type: historical_story
+orchestration:
+  mode: executive-producer
+  skill: pipelines/historical-story/executive-producer
+  budget_default_usd: 3.00
+  max_revisions_per_stage: 2
+  max_send_backs: 2
+  max_wall_time_minutes: 60
+extensions:
+  custom_scripts: true
+  custom_playbooks: true
+  custom_skills: true
+  custom_tools: false
+required_skills:
+  - pipelines/historical-story/executive-producer
+  - pipelines/historical-story/intake-director
+  - pipelines/historical-story/research-director
+  - pipelines/historical-story/proposal-director
+  - pipelines/historical-story/character-bible-director
+  - pipelines/historical-story/script-director
+  - pipelines/historical-story/narration-timing-director
+  - pipelines/historical-story/scene-director
+  - pipelines/historical-story/asset-director
+  - pipelines/historical-story/edit-director
+  - pipelines/historical-story/compose-director
+  - pipelines/historical-story/publish-director
+  - meta/reviewer
+  - meta/checkpoint-protocol
+  - meta/voice-performance-director
+stages:
+  - name: intake
+    skill: pipelines/historical-story/intake-director
+    produces: [brief]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: research
+    skill: pipelines/historical-story/research-director
+    required_artifacts_in: [brief]
+    produces: [research_brief, historical_evidence_ledger]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: proposal
+    skill: pipelines/historical-story/proposal-director
+    required_artifacts_in: [brief, research_brief, historical_evidence_ledger]
+    produces: [proposal_packet, decision_log]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: character_bible
+    skill: pipelines/historical-story/character-bible-director
+    required_artifacts_in: [brief, research_brief, historical_evidence_ledger, proposal_packet]
+    produces: [historical_character_bible]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: script
+    skill: pipelines/historical-story/script-director
+    required_artifacts_in: [proposal_packet, historical_evidence_ledger, historical_character_bible]
+    produces: [script]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: narration_timing
+    skill: pipelines/historical-story/narration-timing-director
+    required_artifacts_in: [script]
+    produces: [narration_timing]
+    required_tools: [tts_selector]
+    tools_available: [tts_selector, transcriber]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: scene_plan
+    skill: pipelines/historical-story/scene-director
+    required_artifacts_in: [script, narration_timing, historical_character_bible]
+    produces: [scene_plan]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: assets
+    skill: pipelines/historical-story/asset-director
+    required_artifacts_in: [scene_plan, historical_character_bible, historical_evidence_ledger]
+    produces: [asset_manifest]
+    required_tools: [image_selector]
+    optional_tools: [video_selector, music_gen]
+    tools_available: [image_selector, video_selector, music_gen]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: edit
+    skill: pipelines/historical-story/edit-director
+    required_artifacts_in: [scene_plan, asset_manifest, narration_timing, script]
+    produces: [edit_decisions]
+    checkpoint_required: true
+    human_approval_default: true
+  - name: compose
+    skill: pipelines/historical-story/compose-director
+    required_artifacts_in: [edit_decisions, asset_manifest, narration_timing]
+    produces: [render_report, final_review]
+    required_tools: [video_compose]
+    optional_tools: [hyperframes_compose, audio_mixer]
+    tools_available: [video_compose, hyperframes_compose, audio_mixer]
+    checkpoint_required: true
+    human_approval_default: false
+  - name: publish
+    skill: pipelines/historical-story/publish-director
+    required_artifacts_in: [render_report, final_review, historical_evidence_ledger]
+    produces: [publish_log]
+    checkpoint_required: true
+    human_approval_default: true
