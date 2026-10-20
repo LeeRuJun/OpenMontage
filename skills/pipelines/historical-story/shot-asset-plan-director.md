@@ -28,7 +28,21 @@ Write one `shot_asset_plan` entry containing:
 
 A character reference alone is never a final shot. A final board must show the historical subject in a relevant place, context, or evidence layout that answers the narration beat. A board can carry several narration beats only when its internal visual state changes meaningfully; otherwise split it.
 
-## Gate
+## Script → visual board → prompt
+
+Do not copy the narration into an image prompt. Translate each approved script section through these fields:
+
+1. **Narrative claim** — what the viewer must understand from this board, not the whole paragraph.
+2. **Subject + action** — who/what is acting or changing; keep people embedded in context.
+3. **Location + spatial relationship** — where the action happens and what sits near/far from what.
+4. **Evidence layer** — map, route, seal, ledger, timeline, object, or diagram that makes the claim legible.
+5. **Historical boundary** — documented fact, illustrative reconstruction, contested detail, or symbolic aftermath; state what must not be invented.
+6. **Composition** — camera/framing, light, palette, hierarchy, and a clean caption-safe region.
+7. **Dynamic layers** — 3–5 things edit/compose may reveal or move during the 20–30 second board: route draw, crop, parallax, evidence reveal, label, or emphasis.
+8. **Constraints** — no AI text, modern objects, unsupported insignia, generic floating portrait, or cinematic action that changes the factual meaning.
+
+Store this translation in `prompt_spec` as well as the provider-ready `prompt`. The prompt is a production contract: a reviewer should be able to trace it back to the script section and evidence ledger without guessing.
+
 
 Reject a plan when the image could be moved to another board without changing meaning, when the prompt lacks a location/context, when a board has too few internal beats to sustain its duration, or when a final image is reused as another board's primary image. Generate one representative board sample, review it, then allow the `shot_assets` stage to batch-generate the approved board images.
 

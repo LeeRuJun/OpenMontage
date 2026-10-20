@@ -35,3 +35,11 @@ def test_historical_schemas_are_valid_json():
     for name in ("historical_evidence_ledger", "historical_character_bible", "historical_scene_bible", "narration_timing", "story_spine", "cover_plan", "shot_asset_plan"):
         data = json.loads((root / f"{name}.schema.json").read_text())
         assert data["$id"].endswith(name)
+
+
+def test_script_schema_requires_opening_contract():
+    schema = load_schema("script")
+    assert "opening" in schema["required"]
+    opening = schema["properties"]["opening"]
+    assert opening["required"] == ["hook", "promise", "roadmap", "target_duration_seconds"]
+    assert opening["properties"]["roadmap"]["maxItems"] == 3

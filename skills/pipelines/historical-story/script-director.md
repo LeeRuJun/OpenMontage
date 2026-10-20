@@ -4,6 +4,17 @@ Write a story, not an encyclopedia entry.
 
 Use: hook → subject/desire → pressure → escalation → midpoint/reversal → loss of options → climax choice → aftermath/theme.
 
+## Opening contract — hook before detail
+
+Every pilot and full episode starts with a short prologue before the first detailed historical explanation. The opening must:
+
+1. **Hook** with a concrete danger, contradiction, or unanswered question.
+2. **Promise** what this episode will explain and why the viewer should keep watching.
+3. **Roadmap** two or three questions/turns the story will answer.
+4. **Bridge** into the first act's place, person, or evidence board.
+
+For full longform, target a 20–30 second opening prologue. Do not open by listing dates, names, institutions, or battlefield details before the viewer knows the episode's question. Record the contract in `script.opening`; the first section label should identify the prologue/hook, and its visual board should support the promise rather than jump straight into a detail card.
+
 Every factual section includes `claim_refs`. Preserve the evidence ledger qualifier for probable, contested, and unknown material.
 
 ## Script length is calculated from time

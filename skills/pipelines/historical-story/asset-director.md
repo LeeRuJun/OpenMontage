@@ -12,7 +12,7 @@ Character references are never automatically final shots. Scene plates define wh
 
 Read the approved `shot_asset_plan`. For each planned shot, combine the required character reference, scene reference, props/maps, narration beat, and composition into a final still image or editorial frame. The generated frame must fit the exact story context; do not place a generic portrait into a scene just because the person is mentioned.
 
-Use the approved provider/model path only. Generate one representative shot first, inspect it for scene fidelity, then batch the remaining shot groups. Reuse a final shot only when the crop, overlay, or narrative function changes meaningfully and the reuse is recorded.
+For high-quality boards, the asset director consumes `prompt_spec` rather than a bare narration paragraph: preserve the claim, embed the subject in the location, show the evidence layer, honor the historical boundary, and leave the dynamic layers for edit/compose. A visually impressive image that loses the causal claim is a failed asset even when its style is attractive.
 
 ## Quality checklist
 
