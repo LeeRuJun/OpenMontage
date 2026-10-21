@@ -21,7 +21,10 @@ def test_historical_story_manifest_has_vertical_story_stages():
         "microbeats_per_board": {"min": 3, "max": 5, "recommended": 4},
         "microbeat_duration_seconds": {"min": 4, "max": 8},
     }
-    assert all(stage.get("human_approval_default") for stage in manifest["stages"] if stage["name"] != "compose")
+    assert manifest["approval_policy"] == "autonomous"
+    assert all(not stage.get("human_approval_default") for stage in manifest["stages"])
+    core_assets = next(stage for stage in manifest["stages"] if stage["name"] == "core_assets")
+    assert "music_gen" not in core_assets.get("tools_available", [])
 
 
 def test_historical_artifact_schemas_are_registered():

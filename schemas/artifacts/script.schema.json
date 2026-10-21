@@ -36,6 +36,8 @@
       "description": "Prologue contract: hook, episode promise, and roadmap before detailed exposition.",
       "required": ["hook", "promise", "roadmap", "target_duration_seconds"],
       "properties": {
+        "brand_name": { "type": "string", "minLength": 1 },
+        "column_name": { "type": "string", "minLength": 1 },
         "hook": { "type": "string", "minLength": 1 },
         "promise": { "type": "string", "minLength": 1 },
         "roadmap": { "type": "array", "minItems": 2, "maxItems": 3, "items": { "type": "string", "minLength": 1 } },

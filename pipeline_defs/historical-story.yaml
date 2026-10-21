@@ -7,6 +7,7 @@ description: >
 category: custom
 stability: beta
 default_checkpoint_policy: guided
+approval_policy: autonomous
 production_modes:
   - name: pilot_2min
     description: "90-150 second validation cut; target ~120 seconds and ~480-576 Chinese characters at 4.0-4.8 chars/second."
@@ -67,37 +68,37 @@ stages:
     skill: pipelines/historical-story/intake-director
     produces: [brief]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: research
     skill: pipelines/historical-story/research-director
     required_artifacts_in: [brief]
     produces: [research_brief, historical_evidence_ledger]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: story_design
     skill: pipelines/historical-story/story-design-director
     required_artifacts_in: [brief, research_brief, historical_evidence_ledger]
     produces: [story_spine]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: cover_plan
     skill: pipelines/historical-story/cover-plan-director
     required_artifacts_in: [brief, research_brief, historical_evidence_ledger, story_spine]
     produces: [cover_plan]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: proposal
     skill: pipelines/historical-story/proposal-director
     required_artifacts_in: [brief, research_brief, historical_evidence_ledger, story_spine, cover_plan]
     produces: [proposal_packet, decision_log]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: script
     skill: pipelines/historical-story/script-director
     required_artifacts_in: [proposal_packet, story_spine, historical_evidence_ledger]
     produces: [script]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: narration_timing
     skill: pipelines/historical-story/narration-timing-director
     required_artifacts_in: [script]
@@ -105,40 +106,40 @@ stages:
     required_tools: [tts_selector]
     tools_available: [tts_selector, transcriber]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: storyboard_blueprint
     skill: pipelines/historical-story/scene-director
     required_artifacts_in: [script, narration_timing, story_spine]
     produces: [scene_plan]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: character_bible
     skill: pipelines/historical-story/character-bible-director
     required_artifacts_in: [script, scene_plan, historical_evidence_ledger]
     produces: [historical_character_bible]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: scene_bible
     skill: pipelines/historical-story/scene-bible-director
     required_artifacts_in: [script, scene_plan, historical_evidence_ledger]
     produces: [historical_scene_bible]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: core_assets
     skill: pipelines/historical-story/asset-director
     required_artifacts_in: [scene_plan, historical_character_bible, historical_scene_bible, historical_evidence_ledger]
     produces: [asset_manifest]
     required_tools: [image_selector]
-    optional_tools: [music_gen]
-    tools_available: [image_selector, music_gen]
+    optional_tools: []
+    tools_available: [image_selector]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: shot_asset_plan
     skill: pipelines/historical-story/shot-asset-plan-director
     required_artifacts_in: [scene_plan, historical_character_bible, historical_scene_bible, asset_manifest]
     produces: [shot_asset_plan]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: shot_assets
     skill: pipelines/historical-story/asset-director
     required_artifacts_in: [scene_plan, shot_asset_plan, historical_character_bible, historical_scene_bible, asset_manifest]
@@ -146,13 +147,13 @@ stages:
     required_tools: [image_selector]
     tools_available: [image_selector]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: edit
     skill: pipelines/historical-story/edit-director
     required_artifacts_in: [scene_plan, asset_manifest, narration_timing, script]
     produces: [edit_decisions]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false
   - name: compose
     skill: pipelines/historical-story/compose-director
     required_artifacts_in: [edit_decisions, asset_manifest, narration_timing]
@@ -167,4 +168,4 @@ stages:
     required_artifacts_in: [render_report, final_review, historical_evidence_ledger]
     produces: [publish_log]
     checkpoint_required: true
-    human_approval_default: true
+    human_approval_default: false

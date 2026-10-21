@@ -4,8 +4,8 @@ Coordinate the `historical-story` pipeline without turning it into a book-summar
 
 ## Modes
 
-- `pilot_2min`: 90–150 seconds, 3–4 acts, 14–28 micro-shots.
-- `full_longform`: 22–25 minutes, 8–10 acts, 180–240 micro-shots.
+- `pilot_2min`: 90–150 seconds, 6–12 visual boards, 2–4 microbeats per board.
+- `full_longform`: 22–25 minutes, 40–50 visual boards, 3–5 microbeats per board, 20–30 second preferred board holds.
 
 ## Non-negotiable order
 
@@ -13,9 +13,13 @@ intake → research/evidence ledger → proposal → character bible → script 
 
 A later stage cannot silently repair a failed earlier contract. If evidence, script, narration, or timing changes, invalidate downstream timing-dependent artifacts.
 
+## Approval policy
+
+This pipeline defaults to `approval_policy: autonomous`. Every stage still writes its checkpoint and runs self-review. The coordinator auto-advances when the artifact is schema-valid and no critical review finding remains; it does not write `awaiting_human` or stop for routine creative approval. A critical contract failure still blocks the run and is reported with the exact artifact and fix needed. Set the manifest policy to `guided` for a human-reviewed run.
+
 ## Quality gates
 
-Require human approval at every creative stage through assets. The coordinator must check story mode, fact coverage, character continuity, narration duration, beat count, shot rhythm, and asset reuse before writing a gated checkpoint.
+In autonomous mode, the coordinator checks story mode, fact coverage, character continuity, narration duration, visual-board count, microbeat rhythm, unique board-image coverage, prompt traceability, and asset provenance before marking a stage completed. Suggestions are recorded and carried forward; critical findings block.
 
 ## Output
 

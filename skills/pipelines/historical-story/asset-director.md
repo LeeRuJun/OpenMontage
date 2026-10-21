@@ -14,7 +14,15 @@ Read the approved `shot_asset_plan`. For each planned shot, combine the required
 
 For high-quality boards, the asset director consumes `prompt_spec` rather than a bare narration paragraph: preserve the claim, embed the subject in the location, show the evidence layer, honor the historical boundary, and leave the dynamic layers for edit/compose. A visually impressive image that loses the causal claim is a failed asset even when its style is attractive.
 
-## Quality checklist
+## Fixed BGM catalog policy
+
+Music selection is catalog-only for this pipeline:
+
+- Read `assets/bgm/music_catalog.json` as the single source of truth.
+- The AI may select among catalog tracks by `story_act`, `narrative_role`, `mood`, `tension`, `energy`, `duration_fit`, and `voice_compatibility`.
+- Copy the selected user-uploaded file into the project `assets/bgm/` directory when needed and record its catalog `id`, source path, selection reason, volume, ducking, and license status in `asset_manifest`/`edit_decisions`.
+- Do not call music generation, music search, or an unlisted fallback for historical-story. If no catalog track fits, stop with a blocker and ask for a user-uploaded BGM; do not synthesize a replacement.
+
 
 - Every final shot matches its narration beat and scene location.
 - Characters are embedded in a relevant environment or evidence layout.

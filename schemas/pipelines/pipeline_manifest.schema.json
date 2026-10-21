@@ -191,6 +191,12 @@
       },
       "minItems": 1
     },
+    "approval_policy": {
+      "type": "string",
+      "enum": ["guided", "autonomous"],
+      "default": "guided",
+      "description": "Whether creative stages pause for human approval or auto-advance after self-review."
+    },
     "default_checkpoint_policy": {
       "type": "string",
       "enum": ["guided", "manual_all", "auto_noncreative"],
