@@ -77,6 +77,7 @@ required_skills:
   - pipelines/historical-story/scene-bible-director
   - pipelines/historical-story/asset-director
   - pipelines/historical-story/shot-asset-plan-director
+  - pipelines/historical-story/shot-prompt-director
   - pipelines/historical-story/edit-director
   - pipelines/historical-story/compose-director
   - pipelines/historical-story/publish-director
@@ -155,7 +156,7 @@ stages:
     checkpoint_required: true
     human_approval_default: false
   - name: shot_asset_plan
-    skill: pipelines/historical-story/shot-asset-plan-director
+    skill: pipelines/historical-story/shot-prompt-director
     required_artifacts_in: [scene_plan, historical_character_bible, historical_scene_bible, asset_manifest]
     produces: [shot_asset_plan]
     checkpoint_required: true

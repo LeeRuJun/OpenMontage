@@ -35,7 +35,7 @@ def core(project: Path) -> None:
     (project/'artifacts/asset_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({'core_assets':len(assets),'characters':sum(x['asset_group_id']=='character_reference' for x in assets),'scene_assets':len(assets)-sum(x['asset_group_id']=='character_reference' for x in assets)},ensure_ascii=False))
 
-def shot_assets(project: Path) -> None:
+def shot_assets(project: Path, only: set[str] | None = None, sample: bool = False) -> None:
     load_dotenv('/Users/fanshu01/rep/github/OpenMontage/.env')
     manifest_path = project / 'artifacts/asset_manifest.json'
     plan = json.loads((project / 'artifacts/shot_asset_plan.json').read_text())
@@ -43,17 +43,34 @@ def shot_assets(project: Path) -> None:
     by_group = {}
     for item in manifest.get('assets', []):
         by_group.setdefault(item.get('asset_group_id'), []).append(str(project / item['path']))
-    refs = (by_group.get('character_reference', [])[:1]
-            + by_group.get('scene_plate', [])[:1]
-            + by_group.get('map', [])[:1]
-            + by_group.get('diagram', [])[:1])
-    out_dir = project / 'assets/images/boards'
+    refs_by_id = {item.get('id'): str(project / item['path']) for item in manifest.get('assets', [])}
+    out_dir = project / ('assets/images/boards/sample' if sample else 'assets/images/boards')
     out_dir.mkdir(parents=True, exist_ok=True)
+    selected = [shot for shot in plan.get('shots', []) if only is None or (shot.get('visual_board_id') or shot['shot_id']).lower() in only]
     requests=[]
-    for shot in plan.get('shots', []):
+    for shot in selected:
         board_id = shot.get('visual_board_id') or shot['shot_id']
+        claim = (shot.get('prompt_spec') or {}).get('visual_claim', '')
+        if board_id.lower() == 'b01': ref_ids = ['qianchu', 'wuyue_palace']
+        elif '水网' in claim or '水乡' in claim: ref_ids = ['wuyue_waterways']
+        elif '地图' in claim or '五代' in claim: ref_ids = ['wuyue_map']
+        else: ref_ids = ['archive_table']
+        refs = [refs_by_id[x] for x in ref_ids if x in refs_by_id]
+        spec = shot.get('prompt_spec') or {}
+        prompt = "\n".join([
+            shot.get('prompt', ''),
+            f"Narrative claim: {spec.get('visual_claim', '')}",
+            f"Subject and action: {spec.get('subject_action', '')}",
+            f"Location and spatial context: {spec.get('location_context', '')}",
+            f"Evidence layer: {spec.get('evidence_layer', '')}",
+            f"Historical boundary: {spec.get('historical_boundary', '')}",
+            f"Composition: {shot.get('composition', '')}",
+            f"Dynamic layers: {', '.join(spec.get('dynamic_layers', []))}",
+            f"Caption safe area: {spec.get('caption_safe_area', '')}",
+            f"Constraints: {', '.join(spec.get('constraints', []))}",
+        ])
         requests.append({
-            'prompt': shot['prompt'],
+            'prompt': prompt,
             'generation_mode': 'edit',
             'image_paths': refs,
             'preferred_provider': 'openai',
@@ -69,6 +86,11 @@ def shot_assets(project: Path) -> None:
     result = ImageBatchRunner().run(requests, max_workers=3, max_retries=2)
     failed=[x for x in result['results'] if x['status']=='failed']
     if failed: raise SystemExit(f'shot_assets failed: {failed}')
+    if sample:
+        sample_manifest = {'version':'1.0','stage':'shot_assets_sample','boards':[{'id':shot.get('visual_board_id') or shot['shot_id'],'path':str((out_dir / f"{(shot.get('visual_board_id') or shot['shot_id']).lower()}.png").relative_to(project)),'provider':'openai','model':'gpt-image-2'} for shot in selected]}
+        (project/'artifacts/shot_asset_sample_manifest.json').write_text(json.dumps(sample_manifest,ensure_ascii=False,indent=2)+'\\n')
+        print(json.dumps({'shot_assets_sample':len(selected),'cost':result['totals']['cost']},ensure_ascii=False))
+        return
     core_assets=[x for x in manifest.get('assets', []) if x.get('subtype') != 'final_board']
     for shot in plan.get('shots', []):
         board_id=shot.get('visual_board_id') or shot['shot_id']
@@ -78,7 +100,7 @@ def shot_assets(project: Path) -> None:
             'source_tool':'image_selector', 'scene_id':board_id, 'model':'gpt-image-2',
             'provider':'openai', 'prompt':shot['prompt'], 'generation_mode':'image',
             'status':'approved', 'origin_type':'generated',
-            'historical_treatment':'dramatic_reconstruction', 'asset_group_id':'final_board',
+            'historical_treatment':'dramatic_reconstruction', 'asset_group_id':'final_board', 'subtype':'final_board',
             'reused_by_scene_ids':[board_id], 'rights_note':'project_generated',
         })
     manifest['assets']=core_assets
@@ -88,5 +110,6 @@ def shot_assets(project: Path) -> None:
     print(json.dumps({'shot_assets':len(plan.get('shots',[])),'cost':result['totals']['cost']},ensure_ascii=False))
 
 if __name__ == '__main__':
-    p=argparse.ArgumentParser(); p.add_argument('stage',choices=['core_assets','shot_assets']); p.add_argument('--project-dir',required=True); a=p.parse_args()
-    (core if a.stage=='core_assets' else shot_assets)(Path(a.project_dir).resolve())
+    p=argparse.ArgumentParser(); p.add_argument('stage',choices=['core_assets','shot_assets']); p.add_argument('--project-dir',required=True); p.add_argument('--boards',default=''); p.add_argument('--sample',action='store_true'); a=p.parse_args()
+    only={x.strip().lower() for x in a.boards.split(',') if x.strip()} or None
+    (core if a.stage=='core_assets' else lambda project: shot_assets(project, only=only, sample=a.sample))(Path(a.project_dir).resolve())
