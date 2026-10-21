@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "purpose": "BGM selection metadata for AI story-video workflows",
   "default_mix": {
     "narration_priority": true,
@@ -72,6 +72,54 @@
       "source": "user_downloaded",
       "license_status": "verify_source_license_before_publish",
       "notes": "Longer cinematic option for a later act or ending; keep beneath narration."
+    },
+    {
+      "id": "backgroundmusicmaster-nature-narration-bed",
+      "path": "assets/bgm/backgroundmusicmaster-nature-narration-bed-445404.mp3",
+      "title": "Nature Narration Bed",
+      "duration_seconds": 206.83,
+      "mood": ["calm", "nature", "warm", "steady"],
+      "energy": 2,
+      "tension": 1,
+      "best_for": ["opening_context", "quiet_reflection", "background_exposition", "steady_narration"],
+      "avoid_for": ["major_climax", "fast_action", "court_conflict"],
+      "voice_compatibility": "review_required",
+      "instrumental_status": "review_required",
+      "source": "user_downloaded",
+      "license_status": "verify_source_license_before_publish",
+      "notes": "Gentle nature bed for calm narration stretches."
+    },
+    {
+      "id": "desifreemusic-calm-thoughtful-narration",
+      "path": "assets/bgm/desifreemusic-a-calm-soundtrack-for-thoughtful-narration-364021.mp3",
+      "title": "Calm Soundtrack for Thoughtful Narration",
+      "duration_seconds": 240.02,
+      "mood": ["calm", "thoughtful", "reflective", "melancholic"],
+      "energy": 2,
+      "tension": 2,
+      "best_for": ["aftermath", "quiet_reflection", "ending", "human_cost"],
+      "avoid_for": ["major_climax", "fast_action", "pre_climax"],
+      "voice_compatibility": "review_required",
+      "instrumental_status": "review_required",
+      "source": "user_downloaded",
+      "license_status": "verify_source_license_before_publish",
+      "notes": "Slow thoughtful bed; good under reflective closing narration."
+    },
+    {
+      "id": "pianocafe-kumi-japanese-piano",
+      "path": "assets/bgm/pianocafe_kumi-japanese-piano-318088.mp3",
+      "title": "Japanese Piano",
+      "duration_seconds": 190.82,
+      "mood": ["piano", "delicate", "intimate", "elegant"],
+      "energy": 2,
+      "tension": 1,
+      "best_for": ["quiet_reflection", "intimate_moment", "aftermath", "ending"],
+      "avoid_for": ["major_climax", "court_conflict", "fast_action"],
+      "voice_compatibility": "review_required",
+      "instrumental_status": "review_required",
+      "source": "user_downloaded",
+      "license_status": "verify_source_license_before_publish",
+      "notes": "Delicate piano bed for intimate moments and endings."
     }
   ],
   "selection_policy": {
@@ -81,7 +129,10 @@
       "atlasaudio-dark-ambient",
       "leberch-history-documentary",
       "nastelbom-tension",
-      "good-b-music-price-of-freedom"
+      "good-b-music-price-of-freedom",
+      "backgroundmusicmaster-nature-narration-bed",
+      "desifreemusic-calm-thoughtful-narration",
+      "pianocafe-kumi-japanese-piano"
     ],
     "required_before_publish": ["verify license", "listen for vocals", "check narration masking", "record act-level music_plan"]
   }
