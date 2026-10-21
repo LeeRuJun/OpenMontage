@@ -493,6 +493,17 @@ def write_checkpoint(
                 f"re-write with status='completed', human_approved=True."
             )
 
+    if pipeline_type == "historical-story" and status in {"awaiting_human", "completed"}:
+        from lib.historical_story_gate import enforce_historical_stage_gate
+
+        project_dir = pipeline_dir / project_id
+        try:
+            enforce_historical_stage_gate(project_dir, stage, artifacts)
+        except Exception as exc:
+            raise CheckpointValidationError(
+                f"HISTORICAL STORY ASSET GATE: stage {stage!r} cannot advance: {exc}"
+            ) from exc
+
     _enforce_stage_prerequisites(
         pipeline_dir,
         project_id,
