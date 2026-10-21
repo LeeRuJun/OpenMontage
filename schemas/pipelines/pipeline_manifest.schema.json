@@ -191,6 +191,57 @@
       },
       "minItems": 1
     },
+    "provider_policy": {
+      "type": "object",
+      "description": "Fixed provider routing for autonomous historical-story runs.",
+      "required": ["image_generation", "tts", "music", "composition"],
+      "properties": {
+        "image_generation": {
+          "type": "object",
+          "required": ["tool", "provider", "model"],
+          "properties": {
+            "tool": { "type": "string" },
+            "provider": { "type": "string" },
+            "model": { "type": "string" },
+            "fallback": { "type": "string", "enum": ["none"] }
+          },
+          "additionalProperties": false
+        },
+        "tts": {
+          "type": "object",
+          "required": ["tool", "provider", "model"],
+          "properties": {
+            "tool": { "type": "string" },
+            "provider": { "type": "string" },
+            "model": { "type": "string" },
+            "fallback": { "type": "string", "enum": ["none"] }
+          },
+          "additionalProperties": false
+        },
+        "music": {
+          "type": "object",
+          "required": ["source", "catalog_path"],
+          "properties": {
+            "source": { "type": "string", "const": "user_uploaded_catalog_only" },
+            "catalog_path": { "type": "string" },
+            "generation_allowed": { "type": "boolean", "const": false },
+            "search_allowed": { "type": "boolean", "const": false }
+          },
+          "additionalProperties": false
+        },
+        "composition": {
+          "type": "object",
+          "required": ["tool", "runtime"],
+          "properties": {
+            "tool": { "type": "string" },
+            "runtime": { "type": "string", "enum": ["hyperframes"] },
+            "fallback": { "type": "string", "enum": ["none"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
     "approval_policy": {
       "type": "string",
       "enum": ["guided", "autonomous"],

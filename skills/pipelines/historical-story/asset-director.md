@@ -14,7 +14,10 @@ Read the approved `shot_asset_plan`. For each planned shot, combine the required
 
 For high-quality boards, the asset director consumes `prompt_spec` rather than a bare narration paragraph: preserve the claim, embed the subject in the location, show the evidence layer, honor the historical boundary, and leave the dynamic layers for edit/compose. A visually impressive image that loses the causal claim is a failed asset even when its style is attractive.
 
-## Fixed BGM catalog policy
+## Fixed image provider policy
+
+When a new image must be generated, use the manifest `provider_policy.image_generation`: `openai_image` / OpenAI `gpt-image-2`. Do not re-rank to another provider or silently fall back; if the fixed provider is unavailable, stop with a blocker. Existing approved local assets may still be reused as references or deterministic board layers when the asset plan explicitly permits it.
+
 
 Music selection is catalog-only for this pipeline:
 

@@ -22,6 +22,10 @@ def test_historical_story_manifest_has_vertical_story_stages():
         "microbeat_duration_seconds": {"min": 4, "max": 8},
     }
     assert manifest["approval_policy"] == "autonomous"
+    assert manifest["provider_policy"]["image_generation"] == {"tool": "openai_image", "provider": "openai", "model": "gpt-image-2", "fallback": "none"}
+    assert manifest["provider_policy"]["tts"] == {"tool": "minimax_tts", "provider": "minimax", "model": "speech-2.8-hd", "fallback": "none"}
+    assert manifest["provider_policy"]["music"]["source"] == "user_uploaded_catalog_only"
+    assert manifest["provider_policy"]["composition"] == {"tool": "hyperframes_compose", "runtime": "hyperframes", "fallback": "none"}
     assert all(not stage.get("human_approval_default") for stage in manifest["stages"])
     core_assets = next(stage for stage in manifest["stages"] if stage["name"] == "core_assets")
     assert "music_gen" not in core_assets.get("tools_available", [])
