@@ -1,0 +1,8 @@
+{
+  "version": "1.0",
+  "account": {"name":"叙事局","promise":"把复杂的故事，讲成看得见的选择。","ip_role":"叙事编辑 / Story Editor","scope":["历史故事","小说故事","人物命运","真实事件"]},
+  "brand_assets":{"mark":"assets/brand/narrative-mark.svg","logo_horizontal":"assets/brand/narrative-logo-horizontal.svg","logo_mono":"assets/brand/narrative-logo-mono.svg","watermark":"assets/brand/narrative-watermark.svg"},
+  "tokens":{"paper":"#F2EAD6","ink":"#222923","indigo":"#314553","accent_vermilion":"#A74436","muted":"#8C9388"},
+  "usage":{"avatar":"Use narrative-mark.svg only; do not put long Chinese text in small avatars.","youtube_bilibili":"Use the same master mark and adapt banner crop, not identity.","cover":"Master logo stays small; series label and episode hook carry the click decision.","first_frame":"Use story hook first; watermark may enter after the first beat.","watermark":"Bottom-right, low opacity, never over captions or evidence labels."},
+  "series_skins":{"historical-story":{"label":"历史故事","palette":["#F2EAD6","#314553","#A74436","#222923"],"motifs":["map route","archive page","chapter stamp","timeline fracture"],"asset":"assets/brand/series/historical-story.json"}}
+}

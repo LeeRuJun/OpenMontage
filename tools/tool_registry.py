@@ -12,7 +12,25 @@ import pkgutil
 from types import ModuleType
 from typing import Any, Optional
 
-from tools.base_tool import BaseTool, ToolStatus, ToolTier, ToolStability
+from tools.base_tool import BaseTool, ToolStatus, ToolTier, ToolStability, ToolRuntime
+
+
+# Local image/video generation is intentionally disabled for normal routing.
+# Keep the provider implementations discoverable for maintenance and diagnostics,
+# but never expose them as selector candidates or configured providers.
+_DISABLED_LOCAL_MEDIA_CAPABILITIES = frozenset({"image_generation", "video_generation"})
+_DISABLED_LOCAL_MEDIA_RUNTIMES = frozenset({ToolRuntime.LOCAL, ToolRuntime.LOCAL_GPU})
+
+
+def is_logically_disabled(tool: BaseTool) -> bool:
+    """Return whether policy removes a local image/video tool from routing."""
+    return (
+        tool.capability in _DISABLED_LOCAL_MEDIA_CAPABILITIES
+        and tool.runtime in _DISABLED_LOCAL_MEDIA_RUNTIMES
+    )
+
+
+_DISABLED_REASON = "local image/video providers are disabled by policy"
 
 
 # Unicode punctuation that breaks on Windows cp1252 stdout. Map each to an
@@ -151,16 +169,25 @@ class ToolRegistry:
         return [t for t in self._tools.values() if t.tier == tier]
 
     def get_by_capability(self, capability: str) -> list[BaseTool]:
-        """Get all tools registered for a top-level capability family."""
-        return [t for t in self._tools.values() if t.capability == capability]
+        """Return routable tools for a top-level capability family."""
+        return [
+            t for t in self._tools.values()
+            if t.capability == capability and not is_logically_disabled(t)
+        ]
 
     def get_by_provider(self, provider: str) -> list[BaseTool]:
-        """Get all tools backed by a specific provider."""
-        return [t for t in self._tools.values() if t.provider == provider]
+        """Return routable tools backed by a specific provider."""
+        return [
+            t for t in self._tools.values()
+            if t.provider == provider and not is_logically_disabled(t)
+        ]
 
     def get_by_status(self, status: ToolStatus) -> list[BaseTool]:
-        """Get all tools with a given status."""
-        return [t for t in self._tools.values() if t.get_status() == status]
+        """Return routable tools with the requested live status."""
+        return [
+            t for t in self._tools.values()
+            if t.get_status() == status and not is_logically_disabled(t)
+        ]
 
     def get_available(self) -> list[BaseTool]:
         """Get all tools that are currently available."""
@@ -175,10 +202,10 @@ class ToolRegistry:
         return [t for t in self._tools.values() if t.stability == stability]
 
     def find_by_capability(self, capability: str) -> list[BaseTool]:
-        """Find tools that declare a given capability."""
+        """Return routable tools declaring a capability."""
         return [
             t for t in self._tools.values()
-            if capability in t.capabilities
+            if capability in t.capabilities and not is_logically_disabled(t)
         ]
 
     def find_fallback(self, tool_name: str) -> Optional[BaseTool]:
@@ -191,7 +218,11 @@ class ToolRegistry:
             candidates.append(tool.fallback)
         for name in candidates:
             fb = self.get(name)
-            if fb and fb.get_status() == ToolStatus.AVAILABLE:
+            if (
+                fb
+                and not is_logically_disabled(fb)
+                and fb.get_status() == ToolStatus.AVAILABLE
+            ):
                 return fb
         return None
 
@@ -205,7 +236,10 @@ class ToolRegistry:
         self.ensure_discovered()
         report: dict[str, Any] = {}
         for name, tool in self._tools.items():
-            info = tool.get_info()
+            info = dict(tool.get_info())
+            if is_logically_disabled(tool):
+                info["status"] = "disabled"
+                info["disabled_reason"] = _DISABLED_REASON
             report[name] = info
         return report
 
@@ -214,6 +248,8 @@ class ToolRegistry:
         self.ensure_discovered()
         grouped: dict[str, list[dict[str, Any]]] = {}
         for tool in self._tools.values():
+            if is_logically_disabled(tool):
+                continue
             grouped.setdefault(tool.capability, []).append(tool.get_info())
         for items in grouped.values():
             items.sort(key=lambda item: (item["provider"], item["name"]))
@@ -224,6 +260,8 @@ class ToolRegistry:
         self.ensure_discovered()
         grouped: dict[str, list[dict[str, Any]]] = {}
         for tool in self._tools.values():
+            if is_logically_disabled(tool):
+                continue
             grouped.setdefault(tool.provider, []).append(tool.get_info())
         for items in grouped.values():
             items.sort(key=lambda item: (item["capability"], item["name"]))
@@ -276,6 +314,7 @@ class ToolRegistry:
                 menu[cap] = {"available": [], "unavailable": [], "total": 0, "configured": 0}
 
             info = tool.get_info()
+            disabled = is_logically_disabled(tool)
             status = tool.get_status()
             entry = {
                 "name": tool.name,
@@ -284,8 +323,10 @@ class ToolRegistry:
                 "best_for": tool.best_for,
                 "dependencies": info.get("dependencies", []),
                 "install_instructions": tool.install_instructions,
-                "status": status.value,
+                "status": "disabled" if disabled else status.value,
             }
+            if disabled:
+                entry["disabled_reason"] = _DISABLED_REASON
             for extra_key in (
                 "source_provider_menu",
                 "source_provider_summary",
@@ -300,7 +341,7 @@ class ToolRegistry:
                 if extra_key in info:
                     entry[extra_key] = info[extra_key]
 
-            if status == ToolStatus.AVAILABLE:
+            if status == ToolStatus.AVAILABLE and not disabled:
                 menu[cap]["available"].append(entry)
                 menu[cap]["configured"] += 1
             else:

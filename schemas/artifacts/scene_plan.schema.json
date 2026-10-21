@@ -23,8 +23,26 @@
           "start_seconds": { "type": "number", "minimum": 0 },
           "end_seconds": { "type": "number", "minimum": 0 },
           "script_section_id": { "type": "string" },
+          "visual_board_id": {
+            "type": "string",
+            "description": "Final visual board containing this internal microbeat. Multiple scene entries may share one board ID."
+          },
+          "microbeat_index": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Order of this internal beat within visual_board_id."
+          },
+          "microbeat_count": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Total internal beats planned for visual_board_id."
+          },
           "framing": { "type": "string" },
           "movement": { "type": "string" },
+          "hold_reason": {
+            "type": "string",
+            "enum": ["emotional_hold", "diagram_hold"]
+          },
           "transition_in": { "type": "string" },
           "transition_out": { "type": "string" },
           "overlay_notes": { "type": "string" },

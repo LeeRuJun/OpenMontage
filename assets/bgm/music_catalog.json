@@ -1,0 +1,88 @@
+{
+  "version": "1.0",
+  "purpose": "BGM selection metadata for AI story-video workflows",
+  "default_mix": {
+    "narration_priority": true,
+    "duck_music_during_narration": true,
+    "recommended_narration_music_level": "8-12%",
+    "lyrics_policy": "prefer instrumental; verify before final publish",
+    "crossfade_seconds": 2.0
+  },
+  "tracks": [
+    {
+      "id": "leberch-history-documentary",
+      "path": "assets/bgm/leberch-history-documentary-589943.mp3",
+      "title": "History Documentary",
+      "duration_seconds": 204.04,
+      "mood": ["historical", "documentary", "restrained", "reflective"],
+      "energy": 2,
+      "tension": 2,
+      "best_for": ["opening_context", "historical_background", "aftermath", "evidence_explanation"],
+      "avoid_for": ["major_climax", "fast_action"],
+      "voice_compatibility": "review_required",
+      "instrumental_status": "review_required",
+      "source": "user_downloaded",
+      "license_status": "verify_source_license_before_publish",
+      "notes": "Low-presence documentary bed; good default under Chinese narration."
+    },
+    {
+      "id": "nastelbom-tension",
+      "path": "assets/bgm/nastelbom-tension-tension-music-602460.mp3",
+      "title": "Tension",
+      "duration_seconds": 145.89,
+      "mood": ["tense", "urgent", "political_pressure", "escalation"],
+      "energy": 4,
+      "tension": 5,
+      "best_for": ["court_conflict", "military_pressure", "reversal", "pre_climax"],
+      "avoid_for": ["quiet_reflection", "dense_fact_dump"],
+      "voice_compatibility": "review_required",
+      "instrumental_status": "review_required",
+      "source": "user_downloaded",
+      "license_status": "verify_source_license_before_publish",
+      "notes": "Use with narration ducking; reserve for rising conflict rather than the full episode."
+    },
+    {
+      "id": "atlasaudio-dark-ambient",
+      "path": "assets/bgm/atlasaudio-dark-ambient-590151.mp3",
+      "title": "Dark Ambient",
+      "duration_seconds": 94.04,
+      "mood": ["dark", "ominous", "uncertain", "low_light"],
+      "energy": 2,
+      "tension": 4,
+      "best_for": ["hook", "hidden_risk", "night_scene", "power_breakdown"],
+      "avoid_for": ["victory", "warm_resolution"],
+      "voice_compatibility": "review_required",
+      "instrumental_status": "review_required",
+      "source": "user_downloaded",
+      "license_status": "verify_source_license_before_publish",
+      "notes": "Short atmospheric bed for suspense and institutional threat."
+    },
+    {
+      "id": "good-b-music-price-of-freedom",
+      "path": "assets/bgm/good_b_music-price-of-freedom-33106.mp3",
+      "title": "Price of Freedom",
+      "duration_seconds": 307.37,
+      "mood": ["cinematic", "resolute", "sorrowful", "hopeful"],
+      "energy": 4,
+      "tension": 3,
+      "best_for": ["counterattack", "turning_point", "historical_consequence", "ending"],
+      "avoid_for": ["quiet_factual_intro"],
+      "voice_compatibility": "review_required",
+      "instrumental_status": "review_required",
+      "source": "user_downloaded",
+      "license_status": "verify_source_license_before_publish",
+      "notes": "Longer cinematic option for a later act or ending; keep beneath narration."
+    }
+  ],
+  "selection_policy": {
+    "choose_by": ["story_act", "narrative_role", "mood", "tension", "energy", "duration_fit", "voice_compatibility"],
+    "do_not_use_one_track_for_entire_long_form_episode": true,
+    "recommended_tracks_for_historical_story": [
+      "atlasaudio-dark-ambient",
+      "leberch-history-documentary",
+      "nastelbom-tension",
+      "good-b-music-price-of-freedom"
+    ],
+    "required_before_publish": ["verify license", "listen for vocals", "check narration masking", "record act-level music_plan"]
+  }
+}

@@ -34,6 +34,13 @@ ARTIFACT_NAMES = [
     "book_profile",
     "delivery_strategy",
     "visual_asset_plan",
+    "historical_evidence_ledger",
+    "historical_character_bible",
+    "narration_timing",
+    "story_spine",
+    "historical_scene_bible",
+    "cover_plan",
+    "shot_asset_plan",
 ]
 
 

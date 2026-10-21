@@ -39,6 +39,12 @@
           "generation_mode": { "type": "string", "enum": ["image", "svg", "code", "stock", "user_asset"] },
           "reusable": { "type": "boolean" },
           "status": { "type": "string", "enum": ["planned", "generated", "approved", "rejected", "needs_refinement"] },
+          "origin_type": { "type": "string", "enum": ["archival", "generated", "provided", "stock", "derivative"] },
+          "source_citation_id": { "type": "string" },
+          "historical_treatment": { "type": "string", "enum": ["documentary", "illustrative", "dramatic_reconstruction", "symbolic"] },
+          "asset_group_id": { "type": "string" },
+          "reused_by_scene_ids": { "type": "array", "items": { "type": "string" } },
+          "rights_note": { "type": "string" },
           "voice_performance": {
             "type": "object",
             "description": "Applied voice-performance contract for narration assets.",
