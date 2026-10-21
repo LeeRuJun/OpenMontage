@@ -8,6 +8,26 @@ category: custom
 stability: beta
 default_checkpoint_policy: guided
 approval_policy: autonomous
+provider_policy:
+  image_generation:
+    tool: openai_image
+    provider: openai
+    model: gpt-image-2
+    fallback: none
+  tts:
+    tool: minimax_tts
+    provider: minimax
+    model: speech-2.8-hd
+    fallback: none
+  music:
+    source: user_uploaded_catalog_only
+    catalog_path: assets/bgm/music_catalog.json
+    generation_allowed: false
+    search_allowed: false
+  composition:
+    tool: hyperframes_compose
+    runtime: hyperframes
+    fallback: none
 production_modes:
   - name: pilot_2min
     description: "90-150 second validation cut; target ~120 seconds and ~480-576 Chinese characters at 4.0-4.8 chars/second."
