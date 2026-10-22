@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """OpenMontage-native hard gate for instruction-driven pipelines."""
 from __future__ import annotations
-import argparse, json
+import argparse, hashlib, json
 from pathlib import Path
 from typing import Any
 import yaml
@@ -27,6 +27,12 @@ def read_artifact(project: Path, name: str) -> dict[str, Any] | None:
     if not isinstance(value, dict): raise GateError(f"artifact {name} must be an object")
     try: validate_artifact(name, value)
     except Exception as exc: raise GateError(f"artifact {name} failed schema validation: {exc}") from exc
+    if name == "narration_timing":
+        script_path = project / "artifacts/script.md"
+        if script_path.is_file():
+            expected = hashlib.sha256(script_path.read_bytes()).hexdigest()[:16]
+            if value.get("script_revision") != expected:
+                raise GateError(f"narration_timing is stale for current script (expected revision {expected})")
     return value
 
 def statuses(root: Path, project: Path, pipeline_name: str) -> list[dict[str, Any]]:
