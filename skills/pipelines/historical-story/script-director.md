@@ -17,6 +17,17 @@ For full longform, target a 20–30 second opening prologue. Do not open by list
 
 Every factual section includes `claim_refs`. Preserve the evidence ledger qualifier for probable, contested, and unknown material.
 
+For the `historical-story` full-longform channel, `script.opening` is protected content, not optional flavor text. It must preserve this order:
+
+1. Fixed brand welcome: `各位观众好，这里是读点东西。`
+2. Episode identification: name the period, subject, and story being told.
+3. Story overview: summarize the whole event before detailed exposition.
+4. Hook: the concrete contradiction or unanswered question.
+5. Promise and roadmap: what the episode will explain.
+6. Detailed historical narration begins only after the above contract.
+
+Any script revision that removes or reorders the fixed welcome, overview, hook, promise, or roadmap fails the script gate and invalidates narration timing and every downstream timing-dependent artifact.
+
 ## Script length is calculated from time
 
 Use a measured Chinese narration density of approximately 4.0–4.8 characters/second. The script generator must calculate the range from the requested duration before writing:

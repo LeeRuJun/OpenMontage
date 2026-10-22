@@ -33,6 +33,19 @@ def read_artifact(project: Path, name: str) -> dict[str, Any] | None:
             expected = hashlib.sha256(script_path.read_bytes()).hexdigest()[:16]
             if value.get("script_revision") != expected:
                 raise GateError(f"narration_timing is stale for current script (expected revision {expected})")
+    if name == "script":
+        opening = value.get("opening") or {}
+        required = ("brand_name", "column_name", "hook", "promise", "roadmap")
+        missing = [key for key in required if not opening.get(key)]
+        if missing:
+            raise GateError(f"script.opening missing protected fields: {', '.join(missing)}")
+        if opening.get("brand_name") != "读点东西" or opening.get("column_name") != "历史故事":
+            raise GateError("script.opening must preserve the fixed 读点东西 · 历史故事 identity")
+        if not isinstance(opening.get("roadmap"), list) or not 2 <= len(opening["roadmap"]) <= 3:
+            raise GateError("script.opening.roadmap must contain 2-3 items")
+        first_text = str((value.get("sections") or [{}])[0].get("text", ""))
+        if "各位观众好" not in first_text or "读点东西" not in first_text:
+            raise GateError("script first section must preserve the fixed brand welcome")
     return value
 
 def statuses(root: Path, project: Path, pipeline_name: str) -> list[dict[str, Any]]:
