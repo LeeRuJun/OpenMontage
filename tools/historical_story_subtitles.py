@@ -35,24 +35,13 @@ def make_srt(project: Path, duration: float) -> Path:
 def main(project: Path) -> None:
     source=project/'renders/historical_story_final.mp4'; final=project/'renders/historical_story_final_subtitled.mp4'
     if not source.is_file(): raise SystemExit(f'missing render: {source}')
-    duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','default=nw=1:nk=1',str(source)],text=True))
+    ffprobe='/opt/homebrew/opt/ffmpeg-full/bin/ffprobe'
+    duration=float(subprocess.check_output([ffprobe,'-v','error','-show_entries','format=duration','-of','default=nw=1:nk=1',str(source)],text=True))
     srt=make_srt(project,duration)
-    cue_dir=project/'assets/audio/subtitle_cues'; cue_dir.mkdir(parents=True,exist_ok=True)
-    blocks=[]
-    for index,block in enumerate(re.split(r'\n\s*\n',srt.read_text(encoding='utf-8').strip()),1):
-        lines=block.splitlines()
-        if len(lines)<3: continue
-        match=re.match(r'(\d{2}:\d{2}:\d{2}),(\d{3}) --> (\d{2}:\d{2}:\d{2}),(\d{3})',lines[1])
-        if not match: continue
-        def seconds(h,m,s,ms): return int(h)*3600+int(m)*60+int(s)+int(ms)/1000
-        start=seconds(*match.group(1).split(':'),match.group(2)); end=seconds(*match.group(3).split(':'),match.group(4)); text=''.join(lines[2:])
-        cue=cue_dir/f'{index:04d}.txt'; cue.write_text(text,encoding='utf-8')
-        path=str(cue).replace('\\','\\\\').replace(':','\\:')
-        enable=f"between(t\\,{start:.3f}\\,{end:.3f})"
-        blocks.append(f"drawtext=fontfile='/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc':fontindex=0:textfile='{path}':fontcolor=0xF0DFC5:fontsize=34:borderw=2:bordercolor=black:box=1:boxcolor=black@0.55:boxborderw=12:x=(w-text_w)/2:y=h-text_h-70:enable='{enable}'")
-    if not blocks: raise SystemExit('no subtitle cues parsed')
-    subprocess.run(['ffmpeg','-y','-i',str(source),'-vf',','.join(blocks),'-map','0:v:0','-map','0:a:0','-c:v','libx264','-preset','medium','-crf','18','-c:a','copy','-movflags','+faststart',str(final)],check=True)
-    print({'output':str(final),'subtitle_path':str(srt),'cue_count':len(blocks),'duration_seconds':duration})
+    ffmpeg='/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
+    subtitle_filter=rf"subtitles=filename='{srt}':force_style='FontName=PingFang SC\,FontSize=20\,PrimaryColour=&H00F0DFC5\,OutlineColour=&H0017151A\,BorderStyle=1\,Outline=2\,Shadow=0\,Alignment=2\,MarginV=55'"
+    subprocess.run([ffmpeg,'-y','-i',str(source),'-vf',subtitle_filter,'-map','0:v:0','-map','0:a:0','-c:v','libx264','-preset','medium','-crf','18','-c:a','copy','-movflags','+faststart',str(final)],check=True)
+    print({'output':str(final),'subtitle_path':str(srt),'duration_seconds':duration})
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(); p.add_argument('--project-dir',required=True); a=p.parse_args(); main(Path(a.project_dir).resolve())
