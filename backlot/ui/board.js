@@ -19,6 +19,10 @@ let selectedStage = null;   // stage drawer open for this stage name
 let activeRender = 0;
 let replay = null;          // {t0, t1, t, playing} — replay mode when non-null
 let firstPaint = true;
+let reviewMode = false;
+let reviewSectionIndex = 0;
+let reviewDecision = localStorage.getItem(`backlot.review.${projectId}`) || "unreviewed";
+let reviewFeedback = localStorage.getItem(`backlot.review.feedback.${projectId}`) || "";
 
 function applyTheme(theme) {
   currentTheme = theme === "light" ? "light" : "dark";
@@ -39,6 +43,16 @@ function renderThemeToggle() {
       render();
     },
   }, el("span", { class: "theme-toggle-icon", "aria-hidden": "true" }, currentTheme === "light" ? "☾" : "☀"));
+}
+
+function renderReviewToggle() {
+  return el("button", {
+    class: `theme-toggle review-toggle${reviewMode ? " active" : ""}`,
+    type: "button",
+    title: reviewMode ? "Back to overview" : "Open script and microbeat review",
+    "aria-label": reviewMode ? "Back to overview" : "Open script and microbeat review",
+    onclick: () => { reviewMode = !reviewMode; render(); },
+  }, reviewMode ? "OVERVIEW" : "REVIEW");
 }
 
 applyTheme(currentTheme);
@@ -97,6 +111,7 @@ function renderSlate(s) {
     ),
     ...chips,
     el("div", { class: "spacer" }),
+    renderReviewToggle(),
     renderThemeToggle(),
     liveEl,
     cost,
@@ -1047,6 +1062,17 @@ function tickReplay() {
   if (replay.playing) scheduleTick();
 }
 
+function renderReviewPage(s) {
+  const script=s.artifacts.script||{}; const sections=script.sections||[]; const selected=sections[reviewSectionIndex]||sections[0];
+  if(!selected) return el("div",{class:"empty"},"No script sections available yet.");
+  const scenes=(s.storyboard?.scenes||[]).filter(c=>(Number(c.end_seconds||0)>Number(selected.start_seconds||0))&&(Number(c.start_seconds||0)<Number(selected.end_seconds||Infinity)));
+  const saveDecision=(v)=>{reviewDecision=v;try{localStorage.setItem(`backlot.review.${projectId}`,v);}catch(_){ }render();};
+  const saveNote=(e)=>{reviewFeedback=e.target.value;try{localStorage.setItem(`backlot.review.feedback.${projectId}`,reviewFeedback);}catch(_){ }};
+  const nav=el("div",{style:"display:flex;flex-direction:column;gap:6px;max-height:calc(100vh - 190px);overflow:auto"},sections.map((sec,i)=>el("button",{type:"button",style:`text-align:left;padding:12px 14px;border:1px solid ${i===reviewSectionIndex?'var(--accent)':'var(--border)'};background:${i===reviewSectionIndex?'var(--surface-2)':'var(--surface)'};color:var(--text-1);cursor:pointer;border-radius:4px`,onclick:()=>{reviewSectionIndex=i;render();}},el("span",{style:"display:block;font-family:var(--mono);font-size:11px;color:var(--accent)"},`${String(i+1).padStart(2,'0')} · ${fmtDuration(sec.start_seconds)}–${fmtDuration(sec.end_seconds)}`),el("strong",{style:"display:block;margin-top:5px"},sec.label||sec.id))));
+  const cards=scenes.length?scenes.map(c=>{const v=c.visual;const thumb=v&&v.exists&&v.type==='image'?el('img',{src:thumbURL(s.project_id,v.path,640),style:'width:100%;aspect-ratio:16/9;object-fit:cover;display:block',loading:'lazy',alt:''}):el('div',{style:'aspect-ratio:16/9;display:grid;place-items:center;background:var(--surface-2);color:var(--text-3);font-family:var(--mono);font-size:12px'},'NO IMAGE YET');return el('article',{style:'border:1px solid var(--border);background:var(--surface);padding:10px;border-radius:4px'},thumb,el('div',{style:'display:flex;justify-content:space-between;margin-top:9px;font-family:var(--mono);font-size:11px;color:var(--text-3)'},el('span',{},c.visual_board_id||c.id),el('span',{},`${fmtDuration(c.start_seconds)}–${fmtDuration(c.end_seconds)}`)),el('h3',{style:'margin:8px 0 5px;font-size:16px;color:var(--text-1)'},c.description||'Untitled board'),el('p',{style:'margin:0;color:var(--text-2);font-size:13px;line-height:1.5'},c.shot_intent||c.information_role||'No shot intent'),el('div',{style:'margin-top:8px;color:var(--accent);font-family:var(--mono);font-size:11px'},`microbeat ${c.microbeat_index||1}/${c.microbeat_count||1} · ${c.narrative_role||'unclassified'}`));}):[el('div',{class:'empty'},'No boards overlap this script section yet.')];
+  return el('section',{class:'review-page',style:'padding:24px 28px 70px'},el('div',{style:'display:flex;justify-content:space-between;align-items:end;gap:20px;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:20px'},el('div',{},el('div',{style:'font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--accent)'},'SCRIPT + MICROBEAT REVIEW'),el('h2',{style:'margin:7px 0 0;font-size:30px'},s.title)),el('div',{style:'font-family:var(--mono);font-size:12px;color:var(--text-3)'},`${sections.length} sections · ${scenes.length} boards`)),el('div',{style:'display:grid;grid-template-columns:minmax(190px,260px) minmax(0,1fr);gap:22px;align-items:start'},nav,el('main',{},el('div',{style:'padding:20px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);margin-bottom:20px'},el('div',{style:'font-family:var(--mono);font-size:11px;color:var(--accent)'},`${selected.label||selected.id} · ${fmtDuration(selected.start_seconds)}–${fmtDuration(selected.end_seconds)}`),el('p',{style:'font-size:17px;line-height:1.7;max-width:850px;margin:12px 0 0;color:var(--text-1)'},selected.text||'No narration text')),el('div',{style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px'},cards),el('div',{style:'margin-top:22px;padding:16px;background:var(--surface);border:1px solid var(--border)'},el('div',{style:'font-family:var(--mono);font-size:11px;color:var(--text-3);margin-bottom:8px'},'REVIEW NOTE · LOCAL DRAFT'),el('textarea',{value:reviewFeedback,placeholder:'记录这一段需要修改的地方…',style:'width:100%;min-height:90px;resize:vertical;background:var(--surface-2);color:var(--text-1);border:1px solid var(--border);padding:10px;font:13px/1.5 var(--body)',oninput:saveNote}),el('div',{style:'display:flex;gap:8px;margin-top:12px;flex-wrap:wrap'},el('button',{type:'button',class:`review-action ${reviewDecision==='approved'?'active':''}`,onclick:()=>saveDecision('approved')},'MARK APPROVED'),el('button',{type:'button',class:`review-action danger ${reviewDecision==='changes_requested'?'active':''}`,onclick:()=>saveDecision('changes_requested')},'REQUEST CHANGES'),el('span',{style:'font-family:var(--mono);font-size:11px;color:var(--text-3)'},`status: ${reviewDecision}`))))));
+}
+
 // ---------------------------------------------------------------------------
 // page assembly
 // ---------------------------------------------------------------------------
@@ -1059,6 +1085,10 @@ function render() {
   firstPaint = false;
   app.innerHTML = "";
   app.append(renderSlate(s));
+  if (reviewMode) {
+    app.append(renderReviewPage(s));
+    return;
+  }
   app.append(renderRail(s));
   const replayBar = renderReplayBar(state);
   if (replayBar) app.append(replayBar);

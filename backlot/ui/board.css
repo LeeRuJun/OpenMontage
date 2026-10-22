@@ -1040,3 +1040,12 @@ body:not(.first) .approval-review { animation: none; }
   .approval-review-foot button { width: 100%; }
   .approval-status { white-space: normal; }
 }
+
+.review-toggle { width: auto; min-width: 76px; padding: 0 10px; font-family: var(--mono); font-size: calc(10px * var(--fs-scale)); letter-spacing: .08em; }
+.review-toggle.active { color: var(--amber); border-color: var(--amber); }
+.review-action { border: 1px solid var(--border); background: var(--surface-2); color: var(--text-1); padding: 8px 11px; font-family: var(--mono); font-size: calc(10px * var(--fs-scale)); cursor: pointer; }
+.review-action:hover, .review-action.active { border-color: var(--green); color: var(--green); }
+.review-action.danger:hover, .review-action.danger.active { border-color: var(--red); color: var(--red); }
+.review-page textarea:focus, .review-page button:focus { outline: 2px solid var(--amber); outline-offset: 2px; }
+@media (max-width: 760px) { .review-page > div:nth-child(2) { grid-template-columns: 1fr !important; } .review-page h2 { font-size: 23px !important; } }
+
