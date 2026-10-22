@@ -4,7 +4,7 @@ Builds the HyperFrames entry from approved asset_manifest/edit_decisions and
 refuses to render when the historical gates are not satisfied.
 """
 from __future__ import annotations
-import json, subprocess
+import json, subprocess, html as html_lib, re
 from pathlib import Path
 from lib.historical_story_gate import validate_final_boards
 from schemas.artifacts import validate_artifact
@@ -22,6 +22,8 @@ def compose(project: Path) -> None:
     manifest=json.loads((project/'artifacts/asset_manifest.json').read_text())
     edit=json.loads((project/'artifacts/edit_decisions.json').read_text())
     timing=json.loads((project/'artifacts/narration_timing.json').read_text())
+    scene_plan=json.loads((project/'artifacts/scene_plan.json').read_text())
+    labels={s.get('visual_board_id',s['id']):s.get('description','') for s in scene_plan.get('scenes',[])}
     validate_artifact('edit_decisions',edit); validate_artifact('narration_timing',timing); validate_final_boards(project,manifest)
     boards={a['scene_id']:a for a in manifest['assets'] if a.get('subtype')=='final_board'}
     cuts=edit['cuts']; total=float(timing['measured_duration_seconds']); raw=sum(float(c['out_seconds'])-float(c['in_seconds']) for c in cuts); scale=total/raw
@@ -29,12 +31,25 @@ def compose(project: Path) -> None:
     for cut in cuts:
         d=(float(cut['out_seconds'])-float(cut['in_seconds']))*scale; starts.append((cut,d,cursor)); cursor+=d
     sections=[]
+    subtitle_clips=[]
+    srt_path=project/'assets/audio/narration.zh-CN.srt'
+    if srt_path.is_file():
+        for block in re.split(r'\n\s*\n', srt_path.read_text(encoding='utf-8').strip()):
+            lines=block.splitlines()
+            if len(lines) < 3: continue
+            match=re.match(r'(\d{2}:\d{2}:\d{2}),(\d{3}) --> (\d{2}:\d{2}:\d{2}),(\d{3})',lines[1])
+            if not match: continue
+            def sec(h,m,s,ms): return int(h)*3600+int(m)*60+int(s)+int(ms)/1000
+            start_s=sec(*match.group(1).split(':'),match.group(2)); end_s=sec(*match.group(3).split(':'),match.group(4)); text=html_lib.escape(''.join(lines[2:]))
+            subtitle_clips.append(f'<div class="clip subtitle" data-start="{start_s:.3f}" data-duration="{max(.1,end_s-start_s):.3f}" data-track-index="30">{text}</div>')
     for cut,d,start in starts:
-        bid=cut['source']; asset=boards[bid]; title=bid
-        sections.append(f'<section id="board-{bid}" class="clip board" data-start="{start:.3f}" data-duration="{d:.3f}" data-track-index="1"><div class="fill"></div><div class="inner"><div class="eyebrow">HISTORICAL STORY · {bid}</div><h2>{title}</h2><img src="{asset["path"]}" alt="" /><div class="note">illustrative reconstruction · deterministic caption layer</div></div></section>')
-    audio='<audio id="narration" src="assets/audio/narration_full.mp3" data-start="0" data-duration="1320.84" data-track-index="20" data-volume="1"></audio>'
-    for i,(path,start,end,vol) in enumerate(BGM): audio+=f'<audio id="bgm-{i}" src="{path}" data-start="{start}" data-duration="{end-start:.3f}" data-track-index="{21+i}" data-volume="{vol}"></audio>'
-    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=1920,height=1080"><title>钱俶纳土归宋</title><script src="assets/gsap.min.js"></script><style>:root{{--ink:#17151a;--paper:#f0dfc5;--muted:#b8a28a;--red:#b85c38}}*{{box-sizing:border-box}}html,body{{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--ink);color:var(--paper);font-family:serif}}#root{{position:relative;width:1920px;height:1080px;overflow:hidden}}.board{{position:absolute;inset:0}}.fill{{position:absolute;inset:0;background:radial-gradient(ellipse at 75% 20%,rgba(184,92,56,.25),transparent 55%),#17151a}}.inner{{position:absolute;inset:0;padding:110px 130px;opacity:0;transform:translateY(24px)}}.eyebrow,.note{{font:700 20px monospace;letter-spacing:3px;color:var(--red)}}h2{{font-size:100px;margin:45px 0;max-width:700px}}img{{position:absolute;right:110px;top:145px;width:800px;height:450px;object-fit:cover;border:3px solid rgba(184,92,56,.7)}}.note{{position:absolute;bottom:90px;left:130px;font-size:18px}}</style></head><body><div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="1320.84">{''.join(sections)}{audio}</div><script>window.__timelines=window.__timelines||{{}};const tl=gsap.timeline({{paused:true}});document.querySelectorAll('.board').forEach(b=>{{const s=parseFloat(b.dataset.start);tl.to(b.querySelector('.inner'),{{opacity:1,y:0,duration:.7,ease:'power3.out'}},s+.05);}});window.__timelines.main=tl;</script></body></html>'''
+        bid=cut['source']; asset=boards[bid]; title=html_lib.escape(labels.get(bid,'历史叙事画面')); welcome='<div class="welcome">读点东西 · 历史故事</div>' if bid == 'B01' else ''
+        sections.append(f'<section id="board-{bid}" class="clip board" data-start="{start:.3f}" data-duration="{d:.3f}" data-track-index="1"><div class="fill"></div><div class="inner">{welcome}<h2>{title}</h2><img src="{asset["path"]}" alt="" /></div></section>')
+    audio='<audio id="narration" src="assets/audio/narration_full.mp3" data-start="0" data-duration="{total:.3f}" data-track-index="20" data-volume="1"></audio>'
+    for i,(path,start,end,vol) in enumerate(BGM):
+        effective_end = total if i == len(BGM) - 1 else end
+        audio+=f'<audio id="bgm-{i}" src="{path}" data-start="{start}" data-duration="{effective_end-start:.3f}" data-track-index="{21+i}" data-volume="{vol}"></audio>'
+    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=1920,height=1080"><title>钱俶纳土归宋</title><script src="assets/gsap.min.js"></script><style>:root{{--ink:#17151a;--paper:#f0dfc5;--muted:#b8a28a;--red:#b85c38}}*{{box-sizing:border-box}}html,body{{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--ink);color:var(--paper);font-family:serif}}#root{{position:relative;width:1920px;height:1080px;overflow:hidden}}.board{{position:absolute;inset:0}}.fill{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,21,26,.08),rgba(23,21,26,.30) 55%,rgba(23,21,26,.88))}}.inner{{position:absolute;inset:0;padding:110px 130px;opacity:0;transform:translateY(24px);z-index:2}}.board img{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0;z-index:0}}.eyebrow,.note{{font:700 20px monospace;letter-spacing:3px;color:var(--red);position:relative;z-index:3}}.welcome{{position:relative;z-index:3;color:var(--red);font:700 26px monospace;letter-spacing:5px;margin-bottom:20px}}h2{{font-size:92px;line-height:1.08;margin:0;max-width:1100px;position:absolute;left:130px;bottom:190px;text-shadow:0 4px 24px #000;z-index:3}}.note{{position:absolute;bottom:90px;left:130px;font-size:18px}}.subtitle{{position:absolute;inset:0;z-index:8;display:flex;align-items:flex-end;justify-content:center;padding:0 150px 58px;text-align:center;font:700 34px/1.35 serif;color:#f0dfc5;text-shadow:0 3px 10px #000;pointer-events:none}}</style></head><body><div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{total:.3f}">{''.join(sections)}{''.join(subtitle_clips)}{audio}</div><script>window.__timelines=window.__timelines||{{}};const tl=gsap.timeline({{paused:true}});document.querySelectorAll('.board').forEach(b=>{{const s=parseFloat(b.dataset.start);tl.to(b.querySelector('.inner'),{{opacity:1,y:0,duration:.7,ease:'power3.out'}},s+.05);}});window.__timelines.main=tl;</script></body></html>'''
     (project/'index.html').write_text(html)
     check=subprocess.run(['npx','hyperframes','check','--json'],cwd=project,text=True,capture_output=True)
     if check.returncode: raise SystemExit(f'HyperFrames check failed:\n{check.stdout[-4000:]}\n{check.stderr[-2000:]}')
