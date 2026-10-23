@@ -1,0 +1,79 @@
+identity:
+  name: "Historical Color Direction"
+  category: custom
+  mood: "grounded, vivid, atmospheric, contemplative"
+  pace: deliberate
+  best_for: "Fact-grounded historical stories with environment-led visual boards"
+
+visual_language:
+  color_palette:
+    primary: ["#314553", "#222923"]
+    accent: ["#A74436", "#D08A3E", "#6C8C89"]
+    background: "#F2EAD6"
+    text: "#222923"
+    muted: "#728078"
+  composition: "foreground, midground, background; people embedded in historically specific environments; one coherent camera view"
+  texture: "materially grounded paper grain, wood, stone, textile, water and smoke; no generic filter"
+
+typography:
+  headings:
+    font: "Songti SC"
+    weight: 600
+    tracking: "0.02em"
+  body:
+    font: "Songti SC"
+    weight: 400
+    line_height: 1.7
+  code:
+    font: "Fira Code"
+    weight: 400
+  scale_system: major_third
+  weight_matrix:
+    title: 700
+    heading: 600
+    body: 400
+    caption: 400
+
+motion:
+  transitions: ["paper_reveal", "route_draw", "ink_fracture", "dissolve"]
+  animation_style: "slow documentary parallax, seek-safe, restrained, no decorative bounce"
+  pacing_rules:
+    min_scene_hold_seconds: 4
+    max_scene_hold_seconds: 36
+    text_card_hold_seconds: 4
+    stat_card_hold_seconds: 4
+    transition_duration_seconds: 0.8
+  entrance: "slow reveal from environmental depth"
+  exit: "quiet dissolve"
+
+audio:
+  voice_style: "warm senior Mandarin narrator, calm, clear, measured historical storytelling"
+  music_mood: "restrained historical ambient bed with room for narration"
+  music_volume: 0.08
+  sfx_style: "subtle paper, water, distant crowd and ceremonial texture; no spectacle effects"
+  ducking_threshold_db: -3
+
+asset_generation:
+  image_prompt_prefix: "fact-grounded historical documentary reconstruction, one coherent environmental shot, layered depth, materially specific, people embedded in place, no generated text, "
+  image_negative_prompt: "floating portrait, object-only still life, collage, contact sheet, split-screen, modern objects, unsupported insignia, readable AI text, generic yellow-brown filter"
+  consistency_anchors:
+    - "Every board has a historically specific place or environment"
+    - "Characters remain embedded in the scene rather than isolated portraits"
+    - "Foreground, midground and background carry separate readable information"
+    - "Color follows time of day, weather, light source and material rather than a fixed filter"
+    - "Objects support the scene as evidence layers and do not become the formal subject"
+    - "References are continuity anchors only and never appear as source-image frames"
+
+quality_rules:
+  - "Every board must sustain a 20-second reading path with at least three information regions"
+  - "No pure object, floating portrait, collage, grid or contact-sheet final board"
+  - "No AI-generated readable text; deterministic overlays are added in composition"
+  - "Color variation must be authored per board and justified by time, weather, light or material"
+  - "People, architecture, clothing, vegetation and water must retain distinct material color relationships"
+  - "Final primary image is unique to its visual board"
+
+chart_palette: ["#314553", "#A74436", "#D08A3E", "#6C8C89", "#222923"]
+color_rules:
+  harmony_type: split-complementary
+  contrast_validation: true
+  colorblind_safe: true

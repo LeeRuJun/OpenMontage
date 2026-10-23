@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 import yaml
 from schemas.artifacts import validate_artifact
+from lib.historical_story_validation import contract_for
 
 class GateError(RuntimeError): pass
 
@@ -33,6 +34,14 @@ def read_artifact(project: Path, name: str) -> dict[str, Any] | None:
             expected = hashlib.sha256(script_path.read_bytes()).hexdigest()[:16]
             if value.get("script_revision") != expected:
                 raise GateError(f"narration_timing is stale for current script (expected revision {expected})")
+    if name == "narration_timing":
+        contract = contract_for(value.get("mode", ""))
+        duration = float(value.get("measured_duration_seconds", 0))
+        if not contract.min_duration <= duration <= contract.max_duration:
+            raise GateError(
+                f"narration_timing duration {duration:.3f}s outside "
+                f"{contract.min_duration}-{contract.max_duration}s for {value.get('mode')}"
+            )
     if name == "script":
         opening = value.get("opening") or {}
         required = ("brand_name", "column_name", "hook", "promise", "roadmap")
@@ -58,6 +67,11 @@ def statuses(root: Path, project: Path, pipeline_name: str) -> list[dict[str, An
                 if read_artifact(project, artifact) is None: missing.append(artifact)
             except GateError: invalid.append(artifact)
         present=[a for a in produced if artifact_path(project,a).is_file()]
+        for artifact in present:
+            try:
+                read_artifact(project, artifact)
+            except GateError:
+                invalid.append(artifact)
         if invalid: state="blocked_invalid_input"
         elif missing: state="blocked_missing_input"
         elif produced and set(produced).issubset(present): state="completed"

@@ -1,43 +1,67 @@
 # Historical Story Script Director
 
-Write a story, not an encyclopedia entry.
+**REQUIRED SUB-SKILL:** Read `skills/creative/story-writing-director.md` before drafting.
 
-Use: hook → subject/desire → pressure → escalation → midpoint/reversal → loss of options → climax choice → aftermath/theme.
+Write a historical story, not an encyclopedia entry and not a narrated essay.
+
+## Governing rule
+
+**Every narration section must be built from events.** Before writing prose, fill an event card with:
+
+- **时间**：具体年份、月份、季节或“某日之后”；
+- **地点**：城、府、河、道路、宫门、营地或其他可视空间；
+- **人物**：谁在场、谁发令、谁执行、谁承受后果；
+- **行动**：人物实际做了什么，命令如何抵达，军队/官员/城市如何回应；
+- **后果**：这次行动立刻改变了什么，下一件事为什么被迫发生。
+
+**事件顺序：时间、地点、人物、行动、后果。**
+
+**每个段落先写事件；每个事件之后再写后果。** 分析不能替代事件。如果一句话不能回答“谁在何处做了什么”，它不能占据故事主体。分析、评价和历史解释只能附着在已经讲清楚的事件之后，不能替代事件。
+
+## Scene contract before prose
+
+For every section, record starting state, immediate objective, resistance, attempt, reversal or discovery, consequence, and the question that forces the next section. The event card supplies the historical fields; the scene contract supplies the causal fields. A section cannot be lengthened with commentary when one of these fields is empty.
+
+## Prose contract
+
+- 用叙事动词：到达、下令、起兵、围攻、撤退、渡河、打开城门、接管、处置、改年号。
+- 让地点推动剧情：命令从哪里发出，军队沿什么道路移动，哪座城/哪条河改变了选择。
+- 让人物选择推动下一段：前一段的后果必须成为下一段的压力、机会或新目标。
+- 不要对观众解释“这说明什么”“观众应该理解什么”“这不是……而是……”；把判断改写成下一件具体发生的事。
+- 不用连续的“制度分析、财政分析、信任分析、正统分析”撑时长；每次分析最多一句，并且必须紧跟在已叙述的事件之后。
+- 不虚构对白、心理独白、未被证实的战术细节或确定的争议结论。
+- 不把后世评价写成当时人物已经知道的动机；使用“史家常将其解释为……”时，必须有 claim_ref 和限定词。
+
+## Story movement
+
+长篇可以使用 orientation、pressure、inciting_incident、development、reversal、recovery、escalation、consequence、ending 等叙事功能。它们可以重复、交错或合并，但每个功能都必须由具体事件承载：
+
+```text
+事件卡：1399年，北平，朱棣与燕军，起兵并控制城门
+行动后果：朝廷必须调兵北上；北平从藩王驻地变成战争基地
+下一事件：朝廷军抵达北平周边，战争进入城防与道路争夺
+```
+
+不要先写抽象主题再寻找例子。先按事件链排列，再决定哪里停顿、转折、升级和收束。
 
 ## Opening contract — hook before detail
 
-Every pilot and full episode starts with a short prologue before the first detailed historical explanation. The opening must:
+Full and pilot episodes都先有 20–30 秒开场，但开场也必须包含事件或具体危险：
 
-1. **Hook** with a concrete danger, contradiction, or unanswered question.
-2. **Promise** what this episode will explain and why the viewer should keep watching.
-3. **Roadmap** two or three questions/turns the story will answer.
-4. **Bridge** into the first act's place, person, or evidence board.
+1. 固定品牌开场：`各位观众好，这里是读点东西。`
+2. 说清时代、人物和正在发生的冲突；
+3. 提出一个具体问题；
+4. 预告将沿哪些地点/事件继续；
+5. 立刻进入第一个时间、地点和人物行动。
 
-For full longform, target a 20–30 second opening prologue. Do not open by listing dates, names, institutions, or battlefield details before the viewer knows the episode's question. Record the contract in `script.opening`; the first section label should identify the prologue/hook, and its visual board should support the promise rather than jump straight into a detail card.
+不要用一串日期、人名、制度名开头，也不要用抽象金句代替事件。
 
-Every factual section includes `claim_refs`. Preserve the evidence ledger qualifier for probable, contested, and unknown material.
+## Evidence and structure
 
-For the `historical-story` full-longform channel, `script.opening` is protected content, not optional flavor text. It must preserve this order:
+Every factual section includes `claim_refs`. `metadata.section_event_refs` records the event IDs used by each section. Preserve the evidence ledger qualifier for probable, contested, and unknown material.
 
-1. Fixed brand welcome: `各位观众好，这里是读点东西。`
-2. Episode identification: name the period, subject, and story being told.
-3. Story overview: summarize the whole event before detailed exposition.
-4. Hook: the concrete contradiction or unanswered question.
-5. Promise and roadmap: what the episode will explain.
-6. Detailed historical narration begins only after the above contract.
+Use spoken Chinese. Each section should normally contain 2–4 linked event beats, and end with either the immediate consequence that starts the next section or a short landing pause. Do not add commentary merely to meet the character target; add the next verified event, location, actor, action, or consequence instead.
 
-Any script revision that removes or reorders the fixed welcome, overview, hook, promise, or roadmap fails the script gate and invalidates narration timing and every downstream timing-dependent artifact.
+For full longform, target 5,500–7,200 Chinese characters and 1,320–1,500 measured narration seconds. If the draft is short, research and add verified events; never pad with repeated analysis, audience instruction, or production terminology.
 
-## Script length is calculated from time
-
-Use a measured Chinese narration density of approximately 4.0–4.8 characters/second. The script generator must calculate the range from the requested duration before writing:
-
-- 120-second pilot: approximately 480–576 characters; allowed pilot contract 400–720.
-- 22-minute full episode: approximately 5,280–6,336 characters.
-- 23-minute full episode: approximately 5,520–6,624 characters.
-- 24-minute full episode: approximately 5,760–6,912 characters.
-- 25-minute full episode: approximately 6,000–7,200 characters.
-
-The full contract allows 5,500–7,200 characters, but the measured narration timing is final. Never slow down, pad with silence, or stretch audio to hide an undersized script.
-
-Pilot uses 3–4 meaningful turns. Full uses 8–10 acts. Use spoken language and leave visual work to the storyboard. Every section should end with a viewer question or deliberate landing silence. Output `script` and stop for human approval.
+Output `script` and stop for review before narration generation.
