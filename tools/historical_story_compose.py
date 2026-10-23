@@ -38,7 +38,7 @@ def compose(project: Path) -> None:
             subtitle_clips.append(f'<div class="clip subtitle" data-start="{start_s:.3f}" data-duration="{max(.1,end_s-start_s):.3f}" data-track-index="30">{text}</div>')
     for cut,d,start in starts:
         bid=cut['source']; asset=boards[bid]; title=html_lib.escape(labels.get(bid,'历史叙事画面')); welcome='<div class="welcome">读点东西 · 历史故事</div>' if bid == 'B01' else ''
-        sections.append(f'<section id="board-{bid}" class="clip board" data-start="{start:.3f}" data-duration="{d:.3f}" data-track-index="1"><div class="fill"></div><div class="inner">{welcome}<h2>{title}</h2><img src="{asset["path"]}" alt="" /></div></section>')
+        sections.append(f'<section id="board-{bid}" class="clip board" data-start="{start:.3f}" data-duration="{d:.3f}" data-track-index="1"><div class="fill"></div><div class="inner">{welcome}<img src="{asset["path"]}" alt="" /></div></section>')
     audio='<audio id="narration" src="assets/audio/narration_full.mp3" data-start="0" data-duration="{total:.3f}" data-track-index="20" data-volume="1"></audio>'
     for i,track in enumerate(music_plan.get('tracks', [])):
         start=float(track['start_seconds']); duration=float(track['duration_seconds'])
