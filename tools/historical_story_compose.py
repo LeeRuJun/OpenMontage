@@ -9,19 +9,13 @@ from pathlib import Path
 from lib.historical_story_gate import validate_final_boards
 from schemas.artifacts import validate_artifact
 
-BGM=[
- ('assets/bgm/atlasaudio-dark-ambient-590151.mp3',0,180,.10),
- ('assets/bgm/backgroundmusicmaster-nature-narration-bed-445404.mp3',178,390,.09),
- ('assets/bgm/nastelbom-tension-tension-music-602460.mp3',388,600,.085),
- ('assets/bgm/leberch-history-documentary-589943.mp3',598,840,.10),
- ('assets/bgm/desifreemusic-a-calm-soundtrack-for-thoughtful-narration-364021.mp3',838,1080,.085),
- ('assets/bgm/pianocafe_kumi-japanese-piano-318088.mp3',1078,1320.84,.09),
-]
-
 def compose(project: Path) -> None:
     manifest=json.loads((project/'artifacts/asset_manifest.json').read_text())
     edit=json.loads((project/'artifacts/edit_decisions.json').read_text())
     timing=json.loads((project/'artifacts/narration_timing.json').read_text())
+    music_plan=json.loads((project/'artifacts/music_plan.json').read_text())
+    marker=json.loads((project/'project.json').read_text()) if (project/'project.json').is_file() else {}
+    project_title=marker.get('title','历史故事')
     scene_plan=json.loads((project/'artifacts/scene_plan.json').read_text())
     labels={s.get('visual_board_id',s['id']):s.get('description','') for s in scene_plan.get('scenes',[])}
     validate_artifact('edit_decisions',edit); validate_artifact('narration_timing',timing); validate_final_boards(project,manifest)
@@ -46,10 +40,10 @@ def compose(project: Path) -> None:
         bid=cut['source']; asset=boards[bid]; title=html_lib.escape(labels.get(bid,'历史叙事画面')); welcome='<div class="welcome">读点东西 · 历史故事</div>' if bid == 'B01' else ''
         sections.append(f'<section id="board-{bid}" class="clip board" data-start="{start:.3f}" data-duration="{d:.3f}" data-track-index="1"><div class="fill"></div><div class="inner">{welcome}<h2>{title}</h2><img src="{asset["path"]}" alt="" /></div></section>')
     audio='<audio id="narration" src="assets/audio/narration_full.mp3" data-start="0" data-duration="{total:.3f}" data-track-index="20" data-volume="1"></audio>'
-    for i,(path,start,end,vol) in enumerate(BGM):
-        effective_end = total if i == len(BGM) - 1 else end
-        audio+=f'<audio id="bgm-{i}" src="{path}" data-start="{start}" data-duration="{effective_end-start:.3f}" data-track-index="{21+i}" data-volume="{vol}"></audio>'
-    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=1920,height=1080"><title>钱俶纳土归宋</title><script src="assets/gsap.min.js"></script><style>:root{{--ink:#17151a;--paper:#f0dfc5;--muted:#b8a28a;--red:#b85c38}}*{{box-sizing:border-box}}html,body{{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--ink);color:var(--paper);font-family:serif}}#root{{position:relative;width:1920px;height:1080px;overflow:hidden}}.board{{position:absolute;inset:0}}.fill{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,21,26,.08),rgba(23,21,26,.30) 55%,rgba(23,21,26,.88))}}.inner{{position:absolute;inset:0;padding:110px 130px;opacity:0;transform:translateY(24px);z-index:2}}.board img{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0;z-index:0}}.eyebrow,.note{{font:700 20px monospace;letter-spacing:3px;color:var(--red);position:relative;z-index:3}}.welcome{{position:relative;z-index:3;color:var(--red);font:700 26px monospace;letter-spacing:5px;margin-bottom:20px}}h2{{font-size:92px;line-height:1.08;margin:0;max-width:1100px;position:absolute;left:130px;bottom:190px;text-shadow:0 4px 24px #000;z-index:3}}.note{{position:absolute;bottom:90px;left:130px;font-size:18px}}.subtitle{{position:absolute;inset:0;z-index:8;display:flex;align-items:flex-end;justify-content:center;padding:0 150px 58px;text-align:center;font:700 34px/1.35 serif;color:#f0dfc5;text-shadow:0 3px 10px #000;pointer-events:none}}</style></head><body><div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{total:.3f}">{''.join(sections)}{''.join(subtitle_clips)}{audio}</div><script>window.__timelines=window.__timelines||{{}};const tl=gsap.timeline({{paused:true}});document.querySelectorAll('.board').forEach(b=>{{const s=parseFloat(b.dataset.start);tl.to(b.querySelector('.inner'),{{opacity:1,y:0,duration:.7,ease:'power3.out'}},s+.05);}});window.__timelines.main=tl;</script></body></html>'''
+    for i,track in enumerate(music_plan.get('tracks', [])):
+        start=float(track['start_seconds']); duration=float(track['duration_seconds'])
+        audio+=f'<audio id="bgm-{i}" src="{track["path"]}" data-start="{start:.3f}" data-duration="{duration:.3f}" data-track-index="{21+i}" data-volume="{float(track.get("volume",0.09)):.3f}"></audio>'
+    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=1920,height=1080"><title>{html_lib.escape(project_title)}</title><script src="assets/gsap.min.js"></script><style>:root{{--ink:#17151a;--paper:#f0dfc5;--muted:#b8a28a;--red:#b85c38}}*{{box-sizing:border-box}}html,body{{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--ink);color:var(--paper);font-family:serif}}#root{{position:relative;width:1920px;height:1080px;overflow:hidden}}.board{{position:absolute;inset:0}}.fill{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,21,26,.08),rgba(23,21,26,.30) 55%,rgba(23,21,26,.88))}}.inner{{position:absolute;inset:0;padding:110px 130px;opacity:0;transform:translateY(24px);z-index:2}}.board img{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0;z-index:0}}.eyebrow,.note{{font:700 20px monospace;letter-spacing:3px;color:var(--red);position:relative;z-index:3}}.welcome{{position:relative;z-index:3;color:var(--red);font:700 26px monospace;letter-spacing:5px;margin-bottom:20px}}h2{{font-size:92px;line-height:1.08;margin:0;max-width:1100px;position:absolute;left:130px;bottom:190px;text-shadow:0 4px 24px #000;z-index:3}}.note{{position:absolute;bottom:90px;left:130px;font-size:18px}}.subtitle{{position:absolute;inset:0;z-index:8;display:flex;align-items:flex-end;justify-content:center;padding:0 150px 58px;text-align:center;font:700 34px/1.35 serif;color:#f0dfc5;text-shadow:0 3px 10px #000;pointer-events:none}}</style></head><body><div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{total:.3f}">{''.join(sections)}{''.join(subtitle_clips)}{audio}</div><script>window.__timelines=window.__timelines||{{}};const tl=gsap.timeline({{paused:true}});document.querySelectorAll('.board').forEach(b=>{{const s=parseFloat(b.dataset.start);tl.to(b.querySelector('.inner'),{{opacity:1,y:0,duration:.7,ease:'power3.out'}},s+.05);}});window.__timelines.main=tl;</script></body></html>'''
     (project/'index.html').write_text(html)
     check=subprocess.run(['npx','hyperframes','check','--json'],cwd=project,text=True,capture_output=True)
     if check.returncode: raise SystemExit(f'HyperFrames check failed:\n{check.stdout[-4000:]}\n{check.stderr[-2000:]}')

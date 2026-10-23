@@ -28,3 +28,11 @@ def test_script_director_routes_through_generic_story_skill():
     skill = Path("skills/pipelines/historical-story/script-director.md").read_text()
     assert "skills/creative/story-writing-director.md" in skill
     assert "scene contract" in skill
+
+
+def test_generic_story_skill_includes_natural_chinese_revision_rules():
+    skill = Path("skills/creative/story-writing-director.md").read_text()
+    assert "observable behavior" in skill
+    assert "formulaic contrast" in skill
+    assert "不要为了字数" in skill
+    assert "revise in context" in skill

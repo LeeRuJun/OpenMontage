@@ -58,3 +58,14 @@ Check every arrow. If event B would happen unchanged even if event A were remove
 ## Topic adapters
 
 A historical adapter adds evidence IDs, dates, source certainty, and a rule against invented dialogue. A brand adapter adds product facts and audience stakes. A fictional adapter adds world rules and invented continuity. The causal scene contract stays the same.
+
+## Natural Chinese revision
+
+Borrow the useful editing principle from Chinese long-form writing workflows without importing their fictional content:
+
+- Replace emotion explanation with **observable behavior**, concrete objects, spoken choices, and consequences.
+- Reduce stock gestures, vague modifiers, repeated negations, excessive punctuation, and formulaic contrast (`不是……而是……`) when they do not carry a real reversal.
+- Keep separate records for underlying reality, each character's knowledge, and what the audience has already been told.
+- Diagnose the reading problem first and **revise in context**; preserve established events and hidden information while changing only the dependent passage.
+- `不要为了字数`添加无关事件、评论或重复环境描写；如果时长不足，补查并加入真正改变选择空间的 verified event.
+- A detector or clean scan is only an editing signal, never a substitute for narrative judgment.

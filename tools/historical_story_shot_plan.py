@@ -323,7 +323,28 @@ def main(project: Path) -> None:
     visual_style = _resolve_visual_style(scene_plan, project)
     period_label = _resolve_period_label(scene_plan, project)
     scenes = scene_plan.get("scenes") or []
-    shots = [_compile_shot(scene, project, visual_style, period_label, index) for index, scene in enumerate(scenes, 1)]
+    board_groups: dict[str, list[dict[str, Any]]] = {}
+    board_order: list[str] = []
+    for scene in scenes:
+        board_id = str(scene.get("visual_board_id") or scene.get("id"))
+        if board_id not in board_groups:
+            board_groups[board_id] = []
+            board_order.append(board_id)
+        board_groups[board_id].append(scene)
+    board_scenes = []
+    for board_id in board_order:
+        beats = board_groups[board_id]
+        board = copy.deepcopy(beats[0])
+        board["start_seconds"] = min(float(beat.get("start_seconds", 0)) for beat in beats)
+        board["end_seconds"] = max(float(beat.get("end_seconds", 0)) for beat in beats)
+        board["microbeat_ids"] = [str(beat.get("id")) for beat in beats]
+        board["microbeats"] = [
+            {"id": str(beat.get("id")), "description": str(beat.get("description", ""))}
+            for beat in beats
+        ]
+        board["description"] = " ".join(str(beat.get("description", "")) for beat in beats)
+        board_scenes.append(board)
+    shots = [_compile_shot(scene, project, visual_style, period_label, index) for index, scene in enumerate(board_scenes, 1)]
     mode = (scene_plan.get("metadata") or {}).get("mode") or "full_longform"
     output = {
         "version": "1.0",

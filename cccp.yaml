@@ -1,0 +1,28 @@
+# CCCP project configuration
+# See: https://github.com/your-org/cccp
+
+# Directories to search for agent definitions (in priority order).
+agent_paths:
+  - ./.claude/agents
+
+# Named MCP server profiles.
+# Each agent gets only the servers its profile specifies.
+# mcp_profiles:
+#   base:
+#     servers:
+#       qmd:
+#         command: qmd
+#         args: [serve, --stdio]
+#   design:
+#     extends: base
+#     servers:
+#       figma:
+#         command: npx
+#         args: [-y, figma-console-mcp]
+
+# Default artifact output directory pattern.
+# Supports {project} and {pipeline_name} variables.
+artifact_dir: docs/projects/{project}/{pipeline_name}
+
+# Default MCP profile applied when a stage doesn't specify one.
+# default_mcp_profile: base

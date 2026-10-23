@@ -55,9 +55,13 @@ def core(project: Path) -> None:
         raise SystemExit("core_asset_plan has no assets")
 
     requests = []
+    missing_items = []
     for item in items:
         output_path = project / str(item["path"])
         output_path.parent.mkdir(parents=True, exist_ok=True)
+        if output_path.is_file() and output_path.stat().st_size > 0:
+            continue
+        missing_items.append(item)
         requests.append({
             "prompt": str(item["prompt"]),
             "preferred_provider": "openai",
@@ -70,7 +74,7 @@ def core(project: Path) -> None:
             "output_path": str(output_path),
             "task_context": {"pipeline": "historical-story", "stage": "core_assets", "asset_group_id": item["asset_group_id"]},
         })
-    result = _run_requests(requests)
+    result = _run_requests(requests) if requests else {"totals": {"cost": 0}}
     assets = []
     for item in items:
         path = project / str(item["path"])
@@ -101,6 +105,12 @@ def shot_assets(project: Path, only: set[str] | None = None, sample: bool = Fals
     requests = []
     for shot in selected:
         board_id = str(shot.get("visual_board_id") or shot["shot_id"])
+        output_path = out_dir / f"{board_id.lower()}.png"
+        sample_path = project / "assets/images/boards/sample" / f"{board_id.lower()}.png"
+        if not output_path.is_file() and sample_path.is_file() and not sample:
+            output_path.write_bytes(sample_path.read_bytes())
+        if output_path.is_file() and output_path.stat().st_size > 0:
+            continue
         ref_ids = [str(value) for value in shot.get("required_core_assets", [])]
         if not ref_ids:
             raise SystemExit(f"{board_id} has no required_core_assets")
@@ -121,10 +131,10 @@ def shot_assets(project: Path, only: set[str] | None = None, sample: bool = Fals
             "quality": "medium",
             "output_format": "png",
             "n": 1,
-            "output_path": str(out_dir / f"{board_id.lower()}.png"),
+            "output_path": str(output_path),
             "task_context": {"pipeline": "historical-story", "stage": "shot_assets", "visual_board_id": board_id},
         })
-    result = _run_requests(requests)
+    result = _run_requests(requests) if requests else {"totals": {"cost": 0}}
     if sample:
         sample_manifest = {"version": "1.0", "stage": "shot_assets_sample", "boards": [{"id": str(shot.get("visual_board_id") or shot["shot_id"]), "path": str((out_dir / f"{(shot.get('visual_board_id') or shot['shot_id']).lower()}.png").relative_to(project)), "provider": "openai", "model": "gpt-image-2"} for shot in selected]}
         (project / "artifacts/shot_asset_sample_manifest.json").write_text(json.dumps(sample_manifest, ensure_ascii=False, indent=2) + "\n")
