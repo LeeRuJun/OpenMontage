@@ -142,6 +142,63 @@
           "best_for": {
             "type": "array",
             "items": { "type": "string" }
+          },
+          "visual_plan": {
+            "type": "object",
+            "description": "Relationship between acts, final visual boards, and internal microbeats.",
+            "required": ["final_visual_boards", "boards_per_act", "board_duration_seconds", "microbeats_per_board", "microbeat_duration_seconds"],
+            "properties": {
+              "final_visual_boards": {
+                "type": "object",
+                "required": ["min", "max", "recommended"],
+                "properties": {
+                  "min": { "type": "integer", "minimum": 1 },
+                  "max": { "type": "integer", "minimum": 1 },
+                  "recommended": { "type": "integer", "minimum": 1 }
+                },
+                "additionalProperties": false
+              },
+              "boards_per_act": {
+                "type": "object",
+                "required": ["min", "max", "recommended"],
+                "properties": {
+                  "min": { "type": "integer", "minimum": 1 },
+                  "max": { "type": "integer", "minimum": 1 },
+                  "recommended": { "type": "integer", "minimum": 1 }
+                },
+                "additionalProperties": false
+              },
+              "board_duration_seconds": {
+                "type": "object",
+                "required": ["min", "max", "preferred_max"],
+                "properties": {
+                  "min": { "type": "number", "minimum": 0 },
+                  "max": { "type": "number", "minimum": 0 },
+                  "preferred_max": { "type": "number", "minimum": 0 }
+                },
+                "additionalProperties": false
+              },
+              "microbeats_per_board": {
+                "type": "object",
+                "required": ["min", "max", "recommended"],
+                "properties": {
+                  "min": { "type": "integer", "minimum": 1 },
+                  "max": { "type": "integer", "minimum": 1 },
+                  "recommended": { "type": "integer", "minimum": 1 }
+                },
+                "additionalProperties": false
+              },
+              "microbeat_duration_seconds": {
+                "type": "object",
+                "required": ["min", "max"],
+                "properties": {
+                  "min": { "type": "number", "minimum": 0 },
+                  "max": { "type": "number", "minimum": 0 }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": false

@@ -1,0 +1,60 @@
+{
+  "channel": "读点东西",
+  "series": "读点东西 · 历史故事",
+  "selection_policy": {
+    "ordering": "按流行度与热度排序，不按历史年代排序",
+    "max_locked_episodes": 3,
+    "production_rule": "一次只制作当前集；当前集完成后再推进下一集",
+    "automatic_publication": false
+  },
+  "episodes": [
+    {
+      "order": 1,
+      "episode_id": "zhudi-jingnan",
+      "title": "朱棣靖难之役",
+      "heat_score": null,
+      "status": "in_progress"
+    },
+    {
+      "order": 2,
+      "episode_id": "yuqian-beijing-defense",
+      "title": "于谦北京保卫战",
+      "heat_score": null,
+      "status": "queued"
+    },
+    {
+      "order": 3,
+      "episode_id": "li-shimin-xuanwumen",
+      "title": "李世民玄武门之变",
+      "heat_score": null,
+      "status": "queued"
+    },
+    {
+      "order": 4,
+      "episode_id": "su-shi-wutai",
+      "title": "苏轼乌台诗案",
+      "heat_score": null,
+      "status": "queued"
+    },
+    {
+      "order": 5,
+      "episode_id": "zhao-kuangyin-chenqiao",
+      "title": "赵匡胤陈桥兵变",
+      "heat_score": null,
+      "status": "queued"
+    },
+    {
+      "order": 6,
+      "episode_id": "zhang-qian-xiyu",
+      "title": "张骞第一次出使西域",
+      "heat_score": null,
+      "status": "queued"
+    }
+  ],
+  "design_principles": [
+    "按每集史事、地点与人物处境独立设计画面。",
+    "根据时段、天气、光源与材质组织色彩，不固定成同一配色或场景。",
+    "前景、中景、远景形成清楚层次，人物自然属于环境。",
+    "吸收通用美术方法，不绑定特定视频，不复制构图、人物造型、字幕、水印或标识。"
+  ]
+}

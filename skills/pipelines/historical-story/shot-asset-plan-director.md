@@ -47,3 +47,9 @@ Store this translation in `prompt_spec` as well as the provider-ready `prompt`. 
 Reject a plan when the image could be moved to another board without changing meaning, when the prompt lacks a location/context, when a board has too few internal beats to sustain its duration, or when a final image is reused as another board's primary image. Generate one representative board sample, review it, then allow the `shot_assets` stage to batch-generate the approved board images.
 
 Output `shot_asset_plan` and stop for human approval.
+
+## Shared art direction
+
+**Before authoring prompts, read `skills/creative/historical-color-direction.md`.** Treat `visual_style` as approved project input and `color_direction` as board-level input. Pass both through without replacing them with a fixed dynasty palette, global low-saturation filter, or external-video look.
+
+Every board must be either a person embedded in a meaningful environment or an environment-led composition. Use foreground, midground, and background to create a 20-second reading path. An isolated portrait or object-only image is not a final board. References are continuity anchors, never source-image frames or collage material.
