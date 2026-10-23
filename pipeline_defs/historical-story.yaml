@@ -64,6 +64,8 @@ extensions:
   custom_skills: true
   custom_tools: false
 required_skills:
+  - creative/story-writing-director
+  - creative/historical-color-direction
   - pipelines/historical-story/executive-producer
   - pipelines/historical-story/intake-director
   - pipelines/historical-story/research-director

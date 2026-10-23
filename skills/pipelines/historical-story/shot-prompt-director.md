@@ -1,5 +1,7 @@
 # Historical Story Shot Prompt Director
 
+**REQUIRED SUB-SKILL:** Read `skills/creative/historical-color-direction.md` before authoring board prompts.
+
 Translate each approved visual board into a production-grade image prompt contract.
 
 ## Non-negotiable input
