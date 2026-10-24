@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 import yaml
 from schemas.artifacts import validate_artifact
-from lib.historical_story_validation import contract_for, validate_script_prose
+from lib.historical_story_validation import contract_for, validate_script_prose, validate_script_repetition, validate_commentary_contract
 
 class GateError(RuntimeError): pass
 
@@ -47,8 +47,11 @@ def read_artifact(project: Path, name: str) -> dict[str, Any] | None:
             )
     if name == "script":
         prose_errors = validate_script_prose(value)
-        if prose_errors:
-            raise GateError("script prose purity failed: " + "; ".join(prose_errors))
+        repetition_errors = validate_script_repetition(value)
+        commentary_errors = validate_commentary_contract(value)
+        if prose_errors or repetition_errors or commentary_errors:
+            errors = prose_errors + repetition_errors + commentary_errors
+            raise GateError("script prose quality failed: " + "; ".join(errors))
         opening = value.get("opening") or {}
         required = ("brand_name", "column_name", "hook", "promise", "roadmap")
         missing = [key for key in required if not opening.get(key)]

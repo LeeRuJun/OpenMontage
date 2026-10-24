@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from typing import Any
 
 
@@ -206,3 +207,49 @@ def validate_script_prose(script: dict[str, Any]) -> list[str]:
             if pattern.lower() in scan_text.lower():
                 errors.append(f"section {section_id} contains production/meta term {pattern!r}")
     return errors
+
+
+def _script_ngrams(value: str, size: int = 2) -> set[str]:
+    compact = re.sub(r"\s+", "", value)
+    return {compact[index:index + size] for index in range(max(0, len(compact) - size + 1))}
+
+
+def validate_script_repetition(script: dict[str, Any], max_similarity: float = 0.60) -> list[str]:
+    """Reject repeated explanatory paragraphs while allowing recurring event names."""
+    paragraphs: list[tuple[str, str]] = []
+    for section in script.get("sections", []):
+        section_id = str(section.get("id", ""))
+        for paragraph in str(section.get("text", "")).split("\n"):
+            paragraph = paragraph.strip()
+            if len(paragraph) >= 18:
+                paragraphs.append((section_id, paragraph))
+    errors: list[str] = []
+    for index, (left_id, left) in enumerate(paragraphs):
+        left_grams = _script_ngrams(left)
+        for right_id, right in paragraphs[index + 1:]:
+            right_grams = _script_ngrams(right)
+            if not left_grams or not right_grams:
+                continue
+            similarity = len(left_grams & right_grams) / len(left_grams | right_grams)
+            if similarity >= max_similarity:
+                errors.append(f"sections {left_id} and {right_id} contain near-duplicate prose (jaccard={similarity:.3f})")
+    return errors
+
+
+def validate_commentary_contract(script: dict[str, Any], min_chars: int = 360, max_chars: int = 810) -> list[str]:
+    """Require an explicit, final 3-5 minute post-story commentary section."""
+    sections = script.get("sections", [])
+    start_id = (script.get("metadata") or {}).get("commentary_start_section_id")
+    if not start_id:
+        return ["commentary_start_section_id is required"]
+    ids = [str(section.get("id", "")) for section in sections]
+    if start_id not in ids:
+        return [f"commentary start section {start_id!r} is missing"]
+    start_index = ids.index(start_id)
+    commentary = sections[start_index:]
+    if not commentary or any(not section_id.startswith("commentary") for section_id in ids[start_index:]):
+        return ["commentary sections must be contiguous and final"]
+    count = sum(len(re.sub(r"\s+", "", str(section.get("text", "")))) for section in commentary)
+    if count < min_chars or count > max_chars:
+        return [f"commentary character count {count} outside {min_chars}-{max_chars}"]
+    return []

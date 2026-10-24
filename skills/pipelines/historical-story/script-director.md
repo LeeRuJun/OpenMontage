@@ -76,7 +76,7 @@ The story body runs from the opening event through the concrete resolution. It c
 
 ### 故事结局之后的独立点评
 
-After the story has reached its ending, add a final **独立点评** section of roughly 3–5 minutes. Mark it explicitly in the script metadata and section label. It may discuss:
+After the story has reached its ending, add a final **独立点评** section of no more than 3 minutes. Mark it explicitly in the script metadata and section label. It may discuss:
 
 - which choice changed the direction of the story;
 - what alternatives were available at that moment;
@@ -86,4 +86,4 @@ After the story has reached its ending, add a final **独立点评** section of 
 
 The commentary begins only after the story resolution. **不能穿插** commentary into the event sequence, and it must not replace missing events. The transition should make the phase change audible: `故事讲到这里，事件的结局已经明确。接下来，我们回头看……`
 
-For a 25–32 minute episode, target approximately 80–85% for the story body and 15–20% for the post-story commentary. The commentary is a separate narrative function, not filler used to reach the character target.
+For a 25–32 minute episode, target at least 90% for the story body and no more than 10% for the post-story commentary. The commentary is a separate narrative function, not filler used to reach the character target.

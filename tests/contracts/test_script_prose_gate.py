@@ -38,3 +38,32 @@ def test_checkpoint_validation_rejects_script_meta_language():
         assert "prose" in str(exc)
     else:
         raise AssertionError("checkpoint validation accepted production meta-language")
+
+
+def test_commentary_contract_requires_post_story_duration():
+    from lib.historical_story_validation import validate_commentary_contract
+
+    script = {
+        "metadata": {"commentary_start_section_id": "commentary-1"},
+        "sections": [
+            {"id": "story", "text": "故事事件。" * 500},
+            {"id": "commentary-1", "text": "点评。" * 250},
+        ],
+    }
+    assert validate_commentary_contract(script) == []
+
+
+def test_commentary_contract_rejects_short_or_interleaved_commentary():
+    from lib.historical_story_validation import validate_commentary_contract
+
+    script = {
+        "metadata": {"commentary_start_section_id": "commentary-1"},
+        "sections": [
+            {"id": "story", "text": "故事事件。" * 500},
+            {"id": "commentary-1", "text": "点评。" * 100},
+            {"id": "story-after", "text": "后续故事。" * 100},
+        ],
+    }
+    errors = validate_commentary_contract(script)
+    assert errors
+    assert any("commentary" in error for error in errors)
