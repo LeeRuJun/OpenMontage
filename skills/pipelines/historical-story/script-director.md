@@ -8,6 +8,9 @@ Write a historical story, not an encyclopedia entry and not a narrated essay.
 
 ## Required inputs before prose
 
+The script writer consumes the approved `material_density_map` and `scene_contracts`; **不要临时改变故事结构** while drafting. Every final section must preserve its event refs and clean `provider_text`.
+
+
 Read `research_brief`, `historical_evidence_ledger`, `story_spine.metadata.event_story`, and the approved `material_density_map` before drafting. **不要在素材地图完成前写正文。** If the event inventory is short, return to research; do not fill the target with commentary or repeated background.
 
 ## Governing rule

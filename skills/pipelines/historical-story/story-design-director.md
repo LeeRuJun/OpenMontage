@@ -1,6 +1,6 @@
 # Historical Story Design Director
 
-**REQUIRED SUB-SKILL:** Read `skills/creative/story-writing-director.md` before designing the story spine.
+**REQUIRED SUB-SKILL:** Read `skills/creative/story-writing-director.md` before designing the story spine. This Skill contains the research, architecture, drafting, and review phases; complete the architecture phase before prose.
 
 Decide how the history will be told before writing narration or designing images. Use the generic causal story blueprint, then add the historical evidence boundary.
 
@@ -38,3 +38,7 @@ The next event must be made more likely, necessary, or impossible by the consequ
 ## Gate
 
 Produce `story_spine` after research and stop for review. Script, character bible, scene bible, and asset generation must wait for this approval.
+
+## Structure handoff boundary
+
+This stage consumes the research event inventory and creates `material_density_map` and `scene_contracts` inside the approved story architecture. It decides which events are core, support, bridge, or commentary; assigns target time; records required facts and forbidden repetition; and maps objective, resistance, action, reversal, consequence and next pressure. **不写最终旁白**，也不在正文阶段临时发明结构。
