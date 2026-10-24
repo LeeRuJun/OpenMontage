@@ -5,6 +5,8 @@ description: Use when designing or drafting any narrated story, screenplay, docu
 
 # Story Writing Director
 
+**Layer boundary:** This Skill consumes an approved story architecture from `skills/creative/story-architecture-director.md`. It writes the prose inside the approved scene contracts. **Do not redesign the plot while drafting prose**; return to architecture when an event, motivation, or consequence is missing. Every final section must carry its clean `provider_text`.
+
 A story is a chain of consequential choices. Information becomes narrative only when a person, group, or institution wants something, meets resistance, acts, and causes a changed situation.
 
 ## Research-first workflow
@@ -81,3 +83,15 @@ Borrow the useful editing principle from Chinese long-form writing workflows wit
 - Diagnose the reading problem first and **revise in context**; preserve established events and hidden information while changing only the dependent passage.
 - `不要为了字数`添加无关事件、评论或重复环境描写；如果时长不足，补查并加入真正改变选择空间的 verified event.
 - A detector or clean scan is only an editing signal, never a substitute for narrative judgment.
+
+
+## Integrated workflow
+
+This is one Skill with four ordered phases, not four competing writers:
+
+1. **Research** — build the source-backed event inventory.
+2. **Architecture** — build the premise, causal outline, material density map, scene contracts, continuity and knowledge state.
+3. **Drafting** — write prose only inside the approved architecture; do not redesign the plot while drafting.
+4. **Review/revision** — independently diagnose causality, repetition, natural Chinese, evidence boundary, and provider payload before release.
+
+A phase may send work back to the previous phase, but later phases never silently replace missing research or structure with commentary.
