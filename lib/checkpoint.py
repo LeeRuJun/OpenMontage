@@ -15,6 +15,7 @@ from typing import Any, Optional
 import jsonschema
 
 from schemas.artifacts import ARTIFACT_NAMES, validate_artifact
+from lib.historical_story_validation import validate_script_prose
 
 # All known stages across all pipelines (used only for artifact name lookup).
 ALL_KNOWN_STAGES = frozenset([
@@ -141,6 +142,11 @@ def _validate_artifacts_for_stage(
             f"Stage {stage!r} with status {status!r} must include "
             f"canonical artifact {required_artifact!r}"
         )
+
+    if stage == "script" and isinstance(artifacts.get("script"), dict):
+        prose_errors = validate_script_prose(artifacts["script"])
+        if prose_errors:
+            raise CheckpointValidationError("script prose purity failed: " + "; ".join(prose_errors))
 
     for artifact_name, artifact_data in artifacts.items():
         if artifact_name not in ARTIFACT_NAMES:

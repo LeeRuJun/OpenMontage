@@ -187,3 +187,22 @@ def validate_story(mode: str, *, timing: dict[str, Any], scenes: list[dict[str, 
     errors.extend(validate_asset_reuse(assets))
     if errors:
         raise ValueError("historical-story validation failed: " + "; ".join(errors))
+
+
+_SCRIPT_PROSE_META_PATTERNS = (
+    "镜头", "画面", "微分镜", "分镜", "提示词", "prompt", "board",
+    "storyboard", "microbeat", "montage", "蒙太奇", "制作说明",
+    "caption-safe", "starting state", "dynamic layer", "visual board",
+)
+
+def validate_script_prose(script: dict[str, Any]) -> list[str]:
+    """Reject production instructions leaking into narrated prose."""
+    errors: list[str] = []
+    for section in script.get("sections", []):
+        section_id = str(section.get("id", ""))
+        text = str(section.get("text", ""))
+        scan_text = text.replace("各位观众好，这里是读点东西。", "")
+        for pattern in _SCRIPT_PROSE_META_PATTERNS:
+            if pattern.lower() in scan_text.lower():
+                errors.append(f"section {section_id} contains production/meta term {pattern!r}")
+    return errors

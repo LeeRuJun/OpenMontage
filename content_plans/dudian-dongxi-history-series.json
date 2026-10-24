@@ -10,10 +10,16 @@
     "heat_score_policy": "未核实的热度保持 null，不把搜索线索当成热榜事实"
   },
   "story_format": {
-    "total_duration_seconds": {"min": 1500, "max": 1920},
+    "total_duration_seconds": {
+      "min": 1500,
+      "max": 1920
+    },
     "total_minutes": "25-32",
     "story_body_ratio": "0.80-0.85",
-    "post_story_commentary_minutes": {"min": 3, "max": 5},
+    "post_story_commentary_minutes": {
+      "min": 3,
+      "max": 5
+    },
     "structure": [
       "具体危险或选择的开场",
       "选择发生前的时间、地点、人物处境",
@@ -24,7 +30,15 @@
       "故事结局",
       "故事结局之后的独立点评"
     ],
-    "event_contract": ["time", "place", "actors", "action", "resistance", "consequence", "next_event"],
+    "event_contract": [
+      "time",
+      "place",
+      "actors",
+      "action",
+      "resistance",
+      "consequence",
+      "next_event"
+    ],
     "commentary_contract": [
       "哪个选择真正改变方向",
       "当时还有哪些可能",
@@ -35,10 +49,24 @@
     "anti_commentary_rule": "故事主体不能用连续分析、主题解释或观众指导填充；点评必须等故事结局后单独出现。"
   },
   "visual_contract": {
-    "final_visual_boards": {"min": 50, "max": 64, "recommended": 56},
-    "microbeats_per_board": {"min": 3, "max": 5, "recommended": 4},
-    "board_duration_seconds": {"min": 20, "max": 36},
-    "primary_subjects": ["person-in-environment", "environment"],
+    "final_visual_boards": {
+      "min": 50,
+      "max": 64,
+      "recommended": 56
+    },
+    "microbeats_per_board": {
+      "min": 3,
+      "max": 5,
+      "recommended": 4
+    },
+    "board_duration_seconds": {
+      "min": 20,
+      "max": 36
+    },
+    "primary_subjects": [
+      "person-in-environment",
+      "environment"
+    ],
     "style_rule": "美术风格可以保持系列连续，但每集和每个 board 的地点、光线、色彩关系、材质与信息重点必须根据事件独立设计。",
     "prompt_diversity_gate": "生图前比较 visual_claim、subject_action、evidence_layer 和 microbeat_visual_states；内容相似度过高时退回 storyboard，不生成图片。",
     "image_rule": "人物必须处于环境中；纯物品不能成为正式视觉板主体；每个 final board 使用唯一主图。"
@@ -49,7 +77,12 @@
     "image_provider": "openai:gpt-image-2",
     "voice": "Chinese (Mandarin)_Gentle_Senior",
     "voice_model": "speech-2.8-hd",
-    "voice_settings": {"speed": 0.95, "pitch": 0, "vol": 1.0, "emotion": "calm"},
+    "voice_settings": {
+      "speed": 0.95,
+      "pitch": 0,
+      "vol": 1.0,
+      "emotion": "calm"
+    },
     "render_runtime": "hyperframes",
     "composition_mode": "atelier",
     "budget_cap_usd": 20,
@@ -73,7 +106,7 @@
       "historical_choice": "土木堡惨败后，朝廷选择南迁，还是留下来守住北京？",
       "turning_consequence": "于谦的选择把一场军事溃败变成北京城下的决战。",
       "heat_score": null,
-      "status": "next"
+      "status": "queued"
     },
     {
       "order": 3,
@@ -91,7 +124,7 @@
       "historical_choice": "一位官员写下的文字，如何在政治环境中变成一场审判？",
       "turning_consequence": "苏轼的文字、官场关系和北宋政治气候被同时推入风暴。",
       "heat_score": null,
-      "status": "queued"
+      "status": "in_progress"
     },
     {
       "order": 5,
