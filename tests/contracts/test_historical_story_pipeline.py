@@ -15,8 +15,8 @@ def test_historical_story_manifest_has_vertical_story_stages():
     assert {mode["name"] for mode in manifest["production_modes"]} == {"pilot_2min", "full_longform"}
     full_mode = next(mode for mode in manifest["production_modes"] if mode["name"] == "full_longform")
     assert full_mode["visual_plan"] == {
-        "final_visual_boards": {"min": 40, "max": 50, "recommended": 48},
-        "boards_per_act": {"min": 5, "max": 7, "recommended": 6},
+        "final_visual_boards": {"min": 50, "max": 64, "recommended": 56},
+        "boards_per_act": {"min": 5, "max": 8, "recommended": 7},
         "board_duration_seconds": {"min": 20, "max": 36, "preferred_max": 30},
         "microbeats_per_board": {"min": 3, "max": 5, "recommended": 4},
         "microbeat_duration_seconds": {"min": 4, "max": 8},

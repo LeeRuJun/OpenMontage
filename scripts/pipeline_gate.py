@@ -37,10 +37,13 @@ def read_artifact(project: Path, name: str) -> dict[str, Any] | None:
     if name == "narration_timing":
         contract = contract_for(value.get("mode", ""))
         duration = float(value.get("measured_duration_seconds", 0))
-        if not contract.min_duration <= duration <= contract.max_duration:
+        min_duration, max_duration = contract.min_duration, contract.max_duration
+        if value.get("contract_version") == "legacy_22_25":
+            min_duration, max_duration = 1320, 1500
+        if not min_duration <= duration <= max_duration:
             raise GateError(
                 f"narration_timing duration {duration:.3f}s outside "
-                f"{contract.min_duration}-{contract.max_duration}s for {value.get('mode')}"
+                f"{min_duration}-{max_duration}s for {value.get('mode')}"
             )
     if name == "script":
         opening = value.get("opening") or {}

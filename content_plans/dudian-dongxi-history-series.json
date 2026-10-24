@@ -1,31 +1,86 @@
 {
   "channel": "读点东西",
-  "series": "读点东西 · 历史故事",
+  "series": "改变历史的选择",
+  "series_promise": "从一个具体选择出发，讲清人物当时看见了什么、做了什么，以及这个选择如何改变后面的时代。",
   "selection_policy": {
     "ordering": "按流行度与热度排序，不按历史年代排序",
     "max_locked_episodes": 3,
     "production_rule": "一次只制作当前集；当前集完成后再推进下一集",
-    "automatic_publication": false
+    "automatic_publication": false,
+    "heat_score_policy": "未核实的热度保持 null，不把搜索线索当成热榜事实"
+  },
+  "story_format": {
+    "total_duration_seconds": {"min": 1500, "max": 1920},
+    "total_minutes": "25-32",
+    "story_body_ratio": "0.80-0.85",
+    "post_story_commentary_minutes": {"min": 3, "max": 5},
+    "structure": [
+      "具体危险或选择的开场",
+      "选择发生前的时间、地点、人物处境",
+      "人物面对的目标与阻力",
+      "人物采取行动",
+      "行动造成的反转和后果",
+      "后续事件被前一选择推动",
+      "故事结局",
+      "故事结局之后的独立点评"
+    ],
+    "event_contract": ["time", "place", "actors", "action", "resistance", "consequence", "next_event"],
+    "commentary_contract": [
+      "哪个选择真正改变方向",
+      "当时还有哪些可能",
+      "人物和群体各自付出了什么",
+      "哪些后果延续到后来",
+      "哪些内容是确定史实，哪些仍有争议"
+    ],
+    "anti_commentary_rule": "故事主体不能用连续分析、主题解释或观众指导填充；点评必须等故事结局后单独出现。"
+  },
+  "visual_contract": {
+    "final_visual_boards": {"min": 50, "max": 64, "recommended": 56},
+    "microbeats_per_board": {"min": 3, "max": 5, "recommended": 4},
+    "board_duration_seconds": {"min": 20, "max": 36},
+    "primary_subjects": ["person-in-environment", "environment"],
+    "style_rule": "美术风格可以保持系列连续，但每集和每个 board 的地点、光线、色彩关系、材质与信息重点必须根据事件独立设计。",
+    "prompt_diversity_gate": "生图前比较 visual_claim、subject_action、evidence_layer 和 microbeat_visual_states；内容相似度过高时退回 storyboard，不生成图片。",
+    "image_rule": "人物必须处于环境中；纯物品不能成为正式视觉板主体；每个 final board 使用唯一主图。"
+  },
+  "production_defaults": {
+    "pipeline": "historical-story",
+    "story_playbook": "story-writing-director + historical-color-direction",
+    "image_provider": "openai:gpt-image-2",
+    "voice": "Chinese (Mandarin)_Gentle_Senior",
+    "voice_model": "speech-2.8-hd",
+    "voice_settings": {"speed": 0.95, "pitch": 0, "vol": 1.0, "emotion": "calm"},
+    "render_runtime": "hyperframes",
+    "composition_mode": "atelier",
+    "budget_cap_usd": 20,
+    "music_policy": "catalog-only",
+    "external_upload": false
   },
   "episodes": [
     {
       "order": 1,
       "episode_id": "zhudi-jingnan",
       "title": "朱棣靖难之役",
+      "historical_choice": "削藩压力逼近北平时，朱棣选择起兵，还是接受朝廷处置？",
+      "turning_consequence": "北平的藩王冲突变成持续四年的皇位战争。",
       "heat_score": null,
-      "status": "in_progress"
+      "status": "completed"
     },
     {
       "order": 2,
       "episode_id": "yuqian-beijing-defense",
       "title": "于谦北京保卫战",
+      "historical_choice": "土木堡惨败后，朝廷选择南迁，还是留下来守住北京？",
+      "turning_consequence": "于谦的选择把一场军事溃败变成北京城下的决战。",
       "heat_score": null,
-      "status": "queued"
+      "status": "next"
     },
     {
       "order": 3,
       "episode_id": "li-shimin-xuanwumen",
       "title": "李世民玄武门之变",
+      "historical_choice": "面对兄弟竞争，李世民继续等待，还是先在玄武门采取行动？",
+      "turning_consequence": "一次宫门前的行动改变了唐朝皇位和之后的政治秩序。",
       "heat_score": null,
       "status": "queued"
     },
@@ -33,6 +88,8 @@
       "order": 4,
       "episode_id": "su-shi-wutai",
       "title": "苏轼乌台诗案",
+      "historical_choice": "一位官员写下的文字，如何在政治环境中变成一场审判？",
+      "turning_consequence": "苏轼的文字、官场关系和北宋政治气候被同时推入风暴。",
       "heat_score": null,
       "status": "queued"
     },
@@ -40,6 +97,8 @@
       "order": 5,
       "episode_id": "zhao-kuangyin-chenqiao",
       "title": "赵匡胤陈桥兵变",
+      "historical_choice": "军队把黄袍披到赵匡胤身上时，他选择接受，还是拒绝这场拥立？",
+      "turning_consequence": "后周的军事行动转变成北宋政权的建立。",
       "heat_score": null,
       "status": "queued"
     },
@@ -47,14 +106,17 @@
       "order": 6,
       "episode_id": "zhang-qian-xiyu",
       "title": "张骞第一次出使西域",
+      "historical_choice": "出使途中被匈奴扣留多年，张骞选择留下，还是继续完成前往大月氏的使命？",
+      "turning_consequence": "一次没有按计划完成的出使，打开了汉朝认识西域的新路线。",
       "heat_score": null,
       "status": "queued"
     }
   ],
   "design_principles": [
-    "按每集史事、地点与人物处境独立设计画面。",
-    "根据时段、天气、光源与材质组织色彩，不固定成同一配色或场景。",
-    "前景、中景、远景形成清楚层次，人物自然属于环境。",
-    "吸收通用美术方法，不绑定特定视频，不复制构图、人物造型、字幕、水印或标识。"
+    "先讲具体故事，再讲故事意味着什么。",
+    "每一集围绕一个可复述的历史选择，而不是围绕一个抽象主题。",
+    "每个事件必须有时间、地点、人物、行动和后果。",
+    "美术风格可以连续，画面内容不能模板化重复。",
+    "只学习公开 Skill 的通用方法，不复制任何外部仓库的文字、提示词、构图或具体作品。"
   ]
 }

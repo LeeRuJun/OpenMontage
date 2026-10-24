@@ -62,7 +62,7 @@ Every factual section includes `claim_refs`. `metadata.section_event_refs` recor
 
 Use spoken Chinese. Each section should normally contain 2–4 linked event beats, and end with either the immediate consequence that starts the next section or a short landing pause. Do not add commentary merely to meet the character target; add the next verified event, location, actor, action, or consequence instead.
 
-For full longform, target 5,500–7,200 Chinese characters and 1,320–1,500 measured narration seconds. If the draft is short, research and add verified events; never pad with repeated analysis, audience instruction, or production terminology.
+For full longform, target 6,750–8,640 Chinese characters and 1,500–1,920 measured narration seconds (25–32 minutes). If the draft is short, research and add verified events; never pad with repeated analysis, audience instruction, or production terminology.
 
 Output `script` and stop for review before narration generation.
 

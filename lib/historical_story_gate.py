@@ -78,7 +78,7 @@ def validate_shot_plan(project_dir: Path) -> int:
         if prompt_errors:
             raise HistoricalStoryGateError("; ".join(prompt_errors))
     if shot_plan.get("mode") != "full_longform": raise HistoricalStoryGateError("shot_asset_plan mode must be full_longform")
-    if not 40 <= len(shots) <= 50: raise HistoricalStoryGateError(f"shot_asset_plan has {len(shots)} shots; full_longform requires 40-50")
+    if not 50 <= len(shots) <= 64: raise HistoricalStoryGateError(f"shot_asset_plan has {len(shots)} shots; full_longform requires 50-64")
     ids = [x.get("visual_board_id") or x.get("shot_id") for x in shots]
     if any(not x for x in ids) or len(ids) != len(set(ids)): raise HistoricalStoryGateError("shot_asset_plan board IDs must be unique")
     for shot in shots:

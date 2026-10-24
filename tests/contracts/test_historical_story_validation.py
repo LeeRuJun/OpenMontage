@@ -39,8 +39,8 @@ def test_generated_assets_need_reuse_or_exception():
 
 def test_full_longform_accepts_48_rich_visual_boards():
     scenes = []
-    for board_index in range(48):
-        act = board_index // 6 + 1
+    for board_index in range(56):
+        act = board_index // 7 + 1
         board_start = board_index * 28
         for beat_index in range(4):
             start = board_start + beat_index * 7
