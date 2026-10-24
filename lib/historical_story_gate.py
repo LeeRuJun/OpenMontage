@@ -1,6 +1,7 @@
 """Executable stage gates for the historical-story pipeline."""
 from __future__ import annotations
 import json
+import re
 from pathlib import Path
 from typing import Any
 from schemas.artifacts import validate_artifact
@@ -34,11 +35,48 @@ def validate_core_assets(project_dir: Path, assets: dict[str, Any] | None = None
         if not item.get("provider") or not item.get("model") or not item.get("historical_treatment"): raise HistoricalStoryGateError(f"core asset lacks provider/model/historical_treatment: {item.get('id')}")
     return {"characters": len(characters), "scenes": len(scenes)}
 
+def _prompt_signature(shot: dict[str, Any]) -> str:
+    spec = shot.get("prompt_spec") or {}
+    states = spec.get("microbeat_visual_states") or []
+    parts = [
+        spec.get("visual_claim", ""),
+        spec.get("location_context", ""),
+        spec.get("evidence_layer", ""),
+    ]
+    parts.extend(state.get("description", "") for state in states if isinstance(state, dict))
+    return re.sub(r"\s+", "", " ".join(str(part) for part in parts).lower())
+
+
+def _char_ngrams(value: str, size: int = 2) -> set[str]:
+    return {value[index:index + size] for index in range(max(0, len(value) - size + 1))}
+
+
+def validate_prompt_diversity(shot_plan: dict[str, Any], max_similarity: float = 0.88) -> list[str]:
+    """Find near-duplicate board-specific prompt contracts before image generation."""
+    shots = shot_plan.get("shots") or []
+    signatures = [(str(shot.get("visual_board_id") or shot.get("shot_id")), _prompt_signature(shot)) for shot in shots]
+    errors: list[str] = []
+    for index, (left_id, left_text) in enumerate(signatures):
+        left_grams = _char_ngrams(left_text)
+        for right_id, right_text in signatures[index + 1:]:
+            right_grams = _char_ngrams(right_text)
+            if not left_grams or not right_grams:
+                continue
+            similarity = len(left_grams & right_grams) / len(left_grams | right_grams)
+            if similarity >= max_similarity:
+                errors.append(f"prompt contracts {left_id} and {right_id} are too similar (jaccard={similarity:.3f})")
+    return errors
+
+
 def validate_shot_plan(project_dir: Path) -> int:
     shot_plan = _load_json(project_dir / "artifacts/shot_asset_plan.json", "shot_asset_plan")
     try: validate_artifact("shot_asset_plan", shot_plan)
     except Exception as exc: raise HistoricalStoryGateError(f"shot_asset_plan schema failure: {exc}") from exc
     shots = shot_plan.get("shots") or []
+    if (shot_plan.get("metadata") or {}).get("prompt_diversity_contract") == "v2":
+        prompt_errors = validate_prompt_diversity(shot_plan)
+        if prompt_errors:
+            raise HistoricalStoryGateError("; ".join(prompt_errors))
     if shot_plan.get("mode") != "full_longform": raise HistoricalStoryGateError("shot_asset_plan mode must be full_longform")
     if not 40 <= len(shots) <= 50: raise HistoricalStoryGateError(f"shot_asset_plan has {len(shots)} shots; full_longform requires 40-50")
     ids = [x.get("visual_board_id") or x.get("shot_id") for x in shots]
@@ -46,6 +84,8 @@ def validate_shot_plan(project_dir: Path) -> int:
     for shot in shots:
         if not shot.get("required_core_assets"): raise HistoricalStoryGateError(f"{shot.get('shot_id')} has no required_core_assets")
         if not shot.get("prompt_spec"): raise HistoricalStoryGateError(f"{shot.get('shot_id')} has no prompt_spec")
+        states = (shot.get("prompt_spec") or {}).get("microbeat_visual_states") or []
+        if not 3 <= len(states) <= 5: raise HistoricalStoryGateError(f"{shot.get('shot_id')} must carry 3-5 microbeat_visual_states")
     return len(shots)
 
 def validate_final_boards(project_dir: Path, assets: dict[str, Any] | None = None) -> dict[str, int]:

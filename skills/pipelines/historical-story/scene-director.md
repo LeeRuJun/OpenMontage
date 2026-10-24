@@ -28,3 +28,10 @@ The scene plan must identify `visual_board_id`, `microbeat_index`, and the board
 Use `character_asset_requests` for identity references, `scene_asset_requests` for locations, and `editorial_asset_requests` for maps, diagrams, timelines, evidence cards, props, and archival material. A final shot request combines the approved references with the narration claim and editorial composition; it does not ask a character to perform detailed animation.
 
 Output `scene_plan` and stop for human approval. Only after approval may character/scene bibles and core assets be designed.
+
+
+## Board content diversity
+
+A consistent art direction does not mean repeated content. Within one act, adjacent final boards must change at least one story-bearing dimension: arrival/setting, actor position, concrete action, resistance, evidence or route, consequence, or the next destination. Reusing the same palette, lens family, architecture and character continuity is allowed; reusing the same claim, spatial arrangement and microbeat descriptions is not.
+
+Before approving a scene plan, run the shot-plan prompt-diversity check. It compares board-specific claim, action, evidence and microbeat text while ignoring shared style guidance. Near-duplicate content returns the plan to storyboard revision before image generation.

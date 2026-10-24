@@ -177,6 +177,7 @@ def _build_prompt(
     style_text: str,
     color_direction: str,
     dynamic_layers: list[str],
+    microbeat_states: list[dict[str, Any]],
 ) -> str:
     style_clause = style_text or "follow the approved project art direction without adding an unapproved palette"
     color_clause = color_direction or "use the board-authored light and color direction"
@@ -191,6 +192,7 @@ def _build_prompt(
         f"Composition and camera: {composition}. "
         f"Lighting and color: {lighting}; {color_clause}. "
         f"Approved visual style: {style_clause}. "
+        f"Microbeat visual states: {'; '.join(str(state.get('description', '')) for state in microbeat_states)}. "
         f"Dynamic layers reserved for edit: {layers}. "
         "Use references for continuity only; integrate people and evidence into the environment. "
         "Create one single coherent shot with one continuous camera view. "
@@ -247,6 +249,8 @@ def _compile_shot(scene: dict[str, Any], project: Path, visual_style: dict[str, 
     )
     color_direction = str(board.get("color_direction") or scene.get("color_direction") or "")
     dynamic_layers = _resolve_dynamic_layers(scene, board)
+    microbeat_states = board.get("microbeat_visual_states") or board.get("microbeats") or []
+    microbeat_states = [state if isinstance(state, dict) else {"id": str(state), "description": str(state)} for state in microbeat_states]
     prompt = _build_prompt(
         period=period,
         claim=claim,
@@ -259,6 +263,7 @@ def _compile_shot(scene: dict[str, Any], project: Path, visual_style: dict[str, 
         style_text=_resolve_style_text(visual_style),
         color_direction=color_direction,
         dynamic_layers=dynamic_layers,
+        microbeat_states=microbeat_states,
     )
     scene_id = str(scene["id"])
     board_id = str(board.get("visual_board_id") or scene.get("visual_board_id") or scene_id)
@@ -283,6 +288,7 @@ def _compile_shot(scene: dict[str, Any], project: Path, visual_style: dict[str, 
             "evidence_layer": evidence_layer,
             "historical_boundary": historical_boundary,
             "dynamic_layers": dynamic_layers,
+            "microbeat_visual_states": microbeat_states,
             "caption_safe_area": str(board.get("caption_safe_area") or "lower third and board-authored safe region"),
             "positive_prompt": prompt,
             "constraints": [
@@ -342,6 +348,16 @@ def main(project: Path) -> None:
             {"id": str(beat.get("id")), "description": str(beat.get("description", ""))}
             for beat in beats
         ]
+        board["microbeat_visual_states"] = [
+            {
+                "id": str(beat.get("id")),
+                "description": str(beat.get("description", "")),
+                "movement": str(beat.get("movement", "static")),
+                "framing": str(beat.get("framing", "wide")),
+                "information_role": str(beat.get("information_role", "")),
+            }
+            for beat in beats
+        ]
         board["description"] = " ".join(str(beat.get("description", "")) for beat in beats)
         board_scenes.append(board)
     shots = [_compile_shot(scene, project, visual_style, period_label, index) for index, scene in enumerate(board_scenes, 1)]
@@ -358,6 +374,7 @@ def main(project: Path) -> None:
             "coherent_single_shot_required": True,
             "period_label": period_label,
             "visual_style": visual_style,
+            "prompt_diversity_contract": "v2",
         },
     }
     output_path = project / "artifacts" / "shot_asset_plan.json"
