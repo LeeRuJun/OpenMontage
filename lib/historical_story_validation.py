@@ -194,6 +194,7 @@ _SCRIPT_PROSE_META_PATTERNS = (
     "镜头", "画面", "微分镜", "分镜", "提示词", "prompt", "board",
     "storyboard", "microbeat", "montage", "蒙太奇", "制作说明",
     "caption-safe", "starting state", "dynamic layer", "visual board",
+    "年谱", "地方志", "事实层", "证据层", "claim_ref", "本段", "审稿说明",
 )
 
 def validate_script_prose(script: dict[str, Any]) -> list[str]:
@@ -252,4 +253,15 @@ def validate_commentary_contract(script: dict[str, Any], min_chars: int = 360, m
     count = sum(len(re.sub(r"\s+", "", str(section.get("text", "")))) for section in commentary)
     if count < min_chars or count > max_chars:
         return [f"commentary character count {count} outside {min_chars}-{max_chars}"]
+    return []
+
+
+def validate_commentary_timing(timing: dict[str, Any], max_seconds: float = 180.0) -> list[str]:
+    commentary_seconds = sum(
+        max(0.0, float(section.get("end_seconds", 0)) - float(section.get("start_seconds", 0)))
+        for section in timing.get("sections", [])
+        if str(section.get("id", "")).startswith("commentary")
+    )
+    if commentary_seconds > max_seconds:
+        return [f"commentary audio duration {commentary_seconds:.3f}s exceeds {max_seconds:.0f}s"]
     return []

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 import yaml
 from schemas.artifacts import validate_artifact
-from lib.historical_story_validation import contract_for, validate_script_prose, validate_script_repetition, validate_commentary_contract
+from lib.historical_story_validation import contract_for, validate_script_prose, validate_script_repetition, validate_commentary_contract, validate_commentary_timing
 
 class GateError(RuntimeError): pass
 
@@ -40,6 +40,9 @@ def read_artifact(project: Path, name: str) -> dict[str, Any] | None:
         min_duration, max_duration = contract.min_duration, contract.max_duration
         if value.get("contract_version") == "legacy_22_25":
             min_duration, max_duration = 1320, 1500
+        commentary_errors = validate_commentary_timing(value)
+        if commentary_errors:
+            raise GateError("commentary timing failed: " + "; ".join(commentary_errors))
         if not min_duration <= duration <= max_duration:
             raise GateError(
                 f"narration_timing duration {duration:.3f}s outside "

@@ -40,3 +40,7 @@ For every issue include:
 ```
 
 Do not praise generally. Do not silently edit. Do not accept a script because it reaches the character target; extra length must come from verified events or a deliberately bounded commentary.
+
+## Research metadata leakage
+
+The spoken script must never expose research or editorial bookkeeping. Block phrases such as `年谱`, `地方志`, `来源`, `claim_ref`, `事实层`, `证据层`, `材料边界`, `本段`, `审稿`, `脚本说明`, `逐项互证`, or `不能这样写` when they describe how the text was researched or reviewed. Convert a supported limitation into listener-facing historical language such as “不同记载说法不一”; keep source IDs, source tiers, and audit notes in the evidence ledger only.

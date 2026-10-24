@@ -67,3 +67,16 @@ def test_commentary_contract_rejects_short_or_interleaved_commentary():
     errors = validate_commentary_contract(script)
     assert errors
     assert any("commentary" in error for error in errors)
+
+
+def test_script_prose_gate_rejects_research_metadata_language():
+    from lib.historical_story_validation import validate_script_prose
+
+    script = {
+        "sections": [
+            {"id": "s1", "text": "事件顺序由年谱与地方志共同提供。"},
+            {"id": "s2", "text": "事实层保留时间、地点、人物和结果。"},
+        ]
+    }
+    errors = validate_script_prose(script)
+    assert len(errors) == 3

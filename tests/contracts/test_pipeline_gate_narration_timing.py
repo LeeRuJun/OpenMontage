@@ -76,3 +76,34 @@ def test_status_marks_stale_produced_narration_as_invalid(tmp_path):
 
     item = next(item for item in statuses(Path("."), project, "historical-story") if item["name"] == "narration_timing")
     assert item["status"] == "blocked_invalid_input"
+
+
+def test_gate_rejects_commentary_section_over_three_minutes(tmp_path):
+    from scripts.pipeline_gate import GateError, read_artifact
+
+    project = tmp_path / "project"
+    artifacts = project / "artifacts"
+    artifacts.mkdir(parents=True)
+    script_text = "script text"
+    (artifacts / "script.md").write_text(script_text)
+    timing = {
+        "version": "1.0",
+        "mode": "full_longform",
+        "script_revision": hashlib.sha256(script_text.encode()).hexdigest()[:16],
+        "narration_asset_id": "narration-full-minimax",
+        "narration_path": "assets/audio/narration_full.mp3",
+        "measured_duration_seconds": 1600,
+        "character_count": 7000,
+        "word_timestamps": [],
+        "sections": [
+            {"id": "s01", "start_seconds": 0, "end_seconds": 1420},
+            {"id": "commentary-1", "start_seconds": 1420, "end_seconds": 1601},
+        ],
+        "acts": [{"id": "s01", "title": "section", "start_seconds": 0, "end_seconds": 1601}],
+        "alignment_confidence": 0.9,
+        "timing_locked_at": datetime.now(timezone.utc).isoformat(),
+    }
+    (artifacts / "narration_timing.json").write_text(json.dumps(timing))
+
+    with pytest.raises(GateError, match="commentary"):
+        read_artifact(project, "narration_timing")
