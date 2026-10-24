@@ -4,6 +4,10 @@
 
 Decide how the history will be told before writing narration or designing images. Use the generic causal story blueprint, then add the historical evidence boundary.
 
+## Research → material map → spine
+
+After the evidence ledger and before the story spine, create `metadata.material_density_map`. Each entry contains `section_id`, `event_refs`, `material_role` (`core_event`, `support`, `bridge`, or `commentary`), `target_seconds`, `required_facts`, `allowed_summary`, and `forbidden_repetition`. The map decides what deserves detail and what is deliberately brief; the script writer must not make this decision while padding prose.
+
 ## Story spine contract
 
 Lock:

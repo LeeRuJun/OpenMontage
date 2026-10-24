@@ -7,6 +7,18 @@ description: Use when designing or drafting any narrated story, screenplay, docu
 
 A story is a chain of consequential choices. Information becomes narrative only when a person, group, or institution wants something, meets resistance, acts, and causes a changed situation.
 
+## Research-first workflow
+
+Do not draft prose before the research material inventory and material density map are complete. Use this order:
+
+1. **Research material inventory** — collect a source-backed event inventory: event cards, dates, places, actors, actions, consequences, uncertainty, and open questions.
+2. **Material density map** — classify each item as `core_event`, `support`, `bridge`, or `commentary`; assign a target time/space and record what must not be repeated.
+3. **Causal story spine** — choose the order in which choices and consequences change the situation.
+4. **Scene contracts** — turn each core event into a starting state, objective, resistance, attempt, reversal, consequence, and next pressure.
+5. **Prose** — write only after the previous records pass review.
+
+A short draft is a research problem, not a license to add explanation. Add a verified event or reduce the promised duration.
+
 ## Story blueprint
 
 Before prose, lock:

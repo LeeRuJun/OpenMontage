@@ -6,6 +6,10 @@
 
 Write a historical story, not an encyclopedia entry and not a narrated essay.
 
+## Required inputs before prose
+
+Read `research_brief`, `historical_evidence_ledger`, `story_spine.metadata.event_story`, and the approved `material_density_map` before drafting. **不要在素材地图完成前写正文。** If the event inventory is short, return to research; do not fill the target with commentary or repeated background.
+
 ## Governing rule
 
 **Every narration section must be built from events.** Before writing prose, fill an event card with:

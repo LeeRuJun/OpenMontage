@@ -36,3 +36,11 @@ def test_generic_story_skill_includes_natural_chinese_revision_rules():
     assert "formulaic contrast" in skill
     assert "不要为了字数" in skill
     assert "revise in context" in skill
+
+
+def test_story_skill_requires_research_before_material_map_and_prose():
+    skill = Path("skills/creative/story-writing-director.md").read_text()
+    assert "research material inventory" in skill
+    assert "material density map" in skill
+    assert "Do not draft prose before" in skill
+    assert "event inventory" in skill

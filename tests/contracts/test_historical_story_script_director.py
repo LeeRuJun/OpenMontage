@@ -25,3 +25,10 @@ def test_script_director_blocks_length_padding_and_route_recap():
     assert "字数不足只能补新证据事件" in skill
     assert "点评不能回放故事" in skill
     assert "审稿指令" in skill
+
+
+def test_script_director_requires_research_and_material_map_before_drafting():
+    skill = Path("skills/pipelines/historical-story/script-director.md").read_text()
+    assert "research_brief" in skill
+    assert "material_density_map" in skill
+    assert "不要在素材地图完成前写正文" in skill
