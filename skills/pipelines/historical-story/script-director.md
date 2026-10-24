@@ -89,3 +89,17 @@ After the story has reached its ending, add a final **独立点评** section of 
 The commentary begins only after the story resolution. **不能穿插** commentary into the event sequence, and it must not replace missing events. The transition should make the phase change audible: `故事讲到这里，事件的结局已经明确。接下来，我们回头看……`
 
 For a 25–32 minute episode, target at least 90% for the story body and no more than 10% for the post-story commentary. The commentary is a separate narrative function, not filler used to reach the character target.
+
+## Failure-proofing rules
+
+The following are hard writing rules, not optional review suggestions:
+
+- **不能用路线复述填字数。** Mention a place or route only when a person arrives, leaves, receives an order, crosses a barrier, or causes a new consequence there.
+- **一段只推进一个事件。** A section may contain setup and immediate consequence, but it must not repeat the same event in three explanatory forms.
+- Do not let “案件”, “案卷”, “朝廷”, “局势”, or “情况” perform an action that belongs to a named or explicitly bounded actor.
+- Evidence limits must become listener-facing factual language (for example, “不同记载说法不一”), never an instruction to the writer about what they must not invent. Move audit notes into the evidence ledger.
+- Do not end a section with a second summary of the same route, case, or conclusion. End on the next pressure, action, or changed situation.
+- **字数不足只能补新证据事件。** Add a verified actor, decision, place, document, confrontation, consequence, or post-story insight; never add repeated explanation, editorial padding, or production language.
+- **点评不能回放故事。** The post-story section may interpret a choice, cost, uncertainty, or memory; it must not retell the whole event chain.
+- Provider text must be regenerated from the final reviewed text after every revision; never leave an older payload beside a newer section body.
+- Any **审稿指令** or production note in spoken text is a blocking defect, even if the surrounding history is accurate.
