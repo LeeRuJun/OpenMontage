@@ -2,6 +2,8 @@
 
 **REQUIRED SUB-SKILL:** Read `skills/creative/story-writing-director.md` before drafting.
 
+**REQUIRED REVIEW:** Before narration generation, run the independent `pipelines/historical-story/script-review-director` review and require `READY`.
+
 Write a historical story, not an encyclopedia entry and not a narrated essay.
 
 ## Governing rule
