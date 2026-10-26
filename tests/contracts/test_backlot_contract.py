@@ -22,8 +22,10 @@ def _minimal_script() -> dict:
         "version": "1.0",
         "title": "Test Script",
         "total_duration_seconds": 10,
+        "metadata": {"commentary_start_section_id": "commentary-1"},
         "sections": [
-            {"id": "s1", "text": "Hello.", "start_seconds": 0, "end_seconds": 10}
+            {"id": "s1", "text": "Hello.", "start_seconds": 0, "end_seconds": 10},
+            {"id": "commentary-1", "text": "点评。" * 200, "start_seconds": 10, "end_seconds": 30},
         ],
     }
 
