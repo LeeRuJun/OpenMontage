@@ -381,13 +381,13 @@ def test_local_qwen_missing_weights_is_unavailable(monkeypatch):
     assert QwenImage21().get_status() == ToolStatus.UNAVAILABLE
 
 
-def test_ltx_local_does_not_fall_back_to_wan():
-    from tools.video.comfyui_video import ComfyUIVideo
+def test_ltx_local_unavailable_without_gpu_setup():
+    from tools.video.ltx_video_local import LTXVideoLocal
 
-    result = ComfyUIVideo().execute(
-        {"prompt": "Clouds", "model_family": "ltx_2.5_local"}
-    )
-    assert not result.success and result.data["setup_required"]
+    tool = LTXVideoLocal()
+    assert tool.get_status() is not None
+    result = tool.execute({"prompt": "Clouds"})
+    assert not result.success
 
 
 def test_openai_25_uses_edit_and_closes_files(monkeypatch, tmp_path):

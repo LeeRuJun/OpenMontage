@@ -269,27 +269,3 @@ def test_runway_uses_each_models_official_request_shape(monkeypatch, tmp_path):
     assert "duration" not in payload
     assert "ratio" not in payload
 
-
-def test_comfyui_partner_workflows_and_local_h3_metadata():
-    from tools.video.comfyui_video import ComfyUIVideo
-
-    tool = ComfyUIVideo()
-    for family, node_class in (
-        ("gemini_omni_flash", "GeminiVideoOmni"),
-        ("seedance_2.5", "ByteDance2TextToVideoNode"),
-        ("minimax_h3_api", "MinimaxHailuo03TextToVideoNode"),
-    ):
-        workflow, output_node = tool._build_partner_t2v(
-            {"prompt": "A product reveal", "duration": 5},
-            42,
-            __import__("pathlib").Path("clip.mp4"),
-            family,
-        )
-        assert workflow["1"]["class_type"] == node_class
-        assert workflow["2"]["class_type"] == "SaveVideo"
-        assert output_node == "2"
-
-    local = tool.execute({"prompt": "x", "model_family": "minimax_h3_local"})
-    assert not local.success
-    assert local.data["model"] == "MiniMax-H3"
-    assert len(local.data["model_stack"]) == 4

@@ -51,7 +51,7 @@ class MiniMaxFalVideo(BaseTool):
         "2K multimodal reference video",
     ]
     not_good_for = ["offline generation"]
-    fallback_tools = ["minimax_video", "runway_video", "comfyui_video"]
+    fallback_tools = ["minimax_video", "runway_video"]
     quality_score = 0.95
     input_schema = {
         "type": "object",
