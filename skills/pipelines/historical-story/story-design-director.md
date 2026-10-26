@@ -1,6 +1,6 @@
 # Historical Story Design Director
 
-**REQUIRED SUB-SKILL:** Read `skills/creative/story-writing-director.md` before designing the story spine. This Skill contains the research, architecture, drafting, and review phases; complete the architecture phase before prose.
+This skill is self-contained for the story_design stage. Do not load any other writing, research, or prose skill while designing the story spine.
 
 Decide how the history will be told before writing narration or designing images. Use the generic causal story blueprint, then add the historical evidence boundary.
 

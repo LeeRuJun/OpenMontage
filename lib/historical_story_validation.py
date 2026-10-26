@@ -195,6 +195,10 @@ _SCRIPT_PROSE_META_PATTERNS = (
     "storyboard", "microbeat", "montage", "蒙太奇", "制作说明",
     "caption-safe", "starting state", "dynamic layer", "visual board",
     "年谱", "地方志", "事实层", "证据层", "claim_ref", "本段", "审稿说明",
+    "事实记录", "政治解释", "后世记忆", "证据边界", "异文", "来源保留",
+    "各有边界", "各自保留", "各自成立", "属于不同层次", "证据性质",
+    "稳定结果", "差异细节", "案卷分开", "记忆分开", "证据来源不同",
+    "叙述中同时保留", "按各自材料理解",
 )
 
 def validate_script_prose(script: dict[str, Any]) -> list[str]:
