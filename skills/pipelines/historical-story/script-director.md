@@ -47,14 +47,21 @@ Never: "异文按来源保留""证据边界""certainty为probable""claim_refs" �
 
 ## Commentary writing (the final 1–3 minutes)
 
-The commentary is what you would tell a friend after the movie, not a research conclusion:
+The commentary is what you would tell a friend after the movie, not a research conclusion. Answer these with the material already narrated:
 
 1. Which choice actually changed the direction of the story?
 2. What did each side pay for that choice?
 3. What can we confirm, and what will always remain uncertain?
 4. What did later generations remember, and how does that memory differ from the event?
 
-Write it as natural spoken opinion. One idea, one paragraph, said once. No layering framework, no "第一层/第二层/第三层" taxonomy, no repeated conclusions.
+**Craft rules for good commentary:**
+
+- **Open on a concrete thing** — a line of poetry, a person, an object. Never open with 回头来看 / 综上所述 / 纵观 — the moment the summary voice starts, the listener checks out.
+- **Close the opening loop.** The opening asked a question; the commentary must answer it. That closure is what makes an ending feel earned.
+- **Deliver one reframe, not a recap.** The commentary's value is showing the listener a new way to see the whole story they just heard ("每一环都没有人越轨" beats retelling the chain).
+- **At most one quotable line, and it must grow from narrated facts** — never a floating life lesson ("文字狱最深的黑暗不是有坏人，而是每个环节的人都觉得自己在照章办事" grows from the case; "文化的力量是无穷的" does not).
+- **End on a person or an event, never an abstraction.** "把这两个人放在一起看，乌台诗案才算讲完整" ends on people; "历史总是惊人的相似" ends on nothing.
+- Write it as natural spoken opinion. One idea, one paragraph, said once. No layering framework, no "第一层/第二层/第三层" taxonomy, no repeated conclusions.
 
 ## What fills length (and what never does)
 
@@ -121,5 +128,13 @@ Full and pilot episodes都先有 20–30 秒开场，但开场也必须包含事
 ## Length contract
 
 For full longform, target 5,940–7,290 Chinese characters and 1,320–1,620 measured narration seconds (22–27 minutes). If the draft is short, research and add verified events; never pad with repeated analysis, audience instruction, or production terminology.
+
+**Overshoot-then-trim strategy (binding):**
+
+1. **Research fat before writing long.** The ledger must hold roughly 1.5× the claims you expect to narrate — specific poems with lines, named actors, dated actions, consequences. A thin ledger cannot be stretched into a dense script; it can only be padded into research voice.
+2. **Write past the target, then cut.** Draft to about 110–120% of the character target with only verified material. Character estimates run 15–25% optimistic — the v3→v6 lesson: estimated 5000, delivered 3369. Do not aim at the number; aim above it.
+3. **Cut the weakest material, never the strongest.** Trimming order: background that repeats what the event chain already shows → commentary that re-explains a narrated fact → a second example where one suffices → scene-setting that adds no new action. Never cut: the specific poem line, the named person, the dated action, the consequence that forces the next event.
+4. **Density plan before drafting.** Mark each section 细写 (case core: quote the poem, name the person, walk the action), 粗写 (background: one sentence, move on), or 拓展 (newly researched material worth a beat of its own). The plan decides where characters go — not the character target.
+5. **Measure after every pass.** Run the deterministic gates after each rewrite; adjust by measured numbers, not by feel.
 
 Output `script` and stop for review before narration generation.
