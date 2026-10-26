@@ -44,7 +44,7 @@ CONTRACTS = {
         VisualBoardContract(6, 12, 8, 2, 4, 3, 8, 24, 18, 2, 4, 3, 3, 8),
     ),
     "full_longform": StoryContract(
-        "full_longform", 1500, 1920, 6750, 8640, 8, 10, 200, 320,
+        "full_longform", 1320, 1620, 5940, 7290, 8, 10, 200, 320,
         VisualBoardContract(50, 64, 56, 5, 8, 7, 20, 36, 30, 3, 5, 4, 4, 8),
     ),
 }

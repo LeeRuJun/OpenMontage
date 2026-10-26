@@ -106,7 +106,7 @@ After the story has reached its ending, add a final **独立点评** section of 
 
 The commentary begins only after the story resolution. **不能穿插** commentary into the event sequence, and it must not replace missing events. The transition should make the phase change audible.
 
-For a 25–32 minute episode, target at least 90% for the story body and no more than 10% for the post-story commentary. The commentary is a separate narrative function, not filler used to reach the character target.
+For a 22–27 minute episode, target at least 90% for the story body and no more than 10% for the post-story commentary. The commentary is a separate narrative function, not filler used to reach the character target.
 
 ## Required inputs before prose
 
@@ -120,6 +120,6 @@ Full and pilot episodes都先有 20–30 秒开场，但开场也必须包含事
 
 ## Length contract
 
-For full longform, target 6,750–8,640 Chinese characters and 1,500–1,920 measured narration seconds (25–32 minutes). If the draft is short, research and add verified events; never pad with repeated analysis, audience instruction, or production terminology.
+For full longform, target 5,940–7,290 Chinese characters and 1,320–1,620 measured narration seconds (22–27 minutes). If the draft is short, research and add verified events; never pad with repeated analysis, audience instruction, or production terminology.
 
 Output `script` and stop for review before narration generation.

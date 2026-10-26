@@ -41,7 +41,7 @@ production_modes:
       microbeats_per_board: {min: 2, max: 4, recommended: 3}
       microbeat_duration_seconds: {min: 3, max: 8}
   - name: full_longform
-    description: "25-32 minute historical story; target 6,750-8,640 Chinese characters at the measured narration rate, 50-64 final visual boards across 8-10 acts, with 3-5 internal microbeats per board."
+    description: "22-27 minute historical story; target 5,940-7,290 Chinese characters at the measured narration rate, 50-64 final visual boards across 8-10 acts, with 3-5 internal microbeats per board."
     required_tools: [tts_selector]
     optional_tools: [image_selector]
     scene_type: historical_story
