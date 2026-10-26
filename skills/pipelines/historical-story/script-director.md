@@ -47,21 +47,9 @@ Never: "异文按来源保留""证据边界""certainty为probable""claim_refs" �
 
 ## Commentary writing (the final 1–3 minutes)
 
-The commentary is what you would tell a friend after the movie, not a research conclusion. Answer these with the material already narrated:
+**SUB-SKILL for the post-story commentary only:** Read `skills/creative/historical-commentary-craft.md`. It holds the five-scale evaluation framework (个人/国家/时代/文化/历史走向), the three-move commentary skeleton (钉死与飘着 → 翻转 → 落在人与物), the closing-line test, the self-check prompt, and the anti-patterns distilled from 易中天/王立群/罗振宇/当年明月. Do not load it while drafting the story body — it governs only the closing evaluation.
 
-1. Which choice actually changed the direction of the story?
-2. What did each side pay for that choice?
-3. What can we confirm, and what will always remain uncertain?
-4. What did later generations remember, and how does that memory differ from the event?
-
-**Craft rules for good commentary:**
-
-- **Open on a concrete thing** — a line of poetry, a person, an object. Never open with 回头来看 / 综上所述 / 纵观 — the moment the summary voice starts, the listener checks out.
-- **Close the opening loop.** The opening asked a question; the commentary must answer it. That closure is what makes an ending feel earned.
-- **Deliver one reframe, not a recap.** The commentary's value is showing the listener a new way to see the whole story they just heard ("每一环都没有人越轨" beats retelling the chain).
-- **At most one quotable line, and it must grow from narrated facts** — never a floating life lesson ("文字狱最深的黑暗不是有坏人，而是每个环节的人都觉得自己在照章办事" grows from the case; "文化的力量是无穷的" does not).
-- **End on a person or an event, never an abstraction.** "把这两个人放在一起看，乌台诗案才算讲完整" ends on people; "历史总是惊人的相似" ends on nothing.
-- Write it as natural spoken opinion. One idea, one paragraph, said once. No layering framework, no "第一层/第二层/第三层" taxonomy, no repeated conclusions.
+The commentary is what you would tell a friend after the movie, not a research conclusion. One stance, 1–2 scales, one quotable line grown from narrated facts, opening on a concrete thing and closing the opening loop. Write it as natural spoken opinion: one idea, one paragraph, said once.
 
 ## What fills length (and what never does)
 
